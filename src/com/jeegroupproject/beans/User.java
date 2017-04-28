@@ -135,12 +135,11 @@ public class User {
 					userByClientID.setClient_id(result1.getInt(8));
 					userByClientID.setAccess_token(result1.getString(9));
 					if(checkPassword(password, userByClientID.getPassword())){
-						//TODO : before returning the client, update its token
-						// number of milliseconds since epoch
-						//generate an hash
-						// save in DB (using the function to save in DB to be defined)
-						return userByClientID;
-					}
+                        //before returning the client, update its token
+                        userByClientID.regenerateToken();
+                        userByEmail.persist();//save change to the token
+                        return userByClientID;
+                    }
 				}
 			}
 			
@@ -178,10 +177,102 @@ public class User {
 		return null;	
 	}
 	
-	//TODO : getauthenticateduserbytoken similar to getauthenticated user
-	//TODO : methode updatetokenforUser
-		//generate a token called each time getauthenticateduser is called (see getauthenticated user)
-		//SQL query to update the field in DB
+	public static User getAuthenticatedUserByToken(Integer userId, String token){
+		
+		Connection connection = DBConnectionFactory.getConnection(); // returns a prepared connection to the DB
+		User user;
+		try{
+			
+			if(userId !=null && token != null){
+				PreparedStatement pStatement = (PreparedStatement) connection.prepareStatement("SELECT * FROM users where id = ? and token = ?");
+				pStatement.setInt(1, userId);
+				pStatement.setString(2, token);
+				ResultSet result = pStatement.executeQuery();
+				
+				if(result.next()){ // check we have at least one result
+					user = new User();
+					user.setId(result.getInt(1));
+					user.setName(result.getString(2));
+					user.setSurname(result.getString(3));
+					user.setEmail( result.getString(4));
+                    user.setPassword(result.getString(5));
+                    user.setIs_employee(result.getBoolean(6));
+                    user.setIs_customer(result.getBoolean(7));
+                    user.setClient_id(result.getInt(8));
+                    user.setAccess_token(result.getString(9));
+                }
+            }
+            
+                
+        } catch (SQLException e) {
+            System.err.println("problem querying");
+            e.printStackTrace();
+        }
+        
+        return null;    
+    }
+		
+	public void regenerateToken(){ 
+        //the token is 
+            //first contactenate clientID and the number of MS since Epoch
+            //apply BCRYPT on it.
+		String StringifiedclientIdParameter = ((Integer)this.getClient_id()).toString();
+		String StringifiedDate = ((Long)System.currentTimeMillis()).toString();
+		String StringifiedParameters = StringifiedclientIdParameter + StringifiedDate;
+        this.setAccess_token(hashPassword(StringifiedParameters));	
+    }
+	
+	public void persist(){
+        // prepare a connection
+        Connection connection = DBConnectionFactory.getConnection(); //returns a prepared connection to the database
+        
+        //test if the user already has an ID >=0 (id -1 means not yet created in db).
+        //if he does, he already exists in database, so we update it
+        if(this.getId() > 0){
+            //prepare a prepared statement for update
+            PreparedStatement pStatement = (PreparedStatement) connection.prepareStatement("UPDATE users SET name = ?, surname = ?, password = ?, is_employee = ?, is_customer = ?, client_id = ?,  `token` = ? , email = ? WHERE `id` = ?  ");
+            pStatement.setInt(1, this.getId());
+            pStatement.setString(2, this.getName());
+            pStatement.setString(3, this.getSurname());
+            pStatement.setString(4, this.getPassword());
+            pStatement.setInt(5, this.isIs_employee() ? 1 : 0);
+            pStatement.setInt(6, this.isIs_customer() ? 1 : 0);
+            pStatement.setInt(7, this.getClient_id());
+            pStatement.setString(8, this.getAccess_token());
+            pStatement.setString(9, this.getEmail());
+
+            // execute update SQL statement
+            pStatement.executeUpdate();
+
+        }else{//if he does not, one must insert it.
+            //prepare a prepared statement for insertion
+            PreparedStatement pStatement = (PreparedStatement) connection.prepareStatement("INSERT<TODODODODOODOD>");
+            pStatement.setInt(1, clientId);
+            pStatement.setString(2, token);
+            //TODO add all the values in the prepared statement.
+
+            // execute update SQL stetement
+            preparedStatement.executeUpdate();
+
+            int affectedRows = statement.executeUpdate();
+
+            if (affectedRows == 0) {
+                throw new SQLException("Creating user failed, no rows affected.");
+            }
+
+            try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    this.setId(generatedKeys.getInt(1));
+                }
+                else {
+                    throw new SQLException("Creating user failed, no ID obtained.");
+                }
+            }
+        }
+
+
+    }
+
 	
 	//TODO : Create a non-static method to save a client to database 
 	

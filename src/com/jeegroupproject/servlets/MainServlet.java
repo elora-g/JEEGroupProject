@@ -33,9 +33,7 @@ public class MainServlet extends HttpServlet {
 		//display the details for the user
 		
 		//TODO get the client in request params, when done implementing this in isLoggedIn filter
-		//request.getAttribute("authuser") 
-		User user = User.getUserByClient_id(23456789);
-		request.setAttribute("user", user);
+		request.getAttribute("authenticatedUser") ;
 		
 		this.getServletContext().getRequestDispatcher(VIEW).forward(request, response);
 		

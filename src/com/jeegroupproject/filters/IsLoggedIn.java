@@ -12,6 +12,8 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.jeegroupproject.beans.User;
+
 /**
  * Servlet Filter implementation class IsLoggedIn
  */
@@ -42,41 +44,35 @@ public class IsLoggedIn implements Filter {
 		HttpServletResponse response = (HttpServletResponse) res;
 		Cookie[] cookies = request.getCookies(); // get all cookies for the current domain (IE, those that are sent by client)
 		
-		boolean needsLoginForm = true;
 		
-		// create variables int clientid and string token default to null
+		Integer userId = null;
+		String token = null;
 		if(cookies != null ){
-			for (Cookie cookie : cookies) {
-				//TODO : change cookie authentication to take into account the token
-			   if (cookie.getName().equals("loggedIn")) { // replace loggedIn by clientId
-				   if(cookie.getValue().equals("1")){
-					    needsLoginForm = false; // 
-					    //TODO if authenticated, place the authenticated user in request param. It will most likely be used everywhere
-				   }
-			    }
-			   /** for both cookie find it in cookies and set the value the variables created above
-			    * 
-			    * if (cookie.getName().equals("loggedIn")) { cookie.getName().equals("clientid") then client id = cookie.getValue (do for both cookies)
-				   
+            for (Cookie cookie : cookies) {
+                //  cookie authentication takes both userID and token in account for validation
+                   if (cookie.getName().equals("userId")) { // get the value of userId cookie
+                   userId = Integer.parseInt(cookie.getValue());         
+                }
+                if (cookie.getName().equals("token")) { // get the value of token cookie
+                   token = cookie.getValue();         
+                }
+            }
+        }
 
-				   }
-			    }
-			   */
-			   /**
-			    * test that client id and token are not null and then we call getAuthenticatedUserbyToken (returns authenticatedUser)
-			    * 
-			    * 
-			    * //TODO if authenticated, place the authenticated user in request param req.setAttribute("authenticatedUser", authenticatedUser). It will most likely be used everywhere
-			    */
-			}
-		}
-		
-		if(needsLoginForm){
-			response.sendRedirect(request.getContextPath() + DO_LOG_IN);
-		}else{
-			chain.doFilter(request, response);
-		}
-		
+        
+        if(userId == null || token == null){ //missing the cookies, one needs to login.
+            response.sendRedirect(request.getContextPath() + DO_LOG_IN);
+        }else{
+            //Try to find a user that matches that 
+            User authenticatedUser = User.getAuthenticatedUserByToken(userId, token);
+            if(authenticatedUser == null){ //could not find a user with that tocken and id
+                response.sendRedirect(request.getContextPath() + DO_LOG_IN); // go login
+            }else{//we found the user
+                // enhance request with the found user. It will most likely be used everywhere
+                req.setAttribute("authenticatedUser", authenticatedUser);
+                chain.doFilter(request, response);
+            }   
+        }
 	}
 
 	/**
