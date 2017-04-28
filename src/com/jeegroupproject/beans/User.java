@@ -2,12 +2,14 @@ package com.jeegroupproject.beans;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
 
 import com.jeegroupproject.database.*;
 import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.PreparedStatement;
 import com.mysql.jdbc.Statement;
 import com.jeegroupproject.bcrypt.*;
+import java.sql.Timestamp;
 
 public class User {
 	private int id;
@@ -15,13 +17,19 @@ public class User {
 	private String surname;
 	private String password;
 	private boolean is_employee;
-	private boolean is_customer;
 	private int client_id;
 	private String access_token;
 	private String email;
+	private String dob;
+	private String phoneNumber;
+	private Date created_at;
+	private Date updated_at;
+	private int advisor_id;
 	
 	
-  	// Define the BCrypt workload to use when generating password hashes. 10-31 is a valid value.
+  	
+
+	// Define the BCrypt workload to use when generating password hashes. 10-31 is a valid value.
 	// Must be consistent across the app or hashed passwords won't match
 	private static int workload = 12;
 
@@ -63,16 +71,6 @@ public class User {
 	}
 	
 	
-	/* TODO
-	 * prepare a method to insert stuff around
-	 * public static void prepareSampledata(){
-	 * to prepare a test sample of clients
-	 * String iQuery = "INSERT INTO `users` (`id`, `name`, `surname`, `email`, `password`, `is_employee`, `is_customer`, `client_id`, `access_token`) VALUES (2, 'Toto', 'Tata', 'toto.tata@titi.fr', '$2y$10$a00IrSEYIIYI.CYC8pqGeu2G8uYMKhMj19GQRmeAR0YTJMs4RJJzO', 0, 1, 12345678, '');";
-
-			statement.executeUpdate(iQuery));
-		}
-	 */
-	
 	
 	/**
 	 * Helper method to get a client by its client id from database
@@ -84,20 +82,25 @@ public class User {
 		Connection connection = DBConnectionFactory.getConnection(); //returns a prepared connection to the database
 		User user = new User();
 		try {
-			PreparedStatement pStatement = (PreparedStatement) connection.prepareStatement("SELECT * FROM users WHERE `client_id` = ?");
-			pStatement.setInt(1, client_id);
+			PreparedStatement pStatement = (PreparedStatement) connection.prepareStatement("SELECT * FROM sac_person WHERE `person_external_id` = ?");
+			pStatement.setInt(2, client_id);
 			ResultSet result = pStatement.executeQuery();
 	
 			if(result.next()){ //check we have at least one result
 				user.setId( result.getInt(1));
-				user.setName(result.getString(2));
-				user.setSurname(result.getString(3));
-				user.setEmail( result.getString(4));
-				user.setPassword(result.getString(5));
-				user.setIs_employee(result.getBoolean(6));
-				user.setIs_customer(result.getBoolean(7));
-				user.setClient_id(result.getInt(8));
-				user.setAccess_token(result.getString(9));
+				user.setClient_id(result.getInt(2));
+				user.setName(result.getString(3));
+				user.setSurname(result.getString(4));
+				user.setEmail( result.getString(5));
+				user.setPassword( result.getString(6));
+				user.setDob(result.getString(7));
+				user.setAccess_token(result.getString(8));
+				user.setPhoneNumber(result.getString(9));
+				user.setCreated_at(result.getDate(10));
+				user.setUpdated_at(result.getDate(11));
+				user.setAdvisor_id(result.getInt(12));
+				user.setIs_employee(result.getBoolean(13));
+
 			}
 				
 		} catch (SQLException e) {
@@ -120,48 +123,61 @@ public class User {
 		User userByEmail;
 		try {
 			if(clientId != null){
-				PreparedStatement pStatement1 = (PreparedStatement) connection.prepareStatement("SELECT * FROM users WHERE `client_id` = ?");
-				pStatement1.setInt(1, clientId);
+				PreparedStatement pStatement1 = (PreparedStatement) connection.prepareStatement("SELECT * FROM sac_person WHERE `person_external_id` = ?");
+				pStatement1.setInt(2, clientId);
 				ResultSet result1 = pStatement1.executeQuery();
 				if(result1.next()){ //check we have at least one result
 					userByClientID = new User();
+					
 					userByClientID.setId( result1.getInt(1));
-					userByClientID.setName(result1.getString(2));
-					userByClientID.setSurname(result1.getString(3));
-					userByClientID.setEmail( result1.getString(4));
-					userByClientID.setPassword(result1.getString(5));
-					userByClientID.setIs_employee(result1.getBoolean(6));
-					userByClientID.setIs_customer(result1.getBoolean(7));
-					userByClientID.setClient_id(result1.getInt(8));
-					userByClientID.setAccess_token(result1.getString(9));
+					userByClientID.setClient_id(result1.getInt(2));
+					userByClientID.setName(result1.getString(3));
+					userByClientID.setSurname(result1.getString(4));
+					userByClientID.setEmail( result1.getString(5));
+					userByClientID.setPassword( result1.getString(6));
+					userByClientID.setDob(result1.getString(7));
+					userByClientID.setAccess_token(result1.getString(8));
+					userByClientID.setPhoneNumber(result1.getString(9));
+					userByClientID.setCreated_at(result1.getDate(10));
+					userByClientID.setUpdated_at(result1.getDate(11));
+					userByClientID.setAdvisor_id(result1.getInt(12));
+					userByClientID.setIs_employee(result1.getBoolean(13));
+					
 					if(checkPassword(password, userByClientID.getPassword())){
                         //before returning the client, update its token
                         userByClientID.regenerateToken();
-                        userByEmail.persist();//save change to the token
+                        userByClientID.persist();//save change to the token
                         return userByClientID;
                     }
 				}
 			}
 			
 			if(email != null){
-				PreparedStatement pStatement2 = (PreparedStatement) connection.prepareStatement("SELECT * FROM users WHERE `email` = ?");
+				PreparedStatement pStatement2 = (PreparedStatement) connection.prepareStatement("SELECT * FROM sac_person WHERE `person_email` = ?");
 				pStatement2.setString(1, email);
 				ResultSet result2 = pStatement2.executeQuery();
 		
 				
 				if(result2.next()){ //check we have at least one result
 					userByEmail = new User();
+									
 					userByEmail.setId( result2.getInt(1));
-					userByEmail.setName(result2.getString(2));
-					userByEmail.setSurname(result2.getString(3));
-					userByEmail.setEmail( result2.getString(4));
-					userByEmail.setPassword(result2.getString(5));
-					userByEmail.setIs_employee(result2.getBoolean(6));
-					userByEmail.setIs_customer(result2.getBoolean(7));
-					userByEmail.setClient_id(result2.getInt(8));
-					userByEmail.setAccess_token(result2.getString(9));
+					userByEmail.setClient_id(result2.getInt(2));
+					userByEmail.setName(result2.getString(3));
+					userByEmail.setSurname(result2.getString(4));
+					userByEmail.setEmail( result2.getString(5));
+					userByEmail.setPassword( result2.getString(6));
+					userByEmail.setDob(result2.getString(7));
+					userByEmail.setAccess_token(result2.getString(8));
+					userByEmail.setPhoneNumber(result2.getString(9));
+					userByEmail.setCreated_at(result2.getDate(10));
+					userByEmail.setUpdated_at(result2.getDate(11));
+					userByEmail.setAdvisor_id(result2.getInt(12));
+					userByEmail.setIs_employee(result2.getBoolean(13));
+					
 					if(checkPassword(password, userByEmail.getPassword())){
-						//TODO : before returning the client, update its token
+						userByEmail.regenerateToken();
+                        userByEmail.persist();//save change to the token
 						return userByEmail;
 						
 					}
@@ -184,22 +200,27 @@ public class User {
 		try{
 			
 			if(userId !=null && token != null){
-				PreparedStatement pStatement = (PreparedStatement) connection.prepareStatement("SELECT * FROM users where id = ? and token = ?");
+				PreparedStatement pStatement = (PreparedStatement) connection.prepareStatement("SELECT * FROM sac_person where person_id = ? and person_token = ?");
 				pStatement.setInt(1, userId);
 				pStatement.setString(2, token);
 				ResultSet result = pStatement.executeQuery();
 				
 				if(result.next()){ // check we have at least one result
 					user = new User();
-					user.setId(result.getInt(1));
-					user.setName(result.getString(2));
-					user.setSurname(result.getString(3));
-					user.setEmail( result.getString(4));
-                    user.setPassword(result.getString(5));
-                    user.setIs_employee(result.getBoolean(6));
-                    user.setIs_customer(result.getBoolean(7));
-                    user.setClient_id(result.getInt(8));
-                    user.setAccess_token(result.getString(9));
+                    
+                    user.setId( result.getInt(1));
+					user.setClient_id(result.getInt(2));
+					user.setName(result.getString(3));
+					user.setSurname(result.getString(4));
+					user.setEmail( result.getString(5));
+					user.setPassword( result.getString(6));
+					user.setDob(result.getString(7));
+					user.setAccess_token(result.getString(8));
+					user.setPhoneNumber(result.getString(9));
+					user.setCreated_at(result.getDate(10));
+					user.setUpdated_at(result.getDate(11));
+					user.setAdvisor_id(result.getInt(12));
+					user.setIs_employee(result.getBoolean(13));
                 }
             }
             
@@ -222,7 +243,7 @@ public class User {
         this.setAccess_token(hashPassword(StringifiedParameters));	
     }
 	
-	public void persist(){
+	public void persist() throws SQLException{
         // prepare a connection
         Connection connection = DBConnectionFactory.getConnection(); //returns a prepared connection to the database
         
@@ -230,37 +251,52 @@ public class User {
         //if he does, he already exists in database, so we update it
         if(this.getId() > 0){
             //prepare a prepared statement for update
-            PreparedStatement pStatement = (PreparedStatement) connection.prepareStatement("UPDATE users SET name = ?, surname = ?, password = ?, is_employee = ?, is_customer = ?, client_id = ?,  `token` = ? , email = ? WHERE `id` = ?  ");
+            PreparedStatement pStatement = (PreparedStatement) connection.prepareStatement("UPDATE sac_person SET person_external_id = ?, person_firstname = ?, person_lastname = ?, person_email = ?, person_password = ?, person_dob = ?, person_token = ?, person_phone_number = ?, person_created_At = ?, person_updated_at = ?, person_advisor_id = ?, person_is_advisor = ? WHERE `id` = ?  ");
             pStatement.setInt(1, this.getId());
-            pStatement.setString(2, this.getName());
-            pStatement.setString(3, this.getSurname());
-            pStatement.setString(4, this.getPassword());
-            pStatement.setInt(5, this.isIs_employee() ? 1 : 0);
-            pStatement.setInt(6, this.isIs_customer() ? 1 : 0);
-            pStatement.setInt(7, this.getClient_id());
+            pStatement.setInt(2, this.getClient_id());
+            pStatement.setString(3, this.getName());
+            pStatement.setString(4, this.getSurname());
+            pStatement.setString(5, this.getEmail());
+            pStatement.setString(6, this.getPassword());
+            pStatement.setString(7, this.getDob());
             pStatement.setString(8, this.getAccess_token());
-            pStatement.setString(9, this.getEmail());
+            pStatement.setString(9, this.getPhoneNumber());
+            pStatement.setTimestamp(10, new java.sql.Timestamp(this.getCreated_at().getTime()));
+            pStatement.setTimestamp(11, new java.sql.Timestamp(this.getUpdated_at().getTime()));
+            pStatement.setInt(12, this.getAdvisor_id());
+            pStatement.setBoolean(13, this.isIs_employee());
 
             // execute update SQL statement
             pStatement.executeUpdate();
 
         }else{//if he does not, one must insert it.
             //prepare a prepared statement for insertion
-            PreparedStatement pStatement = (PreparedStatement) connection.prepareStatement("INSERT<TODODODODOODOD>");
-            pStatement.setInt(1, clientId);
-            pStatement.setString(2, token);
-            //TODO add all the values in the prepared statement.
+        	
+            PreparedStatement pStatement = (PreparedStatement) connection.prepareStatement("INSERT INTO `sac_person` (`person_external_id`, `person_firstname`, `person_lastname`, `person_email`, `person_password`, `person_dob`, `person_token`, `person_phone_number`, `person_created_At`, `person_updated_at`, `person_advisor_id`, `person_is_advisor`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?);");
+            pStatement.setInt(1, this.getId());
+            pStatement.setInt(2, this.getClient_id());
+            pStatement.setString(3, this.getName());
+            pStatement.setString(4, this.getSurname());
+            pStatement.setString(5, this.getEmail());
+            pStatement.setString(6, this.getPassword());
+            pStatement.setString(7, this.getDob());
+            pStatement.setString(8, this.getAccess_token());
+            pStatement.setString(9, this.getPhoneNumber());
+            pStatement.setTimestamp(10, new java.sql.Timestamp(this.getCreated_at().getTime()));
+            pStatement.setTimestamp(11, new java.sql.Timestamp(this.getUpdated_at().getTime()));
+            pStatement.setInt(12, this.getAdvisor_id());
+            pStatement.setBoolean(13, this.isIs_employee());
 
             // execute update SQL stetement
-            preparedStatement.executeUpdate();
+            pStatement.executeUpdate();
 
-            int affectedRows = statement.executeUpdate();
+            int affectedRows = pStatement.executeUpdate();
 
             if (affectedRows == 0) {
                 throw new SQLException("Creating user failed, no rows affected.");
             }
 
-            try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
+            try (ResultSet generatedKeys = pStatement.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
                     this.setId(generatedKeys.getInt(1));
                 }
@@ -273,9 +309,6 @@ public class User {
 
     }
 
-	
-	//TODO : Create a non-static method to save a client to database 
-	
 	
 	
 	public int getId() {
@@ -308,12 +341,7 @@ public class User {
 	public void setIs_employee(boolean is_employee) {
 		this.is_employee = is_employee;
 	}
-	public boolean isIs_customer() {
-		return is_customer;
-	}
-	public void setIs_customer(boolean is_customer) {
-		this.is_customer = is_customer;
-	}
+
 	public int getClient_id() {
 		return client_id;
 	}
@@ -336,14 +364,54 @@ public class User {
 		return email;
 	}
 
-
-
-
-
-
 	public void setEmail(String email) {
 		this.email = email;
 	}
+	
+	public String getDob() {
+		return dob;
+	}
+
+	public void setDob(String dob) {
+		this.dob = dob;
+	}
+
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+
+	public Date getCreated_at() {
+		return created_at;
+	}
+
+	public void setCreated_at(Date created_at) {
+		this.created_at = created_at;
+	}
+
+	public Date getUpdated_at() {
+		return updated_at;
+	}
+
+	public void setUpdated_at(Date updated_at) {
+		this.updated_at = updated_at;
+	}
+
+	public int getAdvisor_id() {
+		return advisor_id;
+	}
+
+	public void setAdvisor_id(int advisor_id) {
+		this.advisor_id = advisor_id;
+	}
+
+
+
+
+
 	
 
 }

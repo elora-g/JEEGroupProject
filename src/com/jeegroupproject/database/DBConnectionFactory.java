@@ -11,7 +11,7 @@ public class DBConnectionFactory {
 		
 		//TODO check that the connection details are correct when porting to another machine
 		// THAT CONFIGURATION WORKS FOR ELORA ON HER LAPTOP WITH MAMP
-        String url = "jdbc:mysql://localhost:8889/jee_group_project";
+        String url = "jdbc:mysql://localhost:8889/societe_agricole_test";
         String usernameDB = "root";
         String passwordDB = "root";
         
