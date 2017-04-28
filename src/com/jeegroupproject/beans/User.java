@@ -196,7 +196,7 @@ public class User {
 	public static User getAuthenticatedUserByToken(Integer userId, String token){
 		
 		Connection connection = DBConnectionFactory.getConnection(); // returns a prepared connection to the DB
-		User user;
+		User user = null;
 		try{
 			
 			if(userId !=null && token != null){
@@ -230,7 +230,7 @@ public class User {
             e.printStackTrace();
         }
         
-        return null;    
+        return user;    
     }
 		
 	public void regenerateToken(){ 
@@ -243,67 +243,83 @@ public class User {
         this.setAccess_token(hashPassword(StringifiedParameters));	
     }
 	
-	public void persist() throws SQLException{
+	public void persist(){
         // prepare a connection
         Connection connection = DBConnectionFactory.getConnection(); //returns a prepared connection to the database
         
+        PreparedStatement pStatement = null;
         //test if the user already has an ID >=0 (id -1 means not yet created in db).
         //if he does, he already exists in database, so we update it
         if(this.getId() > 0){
             //prepare a prepared statement for update
-            PreparedStatement pStatement = (PreparedStatement) connection.prepareStatement("UPDATE sac_person SET person_external_id = ?, person_firstname = ?, person_lastname = ?, person_email = ?, person_password = ?, person_dob = ?, person_token = ?, person_phone_number = ?, person_created_At = ?, person_updated_at = ?, person_advisor_id = ?, person_is_advisor = ? WHERE `id` = ?  ");
-            pStatement.setInt(1, this.getId());
-            pStatement.setInt(2, this.getClient_id());
-            pStatement.setString(3, this.getName());
-            pStatement.setString(4, this.getSurname());
-            pStatement.setString(5, this.getEmail());
-            pStatement.setString(6, this.getPassword());
-            pStatement.setString(7, this.getDob());
-            pStatement.setString(8, this.getAccess_token());
-            pStatement.setString(9, this.getPhoneNumber());
-            pStatement.setTimestamp(10, new java.sql.Timestamp(this.getCreated_at().getTime()));
-            pStatement.setTimestamp(11, new java.sql.Timestamp(this.getUpdated_at().getTime()));
-            pStatement.setInt(12, this.getAdvisor_id());
-            pStatement.setBoolean(13, this.isIs_employee());
+            System.err.println("trying to update a record !");
+			try {
+				pStatement = (PreparedStatement) connection.prepareStatement("UPDATE sac_person SET person_external_id = ?, person_firstname = ?, person_lastname = ?, person_email = ?, person_password = ?, person_dob = ?, person_token = ?, person_phone_number = ?, person_created_At = ?, person_updated_at = ?, person_advisor_id = ?, person_is_advisor = ? WHERE person_id = ?  ;");
+			
+	            pStatement.setInt(1, this.getClient_id());
+	            pStatement.setString(2, this.getName());
+	            pStatement.setString(3, this.getSurname());
+	            pStatement.setString(4, this.getEmail());
+	            pStatement.setString(5, this.getPassword());
+	            pStatement.setString(6, this.getDob());
+	            pStatement.setString(7, this.getAccess_token());
+	            pStatement.setString(8, this.getPhoneNumber());
+	            pStatement.setTimestamp(9, new java.sql.Timestamp(this.getCreated_at().getTime()));
+	            pStatement.setTimestamp(10, new java.sql.Timestamp(this.getUpdated_at().getTime()));
+	            pStatement.setInt(11, this.getAdvisor_id());
+	            pStatement.setBoolean(12, this.isIs_employee());
+	            pStatement.setInt(13, this.getId());
+	
+	            // execute update SQL statement
+	            pStatement.executeUpdate();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
 
-            // execute update SQL statement
-            pStatement.executeUpdate();
+	            System.err.println("Update of a record failed !");
+				e.printStackTrace();
+			}
 
         }else{//if he does not, one must insert it.
             //prepare a prepared statement for insertion
         	
-            PreparedStatement pStatement = (PreparedStatement) connection.prepareStatement("INSERT INTO `sac_person` (`person_external_id`, `person_firstname`, `person_lastname`, `person_email`, `person_password`, `person_dob`, `person_token`, `person_phone_number`, `person_created_At`, `person_updated_at`, `person_advisor_id`, `person_is_advisor`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?);");
-            pStatement.setInt(1, this.getId());
-            pStatement.setInt(2, this.getClient_id());
-            pStatement.setString(3, this.getName());
-            pStatement.setString(4, this.getSurname());
-            pStatement.setString(5, this.getEmail());
-            pStatement.setString(6, this.getPassword());
-            pStatement.setString(7, this.getDob());
-            pStatement.setString(8, this.getAccess_token());
-            pStatement.setString(9, this.getPhoneNumber());
-            pStatement.setTimestamp(10, new java.sql.Timestamp(this.getCreated_at().getTime()));
-            pStatement.setTimestamp(11, new java.sql.Timestamp(this.getUpdated_at().getTime()));
-            pStatement.setInt(12, this.getAdvisor_id());
-            pStatement.setBoolean(13, this.isIs_employee());
+        	try {
+	            pStatement = (PreparedStatement) connection.prepareStatement("INSERT INTO `sac_person` (`person_external_id`, `person_firstname`, `person_lastname`, `person_email`, `person_password`, `person_dob`, `person_token`, `person_phone_number`, `person_created_At`, `person_updated_at`, `person_advisor_id`, `person_is_advisor`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?);");
 
-            // execute update SQL stetement
-            pStatement.executeUpdate();
-
-            int affectedRows = pStatement.executeUpdate();
-
-            if (affectedRows == 0) {
-                throw new SQLException("Creating user failed, no rows affected.");
-            }
-
-            try (ResultSet generatedKeys = pStatement.getGeneratedKeys()) {
-                if (generatedKeys.next()) {
-                    this.setId(generatedKeys.getInt(1));
-                }
-                else {
-                    throw new SQLException("Creating user failed, no ID obtained.");
-                }
-            }
+	            pStatement.setInt(1, this.getClient_id());
+	            pStatement.setString(2, this.getName());
+	            pStatement.setString(3, this.getSurname());
+	            pStatement.setString(4, this.getEmail());
+	            pStatement.setString(5, this.getPassword());
+	            pStatement.setString(6, this.getDob());
+	            pStatement.setString(7, this.getAccess_token());
+	            pStatement.setString(8, this.getPhoneNumber());
+	            pStatement.setTimestamp(9, new java.sql.Timestamp(this.getCreated_at().getTime()));
+	            pStatement.setTimestamp(10, new java.sql.Timestamp(this.getUpdated_at().getTime()));
+	            pStatement.setInt(11, this.getAdvisor_id());
+	            pStatement.setBoolean(12, this.isIs_employee());
+	
+	            // execute update SQL stetement
+	            pStatement.executeUpdate();
+	
+	            int affectedRows = pStatement.executeUpdate();
+	
+	            if (affectedRows == 0) {
+	                throw new SQLException("Creating user failed, no rows affected.");
+	            }
+	
+	            try (ResultSet generatedKeys = pStatement.getGeneratedKeys()) {
+	                if (generatedKeys.next()) {
+	                    this.setId(generatedKeys.getInt(1));
+	                }
+	                else {
+	                    throw new SQLException("Creating user failed, no ID obtained.");
+	                }
+	            }
+	            
+	        } catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
         }
 
 

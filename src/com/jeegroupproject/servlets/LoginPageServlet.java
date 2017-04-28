@@ -67,7 +67,36 @@ public class LoginPageServlet extends HttpServlet {
 		String clientId = request.getParameter("clientId");
 		String password = request.getParameter("password");
 		
+		Cookie[] cookies = request.getCookies(); // get all cookies for the current domain (IE, those that are sent by client)
+		
+		
+		//first of all, test if there is a token and userid in cookies.
+		Integer userId = null;
+		String token = null;
+		if(cookies != null ){
+            for (Cookie cookie : cookies) {
+                //  cookie authentication takes both userID and token in account for validation
+                   if (cookie.getName().equals("userId")) { // get the value of userId cookie
+                   userId = Integer.parseInt(cookie.getValue());         
+                }
+                if (cookie.getName().equals("token")) { // get the value of token cookie
+                   token = cookie.getValue();         
+                }
+            }
+        }
 
+		if(userId != null && token != null){ //missing the cookies, one needs to login.
+           
+            //Try to find a user that matches that 
+            User authenticatedUser = User.getAuthenticatedUserByToken(userId, token);
+            if(authenticatedUser != null){ 
+            	
+    			response.sendRedirect(request.getContextPath() + "/restricted/main");// redirect to main
+    			
+            	
+            }
+		}
+		
 		//Testing given values.
 		if(email.trim().isEmpty() && clientId.trim().isEmpty()){ // Fail if both client id and email are empty
 			String messageId = "Vous n'avez indiqué ni votre identifiant ni votre e-mail";
@@ -81,21 +110,24 @@ public class LoginPageServlet extends HttpServlet {
 			
 			//TODO : remove this next line.
 			//It is only here to help grabbing hashed passwords to then insert them into the database.
-			System.err.println("hash for enterted password" + User.hashPassword(password));
+			System.err.println("hash for entered password" + User.hashPassword(password));
 			
 			//remember : getAuthenticatedUser should generate auth_token for said user
 			User connectedUser = User.getAuthenticatedUser( clientId.trim().isEmpty() ? null :  Integer.parseInt(clientId), email.trim().isEmpty() ? null: email, password);
 			if(connectedUser != null){
-				response.addCookie(new Cookie("loggedIn","1")); //set cookie
-				//TODO : place the token for user in cookie response.addCookie(new COokie("userId",connectedUserId));;
-				//TODO : place the user id in Cookie "user id", value of userid
+				// place the token for user in cookie
+				response.addCookie(new Cookie("token",connectedUser.getAccess_token())); //set cookie
+				//place the user id in Cookie
+				response.addCookie(new Cookie("userId", ((Integer)connectedUser.getId()).toString())); //set cookie
+				response.sendRedirect(request.getContextPath() + "/restricted/main");// redirect to main
 			}else{
 				String messageNoAuth = "Utilisateur Inconnu ou mot de passe incorrect";
 				request.setAttribute("message", messageNoAuth);
 				this.getServletContext().getRequestDispatcher(VIEW).forward(request, response);// show an error on login page
 			}
-				
-			response.sendRedirect(request.getContextPath() + "/restricted/main");// redirect to main
+			
+			
+			
 			
 		}
 		
