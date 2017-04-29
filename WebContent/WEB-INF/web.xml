@@ -37,8 +37,8 @@
     <filter-class>com.jeegroupproject.filters.IsAuthenticated</filter-class>
   </filter>
   <filter>
-  	<filter-name>IsAdvisor</filter-name>
-  	<filter-class>com.jeegroupproject.filters.IsAdvisor</filter-class>
+    <filter-name>IsAdvisor</filter-name>
+    <filter-class>com.jeegroupproject.filters.IsAdvisor</filter-class>
   </filter>
   <filter-mapping>
     <filter-name>IsAuthenticated</filter-name>
@@ -46,7 +46,7 @@
     <url-pattern>/advisor/*</url-pattern>
   </filter-mapping>
   <filter-mapping>
-  	<filter-name>IsAdvisor</filter-name>
-  	<url-pattern>/advisor/*</url-pattern>
+    <filter-name>IsAdvisor</filter-name>
+    <url-pattern>/advisor/*</url-pattern>
   </filter-mapping>
 </web-app>
