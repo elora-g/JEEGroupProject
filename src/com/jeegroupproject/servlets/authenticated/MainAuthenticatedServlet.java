@@ -1,9 +1,8 @@
-package com.jeegroupproject.servlets;
+package com.jeegroupproject.servlets.authenticated;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -11,17 +10,18 @@ import javax.servlet.http.HttpServletResponse;
 import com.jeegroupproject.filters.IsAuthenticated;
 
 /**
- * Servlet implementation class LogOutServlet
+ * Servlet implementation class MainAuthenticatedServlet
  */
-@WebServlet("/LogOutServlet")
-public class LogOutServlet extends HttpServlet {
+@WebServlet("/MainServlet")
+public class MainAuthenticatedServlet extends HttpServlet {
+	
 	private static final long serialVersionUID = 1L;
-	private static final String VIEW = "/login";
+	public static final String VIEW = "/WEB-INF/Views/authenticated/mainauthenticated.jsp";
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public LogOutServlet() {
+    public MainAuthenticatedServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -30,19 +30,22 @@ public class LogOutServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-		//TODO find how to invalidate a cookie (if possible because since cookies are specific to client, it's possible that it cannot be deleted from the server)
-		response.addCookie(new Cookie(IsAuthenticated.PERSONID_COOKIE_NAME,"-1")); //set cookie to -1 because user can have a negative id ==> invalidate the filter and logs out
-		response.addCookie(new Cookie(IsAuthenticated.TOKEN_COOKIE_NAME,""));
-		response.sendRedirect(request.getContextPath() + VIEW);
+		
+		
+		request.getAttribute(IsAuthenticated.AUTH_PERSON_ATTR_NAME); // returns the authenticated person set by the filter
+		
+		//TODO : do something with the authenticated person
+		
+		this.getServletContext().getRequestDispatcher(VIEW).forward(request, response);
+		
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+
 		doGet(request, response);
 	}
-	
+
 }

@@ -1,4 +1,4 @@
-package com.jeegroupproject.servlets;
+package com.jeegroupproject.servlets.common;
 
 import java.io.IOException;
 
@@ -18,8 +18,8 @@ import com.jeegroupproject.filters.IsAuthenticated;
 @WebServlet("/LoginPageServlet")
 public class LoginPageServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	public static final String VIEW = "/WEB-INF/loginPage.jsp";
-	public static final String MAIN_PAGE = "/restricted/main";
+	public static final String VIEW = "/WEB-INF/Views/common/loginPage.jsp";
+	public static final String MAIN_PAGE = "/authenticated/main";
        
     public LoginPageServlet() {
         super();

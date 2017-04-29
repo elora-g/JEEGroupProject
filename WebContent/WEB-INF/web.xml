@@ -2,34 +2,44 @@
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd" id="WebApp_ID" version="3.1">
   <servlet>
     <servlet-name>LoginPageServlet</servlet-name>
-    <servlet-class>com.jeegroupproject.servlets.LoginPageServlet</servlet-class>
+    <servlet-class>com.jeegroupproject.servlets.common.LoginPageServlet</servlet-class>
   </servlet>
   <servlet>
-    <servlet-name>Main</servlet-name>
-    <servlet-class>com.jeegroupproject.servlets.MainServlet</servlet-class>
+    <servlet-name>LogOutServlet</servlet-name>
+    <servlet-class>com.jeegroupproject.servlets.common.LogOutServlet</servlet-class>
   </servlet>
   <servlet>
-  	<servlet-name>LogOutServlet</servlet-name>
-  	<servlet-class>com.jeegroupproject.servlets.LogOutServlet</servlet-class>
+    <servlet-name>MainAuthenticated</servlet-name>
+    <servlet-class>com.jeegroupproject.servlets.authenticated.MainAuthenticatedServlet</servlet-class>
+  </servlet>
+  <servlet>
+  	<servlet-name>MainAdvisor</servlet-name>
+  	<servlet-class>com.jeegroupproject.servlets.advisor.MainAdvisor</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>LoginPageServlet</servlet-name>
     <url-pattern>/login</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-    <servlet-name>Main</servlet-name>
-    <url-pattern>/restricted/main</url-pattern>
+    <servlet-name>LogOutServlet</servlet-name>
+    <url-pattern>/logout</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-  	<servlet-name>LogOutServlet</servlet-name>
-  	<url-pattern>/logout</url-pattern>
+    <servlet-name>MainAuthenticated</servlet-name>
+    <url-pattern>/authenticated/main</url-pattern>
   </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>MainAdvisor</servlet-name>
+  	<url-pattern>/advisor/main</url-pattern>
+  </servlet-mapping>
+
   <filter>
     <filter-name>IsAuthenticated</filter-name>
     <filter-class>com.jeegroupproject.filters.IsAuthenticated</filter-class>
   </filter>
   <filter-mapping>
     <filter-name>IsAuthenticated</filter-name>
-    <url-pattern>/restricted/*</url-pattern>
+    <url-pattern>/authenticated/*</url-pattern>
+    <url-pattern>/advisor/*</url-pattern>
   </filter-mapping>
 </web-app>

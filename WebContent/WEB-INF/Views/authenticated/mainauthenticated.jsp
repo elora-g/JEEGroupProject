@@ -8,7 +8,7 @@
 <title>Bienvenue</title>
 </head>
 <body>
-	<p>Bienvenue</p>
+	<p>Bienvenue Client</p>
 	<form method="post" action="/JEEGroupProject/logout"> <%--TODO : corriger le path --%>
 		<input type="submit" value="Déconnexion" class="noLabel" />
     	<br />
