@@ -104,7 +104,7 @@ public class Person {
 						person.setCreatedAt(result.getDate(10));
 						person.setUpdatedAt(result.getDate(11));
 						person.setAdvisorId(result.getInt(12));
-						person.setAdvisor(result.getBoolean(13));
+						person.setIsAdvisor(result.getBoolean(13));
 					}
 				}catch (SQLException e) {
 					System.err.println("getPersonByExternalId: problem with the result set");
@@ -164,7 +164,7 @@ public class Person {
 							personByExternalId.setCreatedAt(result1.getDate(10));
 							personByExternalId.setUpdatedAt(result1.getDate(11));
 							personByExternalId.setAdvisorId(result1.getInt(12));
-							personByExternalId.setAdvisor(result1.getBoolean(13));
+							personByExternalId.setIsAdvisor(result1.getBoolean(13));
 							
 							if(checkPassword(password, personByExternalId.getPassword())){
 		                        //before returning the person, update its token
@@ -204,7 +204,7 @@ public class Person {
 							personByEmail.setCreatedAt(result2.getDate(10));
 							personByEmail.setUpdatedAt(result2.getDate(11));
 							personByEmail.setAdvisorId(result2.getInt(12));
-							personByEmail.setAdvisor(result2.getBoolean(13));
+							personByEmail.setIsAdvisor(result2.getBoolean(13));
 							
 							if(checkPassword(password, personByEmail.getPassword())){
 								personByEmail.regenerateToken();
@@ -272,7 +272,7 @@ public class Person {
 							person.setUpdatedAt(result.getDate(11));
 							person.setAdvisorId(result.getInt(12));
 							
-							person.setAdvisor(result.getBoolean(13));
+							person.setIsAdvisor(result.getBoolean(13));
 		                }
 	            
 					}catch (SQLException e) {
@@ -339,7 +339,7 @@ public class Person {
 		            pStatement.setTimestamp(9, new java.sql.Timestamp(this.getCreatedAt().getTime()));
 		            pStatement.setTimestamp(10, new java.sql.Timestamp(this.getUpdatedAt().getTime()));
 		            pStatement.setInt(11, this.getAdvisorId());
-		            pStatement.setBoolean(12, this.isAdvisor());
+		            pStatement.setBoolean(12, this.getIsAdvisor());
 		            pStatement.setInt(13, this.getId());
 		
 		            // execute update SQL statement
@@ -364,7 +364,7 @@ public class Person {
 		            pStatement.setTimestamp(9, new Timestamp(this.getCreatedAt().getTime()));
 		            pStatement.setTimestamp(10, new Timestamp(this.getUpdatedAt().getTime()));
 		            pStatement.setInt(11, this.getAdvisorId());
-		            pStatement.setBoolean(12, this.isAdvisor());
+		            pStatement.setBoolean(12, this.getIsAdvisor());
 		
 		            // execute update SQL statement
 		            pStatement.executeUpdate();
@@ -422,10 +422,10 @@ public class Person {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public boolean isAdvisor() {
+	public boolean getIsAdvisor() {
 		return isAdvisor;
 	}
-	public void setAdvisor(boolean isAdvisor) {
+	public void setIsAdvisor(boolean isAdvisor) {
 		this.isAdvisor = isAdvisor;
 	}
 

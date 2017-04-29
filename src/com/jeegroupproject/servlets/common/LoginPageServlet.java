@@ -39,7 +39,7 @@ public class LoginPageServlet extends HttpServlet {
 		Person authenticatedPerson = IsAuthenticated.getAuthenticatedPersonFromCookies(cookies);
 		
 		if(authenticatedPerson != null){ // if user is already authenticated, no need to show login page
-			if(authenticatedPerson.isAdvisor()){
+			if(authenticatedPerson.getIsAdvisor()){
 				response.sendRedirect(request.getContextPath() + MAIN_ADVISOR_PAGE); 
 			}else{
 				response.sendRedirect(request.getContextPath() + MAIN_AUTH_PAGE);
@@ -63,7 +63,7 @@ public class LoginPageServlet extends HttpServlet {
 		
 		Person authenticatedPerson = IsAuthenticated.getAuthenticatedPersonFromCookies(cookies);
 		if(authenticatedPerson != null){
-			if(authenticatedPerson.isAdvisor()){
+			if(authenticatedPerson.getIsAdvisor()){
 				response.sendRedirect(request.getContextPath() + MAIN_ADVISOR_PAGE);
 			}else{
 				response.sendRedirect(request.getContextPath() + MAIN_AUTH_PAGE);
@@ -100,7 +100,7 @@ public class LoginPageServlet extends HttpServlet {
 				response.addCookie(new Cookie(IsAuthenticated.TOKEN_COOKIE_NAME,connectedPerson.getToken())); //set cookie
 				//place the user id in Cookie
 				response.addCookie(new Cookie(IsAuthenticated.PERSONID_COOKIE_NAME, ((Integer)connectedPerson.getId()).toString())); //set cookie
-				if(connectedPerson.isAdvisor()){
+				if(connectedPerson.getIsAdvisor()){
 					response.sendRedirect(request.getContextPath() + MAIN_ADVISOR_PAGE);
 				}else{
 					response.sendRedirect(request.getContextPath() + MAIN_AUTH_PAGE);

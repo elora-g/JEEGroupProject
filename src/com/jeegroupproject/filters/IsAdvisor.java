@@ -44,7 +44,7 @@ public class IsAdvisor implements Filter {
 		
 		Person authenticatedPerson = (Person) request.getAttribute(IsAuthenticated.AUTH_PERSON_ATTR_NAME); // returns the authenticated person set by the filter
 		
-		if(authenticatedPerson.isAdvisor()){
+		if(authenticatedPerson.getIsAdvisor()){
 			
             chain.doFilter(request, response); //let the person go to the restricted main advisor page
             

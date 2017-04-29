@@ -15,5 +15,10 @@
 	</form>
 	
 	<c:out value="${authenticatedPerson.email}"></c:out>
+	
+	<c:if test="${authenticatedPerson.isAdvisor}">
+		<p><a href="/JEEGroupProject/advisor/main">Je veux voir mon dashboard</a></p>
+	</c:if>
+	
 </body>
 </html>
