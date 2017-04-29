@@ -17,22 +17,14 @@
                 
                 <label for="email">Adresse email</label>
                 <input type="email" id="email" name="email" size="20" maxlength="60" />
-                <%--<span class="error">${form.errors['email']}</span> --%>
                 <br />
                 
-                <label for="clientId">Client Id</label>
-                <input type="text" id="clientId" name="clientId" size="20" maxlength="60" />
-                <%--<span class="error">${form.errors['email']}</span> --%>
+                <label for="externalId">Client Id</label>
+                <input type="text" id="externalId" name="externalId" size="20" maxlength="60" />
                 <br />
 
                 <label for="password">Mot de passe <span class="required">*</span></label>
                 <input type="password" id="password" name="password" size="20" maxlength="20" />
-                <%-- <span class="error">${form.errors['password']}</span> --%>
-                <br />
-                
-                <br />
-                <label for="rememberMe">Se souvenir de moi</label>
-                <input type="checkbox" id="rememberMe" name="rememberMe" />
                 <br />
 
                 <input type="submit" value="Connexion" class="noLabel" />
