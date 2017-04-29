@@ -20,7 +20,11 @@ import com.jeegroupproject.beans.Person;
  */
 @WebFilter("/IsLoggedIn")
 public class IsLoggedIn implements Filter {
+	
 	public static final String DO_LOG_IN = "/login";
+	public static final String AUTH_PERSON_ATTR_NAME = "authenticatedPerson";
+	public static final String PERSONID_COOKIE_NAME = "id";
+	public static final String TOKEN_COOKIE_NAME = "token";
 	
     /**
      * Default constructor. 
@@ -36,29 +40,39 @@ public class IsLoggedIn implements Filter {
 		// TODO Auto-generated method stub
 	}
 	
-	
+	/**
+	 * Returns a person based on given cookies
+	 * @param cookies
+	 * @return
+	 */
 	public static Person getAuthenticatedPersonFromCookies(Cookie[] cookies){
 		
 		Person authenticatedPerson = null;
-
-		Integer userId = null;
+		Integer id = null;
 		String token = null;
+		
 		if(cookies != null ){
+			
             for (Cookie cookie : cookies) {
-                //  cookie authentication takes both userID and token in account for validation
-                   if (cookie.getName().equals("userId")) { // get the value of userId cookie
-                   userId = Integer.parseInt(cookie.getValue());         
+            	
+                //  cookie authentication takes both id and token in account for validation for security
+                   if (cookie.getName().equals(PERSONID_COOKIE_NAME)) { // get the value of userId cookie
+                   id = Integer.parseInt(cookie.getValue());    
+                   
                 }
-                if (cookie.getName().equals("token")) { // get the value of token cookie
+                if (cookie.getName().equals(TOKEN_COOKIE_NAME)) { // get the value of token cookie
+                	
                    token = cookie.getValue();         
+                   
                 }
             }
         }
 		
-		if(userId != null && token != null){
-            //Try to find a user that matches that 
-			authenticatedPerson = Person.getAuthenticatedPersonByToken(userId, token);
-
+		if(id != null && token != null){
+			
+            //Try to find a person that matches this id and this token
+			authenticatedPerson = Person.getAuthenticatedPersonByToken(id, token);
+			
         }
 
 		return authenticatedPerson;
@@ -69,16 +83,21 @@ public class IsLoggedIn implements Filter {
 	 */
 	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
 		
-		HttpServletRequest request = (HttpServletRequest) req; // Syntaxe pour caster
-		HttpServletResponse response = (HttpServletResponse) res;
+		HttpServletRequest request = (HttpServletRequest) req; // Cast to obtain HttpServletRequest specific methods required to get cookies
+		HttpServletResponse response = (HttpServletResponse) res; // Cast to obtain HttpServletResponse specific methods required to get cookies
 		Cookie[] cookies = request.getCookies(); // get all cookies for the current domain (IE, those that are sent by client)
 		
 		Person authenticatedPerson = getAuthenticatedPersonFromCookies(cookies);
+		
 		if(authenticatedPerson != null){
-			 req.setAttribute("authenticatedUser", authenticatedPerson);
-             chain.doFilter(request, response);
+			
+			 req.setAttribute(AUTH_PERSON_ATTR_NAME, authenticatedPerson);
+             chain.doFilter(request, response); //let the person go to the restricted main page
+             
 		}else{
-			response.sendRedirect(request.getContextPath() + DO_LOG_IN); // go login
+			
+			response.sendRedirect(request.getContextPath() + DO_LOG_IN); // redirects to login page
+			
 		}
 		
 	}

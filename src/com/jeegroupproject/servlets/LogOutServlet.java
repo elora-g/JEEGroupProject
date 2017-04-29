@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.jeegroupproject.filters.IsLoggedIn;
+
 /**
  * Servlet implementation class LogOutServlet
  */
@@ -29,8 +31,9 @@ public class LogOutServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		response.addCookie(new Cookie("userId","-1")); //set cookie
-		response.addCookie(new Cookie("token",""));
+		//TODO find how to invalidate a cookie (if possible because since cookies are specific to client, it's possible that it cannot be deleted from the server)
+		response.addCookie(new Cookie(IsLoggedIn.PERSONID_COOKIE_NAME,"-1")); //set cookie to -1 because user can have a negative id ==> invalidate the filter and logs out
+		response.addCookie(new Cookie(IsLoggedIn.TOKEN_COOKIE_NAME,""));
 		response.sendRedirect(request.getContextPath() + VIEW);
 	}
 

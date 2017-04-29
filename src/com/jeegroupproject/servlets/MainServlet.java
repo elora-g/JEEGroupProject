@@ -7,12 +7,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.jeegroupproject.beans.Person;
+import com.jeegroupproject.filters.IsLoggedIn;
+
 /**
  * Servlet implementation class MainServlet
  */
 @WebServlet("/MainServlet")
 public class MainServlet extends HttpServlet {
+	
 	private static final long serialVersionUID = 1L;
 	public static final String VIEW = "/WEB-INF/restricted/main.jsp";
        
@@ -29,11 +31,10 @@ public class MainServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		//find the associtated user from databse
-		//display the details for the user
 		
-		//TODO get the client in request params, when done implementing this in isLoggedIn filter
-		request.getAttribute("authenticatedUser") ;
+		request.getAttribute(IsLoggedIn.AUTH_PERSON_ATTR_NAME); // returns the authenticated person set by the filter
+		
+		//TODO : do something with the authenticated person
 		
 		this.getServletContext().getRequestDispatcher(VIEW).forward(request, response);
 		
@@ -43,7 +44,7 @@ public class MainServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+
 		doGet(request, response);
 	}
 

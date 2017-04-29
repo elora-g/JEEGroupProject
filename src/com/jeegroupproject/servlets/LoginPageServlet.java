@@ -88,9 +88,9 @@ public class LoginPageServlet extends HttpServlet {
 			if(connectedPerson != null){
 				
 				// place the token for user in cookie
-				response.addCookie(new Cookie("token",connectedPerson.getToken())); //set cookie
+				response.addCookie(new Cookie(IsLoggedIn.TOKEN_COOKIE_NAME,connectedPerson.getToken())); //set cookie
 				//place the user id in Cookie
-				response.addCookie(new Cookie("userId", ((Integer)connectedPerson.getId()).toString())); //set cookie
+				response.addCookie(new Cookie(IsLoggedIn.PERSONID_COOKIE_NAME, ((Integer)connectedPerson.getId()).toString())); //set cookie
 				response.sendRedirect(request.getContextPath() + MAIN_PAGE);// redirect to main
 				
 			}else{
