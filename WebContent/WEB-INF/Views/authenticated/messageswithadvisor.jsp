@@ -9,17 +9,18 @@
 </head>
 <body>
 	<p>importer la jsp menuauth</p>
-	<p>Bienvenue Client</p>
-	<form method="post" action="/JEEGroupProject/logout"> <%--TODO : corriger le path --%>
-		<input type="submit" value="Déconnexion" class="noLabel" />
-    	<br />
-	</form>
-	
+	<p>Echanger avec mon conseiller</p>
+
+	<p>Message 1</p>
+	<p>Réponse 1</p>
+	<p>Message 2</p>
+	<p>Réponse 2</p>
+	<p>Espace pour écrire un message au conseiller avec bouton submit</p>
+
+
 	<c:out value="${authenticatedPerson.email}"></c:out>
 	
-	<c:if test="${authenticatedPerson.isAdvisor}">
-		<p><a href="/JEEGroupProject/advisor/main">Je veux voir mon dashboard</a></p>
-	</c:if>
+
 	
 </body>
 </html>

@@ -9,6 +9,13 @@
 </head>
 <body>
 	<p>Bienvenue Advisor</p>
+	
+	<c:out value="${authenticatedPerson.email}"></c:out>
+	<br />
+	
+	<p>importer la jsp menuadvisor</p>
+	<br />
+	
 	<form method="post" action="/JEEGroupProject/logout"> <%--TODO : corriger le path --%>
 		<input type="submit" value="Déconnexion" class="noLabel" />
     	<br />
@@ -16,6 +23,6 @@
 	
 	<p><a href="/JEEGroupProject/authenticated/main">Je veux voir mes sous à moi</a></p>
 	
-	<c:out value="${authenticatedPerson.email}"></c:out>
+
 </body>
 </html>

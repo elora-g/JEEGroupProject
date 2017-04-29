@@ -8,18 +8,18 @@
 <title>Bienvenue</title>
 </head>
 <body>
+
 	<p>importer la jsp menuauth</p>
-	<p>Bienvenue Client</p>
-	<form method="post" action="/JEEGroupProject/logout"> <%--TODO : corriger le path --%>
-		<input type="submit" value="Déconnexion" class="noLabel" />
-    	<br />
-	</form>
+	<p>Mes informations personnelles</p>
 	
+	<p>Liste de mes informations personnelles</p>
+
+	<p>Formulaire pour éditer mes informations personnelles</p>
+
+
 	<c:out value="${authenticatedPerson.email}"></c:out>
 	
-	<c:if test="${authenticatedPerson.isAdvisor}">
-		<p><a href="/JEEGroupProject/advisor/main">Je veux voir mon dashboard</a></p>
-	</c:if>
+
 	
 </body>
 </html>
