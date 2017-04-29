@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.jeegroupproject.beans.User;
+import com.jeegroupproject.beans.Person;
 /**
  * Servlet implementation class MainServlet
  */

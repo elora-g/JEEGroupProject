@@ -1,6 +1,9 @@
 package com.jeegroupproject.beans;
 
 public class CredentialsBean {
+	
+	//TODO suppress thi bean cause not used
+	
 	private String email;
     private String password;
     private String clientId;

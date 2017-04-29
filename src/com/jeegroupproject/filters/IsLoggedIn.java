@@ -12,7 +12,8 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.jeegroupproject.beans.User;
+import com.jeegroupproject.beans.Person;
+
 
 /**
  * Servlet Filter implementation class IsLoggedIn
@@ -34,17 +35,12 @@ public class IsLoggedIn implements Filter {
 	public void destroy() {
 		// TODO Auto-generated method stub
 	}
+	
+	
+	public static Person getAuthenticatedPersonFromCookies(Cookie[] cookies){
+		
+		Person authenticatedPerson = null;
 
-	/**
-	 * @see Filter#doFilter(ServletRequest, ServletResponse, FilterChain)
-	 */
-	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
-		
-		HttpServletRequest request = (HttpServletRequest) req; // Syntaxe pour caster
-		HttpServletResponse response = (HttpServletResponse) res;
-		Cookie[] cookies = request.getCookies(); // get all cookies for the current domain (IE, those that are sent by client)
-		
-		
 		Integer userId = null;
 		String token = null;
 		if(cookies != null ){
@@ -58,21 +54,33 @@ public class IsLoggedIn implements Filter {
                 }
             }
         }
-
-        
-        if(userId == null || token == null){ //missing the cookies, one needs to login.
-            response.sendRedirect(request.getContextPath() + DO_LOG_IN);
-        }else{
+		
+		if(userId != null && token != null){
             //Try to find a user that matches that 
-            User authenticatedUser = User.getAuthenticatedUserByToken(userId, token);
-            if(authenticatedUser == null){ //could not find a user with that tocken and id
-                response.sendRedirect(request.getContextPath() + DO_LOG_IN); // go login
-            }else{//we found the user
-                // enhance request with the found user. It will most likely be used everywhere
-                req.setAttribute("authenticatedUser", authenticatedUser);
-                chain.doFilter(request, response);
-            }   
+			authenticatedPerson = Person.getAuthenticatedPersonByToken(userId, token);
+
         }
+
+		return authenticatedPerson;
+	}
+
+	/**
+	 * @see Filter#doFilter(ServletRequest, ServletResponse, FilterChain)
+	 */
+	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
+		
+		HttpServletRequest request = (HttpServletRequest) req; // Syntaxe pour caster
+		HttpServletResponse response = (HttpServletResponse) res;
+		Cookie[] cookies = request.getCookies(); // get all cookies for the current domain (IE, those that are sent by client)
+		
+		Person authenticatedPerson = getAuthenticatedPersonFromCookies(cookies);
+		if(authenticatedPerson != null){
+			 req.setAttribute("authenticatedUser", authenticatedPerson);
+             chain.doFilter(request, response);
+		}else{
+			response.sendRedirect(request.getContextPath() + DO_LOG_IN); // go login
+		}
+		
 	}
 
 	/**
