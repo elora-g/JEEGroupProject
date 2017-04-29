@@ -14,6 +14,6 @@
     	<br />
 	</form>
 	
-	<c:out value="${user.email}"></c:out>
+	<c:out value="${authenticatedPerson.email}"></c:out>
 </body>
 </html>

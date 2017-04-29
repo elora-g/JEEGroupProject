@@ -25,11 +25,11 @@
   	<url-pattern>/logout</url-pattern>
   </servlet-mapping>
   <filter>
-    <filter-name>IsLoggedIn</filter-name>
-    <filter-class>com.jeegroupproject.filters.IsLoggedIn</filter-class>
+    <filter-name>IsAuthenticated</filter-name>
+    <filter-class>com.jeegroupproject.filters.IsAuthenticated</filter-class>
   </filter>
   <filter-mapping>
-    <filter-name>IsLoggedIn</filter-name>
+    <filter-name>IsAuthenticated</filter-name>
     <url-pattern>/restricted/*</url-pattern>
   </filter-mapping>
 </web-app>

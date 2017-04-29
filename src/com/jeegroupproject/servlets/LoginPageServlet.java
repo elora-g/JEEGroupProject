@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.jeegroupproject.beans.*;
-import com.jeegroupproject.filters.IsLoggedIn;
+import com.jeegroupproject.filters.IsAuthenticated;
 
 /**
  * Servlet implementation class LoginPageServlet
@@ -35,7 +35,7 @@ public class LoginPageServlet extends HttpServlet {
 
 		Cookie[] cookies = request.getCookies(); // get all cookies from the domain
 		
-		Person authenticatedPerson = IsLoggedIn.getAuthenticatedPersonFromCookies(cookies);
+		Person authenticatedPerson = IsAuthenticated.getAuthenticatedPersonFromCookies(cookies);
 		
 		if(authenticatedPerson != null){ // if user is already authenticated, no need to show login page
 			response.sendRedirect(request.getContextPath() + MAIN_PAGE);
@@ -56,7 +56,7 @@ public class LoginPageServlet extends HttpServlet {
 		
 		Cookie[] cookies = request.getCookies(); // get all cookies for the current domain (IE, those that are sent by client)
 		
-		Person authenticatedPerson = IsLoggedIn.getAuthenticatedPersonFromCookies(cookies);
+		Person authenticatedPerson = IsAuthenticated.getAuthenticatedPersonFromCookies(cookies);
 		if(authenticatedPerson != null){
 			response.sendRedirect(request.getContextPath() + MAIN_PAGE);// redirect to main
 		}
@@ -88,9 +88,9 @@ public class LoginPageServlet extends HttpServlet {
 			if(connectedPerson != null){
 				
 				// place the token for user in cookie
-				response.addCookie(new Cookie(IsLoggedIn.TOKEN_COOKIE_NAME,connectedPerson.getToken())); //set cookie
+				response.addCookie(new Cookie(IsAuthenticated.TOKEN_COOKIE_NAME,connectedPerson.getToken())); //set cookie
 				//place the user id in Cookie
-				response.addCookie(new Cookie(IsLoggedIn.PERSONID_COOKIE_NAME, ((Integer)connectedPerson.getId()).toString())); //set cookie
+				response.addCookie(new Cookie(IsAuthenticated.PERSONID_COOKIE_NAME, ((Integer)connectedPerson.getId()).toString())); //set cookie
 				response.sendRedirect(request.getContextPath() + MAIN_PAGE);// redirect to main
 				
 			}else{

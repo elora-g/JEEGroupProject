@@ -19,7 +19,7 @@ import com.jeegroupproject.beans.Person;
  * Servlet Filter implementation class IsLoggedIn
  */
 @WebFilter("/IsLoggedIn")
-public class IsLoggedIn implements Filter {
+public class IsAuthenticated implements Filter {
 	
 	public static final String DO_LOG_IN = "/login";
 	public static final String AUTH_PERSON_ATTR_NAME = "authenticatedPerson";
@@ -29,7 +29,7 @@ public class IsLoggedIn implements Filter {
     /**
      * Default constructor. 
      */
-    public IsLoggedIn() {
+    public IsAuthenticated() {
         // TODO Auto-generated constructor stub
     }
 

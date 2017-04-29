@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.jeegroupproject.filters.IsLoggedIn;
+import com.jeegroupproject.filters.IsAuthenticated;
 
 /**
  * Servlet implementation class MainServlet
@@ -32,7 +32,7 @@ public class MainServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		
-		request.getAttribute(IsLoggedIn.AUTH_PERSON_ATTR_NAME); // returns the authenticated person set by the filter
+		request.getAttribute(IsAuthenticated.AUTH_PERSON_ATTR_NAME); // returns the authenticated person set by the filter
 		
 		//TODO : do something with the authenticated person
 		
