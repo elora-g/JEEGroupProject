@@ -19,7 +19,8 @@ import com.jeegroupproject.filters.IsAuthenticated;
 public class LoginPageServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	public static final String VIEW = "/WEB-INF/Views/common/loginPage.jsp";
-	public static final String MAIN_PAGE = "/authenticated/main";
+	public static final String MAIN_AUTH_PAGE = "/authenticated/main";
+	public static final String MAIN_ADVISOR_PAGE = "/advisor/main";
        
     public LoginPageServlet() {
         super();
@@ -38,7 +39,11 @@ public class LoginPageServlet extends HttpServlet {
 		Person authenticatedPerson = IsAuthenticated.getAuthenticatedPersonFromCookies(cookies);
 		
 		if(authenticatedPerson != null){ // if user is already authenticated, no need to show login page
-			response.sendRedirect(request.getContextPath() + MAIN_PAGE);
+			if(authenticatedPerson.isAdvisor()){
+				response.sendRedirect(request.getContextPath() + MAIN_ADVISOR_PAGE); 
+			}else{
+				response.sendRedirect(request.getContextPath() + MAIN_AUTH_PAGE);
+			}
 		}else{
 			this.getServletContext().getRequestDispatcher(VIEW).forward(request, response);
 		}	
@@ -58,7 +63,11 @@ public class LoginPageServlet extends HttpServlet {
 		
 		Person authenticatedPerson = IsAuthenticated.getAuthenticatedPersonFromCookies(cookies);
 		if(authenticatedPerson != null){
-			response.sendRedirect(request.getContextPath() + MAIN_PAGE);// redirect to main
+			if(authenticatedPerson.isAdvisor()){
+				response.sendRedirect(request.getContextPath() + MAIN_ADVISOR_PAGE);
+			}else{
+				response.sendRedirect(request.getContextPath() + MAIN_AUTH_PAGE);
+			}
 		}
 		
 		
@@ -91,8 +100,11 @@ public class LoginPageServlet extends HttpServlet {
 				response.addCookie(new Cookie(IsAuthenticated.TOKEN_COOKIE_NAME,connectedPerson.getToken())); //set cookie
 				//place the user id in Cookie
 				response.addCookie(new Cookie(IsAuthenticated.PERSONID_COOKIE_NAME, ((Integer)connectedPerson.getId()).toString())); //set cookie
-				response.sendRedirect(request.getContextPath() + MAIN_PAGE);// redirect to main
-				
+				if(connectedPerson.isAdvisor()){
+					response.sendRedirect(request.getContextPath() + MAIN_ADVISOR_PAGE);
+				}else{
+					response.sendRedirect(request.getContextPath() + MAIN_AUTH_PAGE);
+				}
 			}else{
 				
 				String messageNoAuth = "Utilisateur Inconnu ou mot de passe incorrect";

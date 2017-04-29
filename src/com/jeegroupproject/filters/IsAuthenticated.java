@@ -83,8 +83,8 @@ public class IsAuthenticated implements Filter {
 	 */
 	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
 		
-		HttpServletRequest request = (HttpServletRequest) req; // Cast to obtain HttpServletRequest specific methods required to get cookies
-		HttpServletResponse response = (HttpServletResponse) res; // Cast to obtain HttpServletResponse specific methods required to get cookies
+		HttpServletRequest request = (HttpServletRequest) req; // Cast to obtain HttpServletRequest specific methods required to get cookies and context path
+		HttpServletResponse response = (HttpServletResponse) res; // Cast to obtain HttpServletResponse specific methods required to get cookies 
 		Cookie[] cookies = request.getCookies(); // get all cookies for the current domain (IE, those that are sent by client)
 		
 		Person authenticatedPerson = getAuthenticatedPersonFromCookies(cookies);
