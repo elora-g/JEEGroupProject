@@ -25,12 +25,12 @@
   	<servlet-class>com.jeegroupproject.servlets.advisor.DisputedOperationsServlet</servlet-class>
   </servlet>
    <servlet>
-  	<servlet-name>MyClientInformationServlet</servlet-name>
-  	<servlet-class>com.jeegroupproject.servlets.advisor.MyClientInformationServlet</servlet-class>
+  	<servlet-name>ClientInformationServlet</servlet-name>
+  	<servlet-class>com.jeegroupproject.servlets.advisor.ClientInformationServlet</servlet-class>
   </servlet>
   <servlet>
-  	<servlet-name>MyClientMessagesServlet</servlet-name>
-  	<servlet-class>com.jeegroupproject.servlets.advisor.MyClientMessagesServlet</servlet-class>
+  	<servlet-name>ClientMessagesServlet</servlet-name>
+  	<servlet-class>com.jeegroupproject.servlets.advisor.ClientMessagesServlet</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>MainAuthenticatedServlet</servlet-name>
@@ -45,8 +45,8 @@
     <servlet-class>com.jeegroupproject.servlets.authenticated.MessagesWithAdvisorServlet</servlet-class>
   </servlet>
   <servlet>
-    <servlet-name>MyPersonalInformationServlet</servlet-name>
-    <servlet-class>com.jeegroupproject.servlets.authenticated.MyPersonalInformationServlet</servlet-class>
+    <servlet-name>PersonalInformationServlet</servlet-name>
+    <servlet-class>com.jeegroupproject.servlets.authenticated.PersonalInformationServlet</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>LoginPageServlet</servlet-name>
@@ -73,11 +73,11 @@
   	<url-pattern>/advisor/disputedoperations</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-  	<servlet-name>MyClientInformationServlet</servlet-name>
+  	<servlet-name>ClientInformationServlet</servlet-name>
   	<url-pattern>/advisor/clientinformation</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-  	<servlet-name>MyClientMessagesServlet</servlet-name>
+  	<servlet-name>ClientMessagesServlet</servlet-name>
   	<url-pattern>/advisor/clientmessages</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
@@ -93,8 +93,8 @@
   	<url-pattern>/authenticated/messages</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-    <servlet-name>MyPersonalInformationServlet</servlet-name>
-  	<url-pattern>/authenticated/myinformation</url-pattern>
+    <servlet-name>PersonalInformationServlet</servlet-name>
+  	<url-pattern>/authenticated/personalinformation</url-pattern>
   </servlet-mapping>
   <filter>
     <filter-name>IsAuthenticated</filter-name>

@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/ClientServlet")
 public class ClientServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	public static final String VIEW = "/WEB-INF/Views/advisor/client.jsp";
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -26,8 +27,8 @@ public class ClientServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		
+		this.getServletContext().getRequestDispatcher(VIEW).forward(request, response);
 	}
 
 	/**

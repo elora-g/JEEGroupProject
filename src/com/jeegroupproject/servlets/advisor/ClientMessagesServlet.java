@@ -8,16 +8,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet implementation class MyClientMessagesServlet
+ * Servlet implementation class ClientMessagesServlet
  */
-@WebServlet("/MyClientMessagesServlet")
-public class MyClientMessagesServlet extends HttpServlet {
+@WebServlet("/ClientMessagesServlet")
+public class ClientMessagesServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	public static final String VIEW = "/WEB-INF/Views/advisor/clientmessages.jsp";
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public MyClientMessagesServlet() {
+    public ClientMessagesServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -26,8 +27,7 @@ public class MyClientMessagesServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		this.getServletContext().getRequestDispatcher(VIEW).forward(request, response);
 	}
 
 	/**
