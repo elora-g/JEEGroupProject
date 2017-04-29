@@ -8,6 +8,16 @@ public class Account {
 	private String type;
 	private boolean isDefault;
 	
+	//TODO persist 	
+		//warning : remember max Accounts per person is 5
+	/**
+	 * Method to save all account data to DB (already existing ==> update or new account ==> insert in DB) 
+	 */
+	
+	//TODO public static List<Account> getAccountsByPersonId(int id) 
+	
+	//TODO public List<Operation> getOperations()
+	
 	
 	// Getters and Setters
 	public int getId() {

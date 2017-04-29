@@ -311,7 +311,7 @@ public class Person {
 	
 	
 	/**
-	 * Method to save all person data to DB
+	 * Method to save all person data to DB (already existing ==> update or new person ==> insert in DB)
 	 */
 	public void persist(){
         
@@ -394,6 +394,18 @@ public class Person {
 			e.printStackTrace();
 		}
     }
+	
+	
+	//TODO public List<Message> getMessages()
+	
+	//TODO public List<Account> getAccounts() 
+	
+	//TODO public Person getAdvisor()
+	
+	//TODO public List<Operation> getDisputedOperationsOfClients() throw exception if person is not an advisor
+	
+	//TODO public List<Person> getClients() throw exception if person is not an advisor
+	
 
 	
 	// Getters and Setters

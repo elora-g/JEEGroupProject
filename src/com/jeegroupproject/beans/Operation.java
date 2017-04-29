@@ -13,7 +13,14 @@ public class Operation {
 	private Date updatedAt;
 	private boolean dispute;
 	
+	//TODO persist 	
+	/**
+	 * Method to save all operation data to DB (already existing ==> update or new operation ==> insert in DB)
+	 */
 	
+	//TODO public static List<Operation> getOperationsByAccountId(int id)
+	
+	//TODO public static List<Operation> getDisputedOperationByAdvisorId(int id) ==> the query will probably need joins with accounts and persons tables
 	
 	// Getters and Setters
 	
