@@ -146,7 +146,7 @@ public class Person {
 			if(externalId != null){
 				try(PreparedStatement pStatement1 = (PreparedStatement) connection.prepareStatement(queryExternalId)){
 		
-					pStatement1.setInt(2, externalId);
+					pStatement1.setInt(1, externalId);
 					try(ResultSet result1 = pStatement1.executeQuery()){
 						
 						if(result1.next()){ //check we have at least one result. If any, read data from record
