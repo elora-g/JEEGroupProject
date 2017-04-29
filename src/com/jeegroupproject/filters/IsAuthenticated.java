@@ -16,9 +16,9 @@ import com.jeegroupproject.beans.Person;
 
 
 /**
- * Servlet Filter implementation class IsLoggedIn
+ * Servlet Filter implementation class IsAuthenticated
  */
-@WebFilter("/IsLoggedIn")
+@WebFilter("/IsAuthenticated")
 public class IsAuthenticated implements Filter {
 	
 	public static final String DO_LOG_IN = "/login";
