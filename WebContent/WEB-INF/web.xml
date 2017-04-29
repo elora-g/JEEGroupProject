@@ -9,12 +9,44 @@
     <servlet-class>com.jeegroupproject.servlets.common.LogOutServlet</servlet-class>
   </servlet>
   <servlet>
-    <servlet-name>MainAuthenticated</servlet-name>
-    <servlet-class>com.jeegroupproject.servlets.authenticated.MainAuthenticatedServlet</servlet-class>
+    <servlet-name>MainAdvisorServlet</servlet-name>
+    <servlet-class>com.jeegroupproject.servlets.advisor.MainAdvisorServlet</servlet-class>
   </servlet>
   <servlet>
-    <servlet-name>MainAdvisor</servlet-name>
-    <servlet-class>com.jeegroupproject.servlets.advisor.MainAdvisorServlet</servlet-class>
+  	<servlet-name>ClientServlet</servlet-name>
+  	<servlet-class>com.jeegroupproject.servlets.advisor.ClientServlet</servlet-class>
+  </servlet>
+  <servlet>
+  	<servlet-name>ClientsServlet</servlet-name>
+  	<servlet-class>com.jeegroupproject.servlets.advisor.ClientsServlet</servlet-class>
+  </servlet>
+  <servlet>
+  	<servlet-name>DisputedOperationsServlet</servlet-name>
+  	<servlet-class>com.jeegroupproject.servlets.advisor.DisputedOperationsServlet</servlet-class>
+  </servlet>
+   <servlet>
+  	<servlet-name>MyClientInformationServlet</servlet-name>
+  	<servlet-class>com.jeegroupproject.servlets.advisor.MyClientInformationServlet</servlet-class>
+  </servlet>
+  <servlet>
+  	<servlet-name>MyClientMessagesServlet</servlet-name>
+  	<servlet-class>com.jeegroupproject.servlets.advisor.MyClientMessagesServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>MainAuthenticatedServlet</servlet-name>
+    <servlet-class>com.jeegroupproject.servlets.authenticated.MainAuthenticatedServlet</servlet-class>
+  </servlet>
+   <servlet>
+    <servlet-name>AccountsServlet</servlet-name>
+    <servlet-class>com.jeegroupproject.servlets.authenticated.AccountsServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>MessagesWithAdvisorServlet</servlet-name>
+    <servlet-class>com.jeegroupproject.servlets.authenticated.MessagesWithAdvisorServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>MyPersonalInformationServlet</servlet-name>
+    <servlet-class>com.jeegroupproject.servlets.authenticated.MyPersonalInformationServlet</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>LoginPageServlet</servlet-name>
@@ -25,12 +57,44 @@
     <url-pattern>/logout</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-    <servlet-name>MainAuthenticated</servlet-name>
+    <servlet-name>MainAdvisorServlet</servlet-name>
+    <url-pattern>/advisor/main</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>ClientServlet</servlet-name>
+  	<url-pattern>/advisor/client</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>ClientsServlet</servlet-name>
+  	<url-pattern>/advisor/clients</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>DisputedOperationsServlet</servlet-name>
+  	<url-pattern>/advisor/disputedoperations</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>MyClientInformationServlet</servlet-name>
+  	<url-pattern>/advisor/clientinformation</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>MyClientMessagesServlet</servlet-name>
+  	<url-pattern>/advisor/clientmessages</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>MainAuthenticatedServlet</servlet-name>
     <url-pattern>/authenticated/main</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-    <servlet-name>MainAdvisor</servlet-name>
-    <url-pattern>/advisor/main</url-pattern>
+    <servlet-name>AccountsServlet</servlet-name>
+  	<url-pattern>/authenticated/accounts</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>MessagesWithAdvisorServlet</servlet-name>
+  	<url-pattern>/authenticated/messages</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>MyPersonalInformationServlet</servlet-name>
+  	<url-pattern>/authenticated/myinformation</url-pattern>
   </servlet-mapping>
   <filter>
     <filter-name>IsAuthenticated</filter-name>
