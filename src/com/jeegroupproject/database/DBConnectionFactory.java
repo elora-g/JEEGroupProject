@@ -7,6 +7,10 @@ import com.mysql.jdbc.Connection;
 
 public class DBConnectionFactory {
 
+	/**
+	 * Get a connection to the DB
+	 * @return the created connection
+	 */
 	public static Connection getConnection(){
 		
 		//TODO check that the connection details are correct when porting to another machine

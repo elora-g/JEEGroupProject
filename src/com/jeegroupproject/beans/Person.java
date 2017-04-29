@@ -81,33 +81,42 @@ public class Person {
 	 * @return the found user, If not found, all members of the user are empty
 	 */
 	public static Person getPersonByExternalId(int externalId){
-		
-		Connection connection = DBConnectionFactory.getConnection(); //returns a prepared connection to the database
+		String query = "SELECT * FROM sac_person WHERE `person_external_id` = ?";
 		Person person = new Person();
-		try {
-			PreparedStatement pStatement = (PreparedStatement) connection.prepareStatement("SELECT * FROM sac_person WHERE `person_external_id` = ?");
-			pStatement.setInt(2, externalId);
-			ResultSet result = pStatement.executeQuery();
-	
-			if(result.next()){ //check we have at least one result. If any, read data from record
-				person.setId( result.getInt(1));
-				person.setExternalId(result.getInt(2));
-				person.setFirstname(result.getString(3));
-				person.setLastname(result.getString(4));
-				person.setEmail( result.getString(5));
-				person.setPassword( result.getString(6));
-				person.setDob(result.getString(7));
-				person.setToken(result.getString(8));
-				person.setPhoneNumber(result.getString(9));
-				person.setCreatedAt(result.getDate(10));
-				person.setUpdatedAt(result.getDate(11));
-				person.setAdvisorId(result.getInt(12));
-				person.setAdvisor(result.getBoolean(13));
-
+		
+		//Connection, PreparedStatement and Resultset have to be closed when finished being used
+		// Since Java 7, these objects implement autocloseable so if there are given as parameters to a try clause they will be closed at the end
+		// https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html
+		try(Connection connection = DBConnectionFactory.getConnection()){ //Try with the resource connection 
+			try(PreparedStatement pStatement = (PreparedStatement) connection.prepareStatement(query)){ //try with the preparedStatement
+				pStatement.setInt(2, externalId);
+				try(ResultSet result = pStatement.executeQuery()){ //try with the resultSet
+					if(result.next()){ //check we have at least one result. If any, read data from record
+						person.setId( result.getInt(1));
+						person.setExternalId(result.getInt(2));
+						person.setFirstname(result.getString(3));
+						person.setLastname(result.getString(4));
+						person.setEmail( result.getString(5));
+						person.setPassword( result.getString(6));
+						person.setDob(result.getString(7));
+						person.setToken(result.getString(8));
+						person.setPhoneNumber(result.getString(9));
+						person.setCreatedAt(result.getDate(10));
+						person.setUpdatedAt(result.getDate(11));
+						person.setAdvisorId(result.getInt(12));
+						person.setAdvisor(result.getBoolean(13));
+					}
+				}catch (SQLException e) {
+					System.err.println("getPersonByExternalId: problem with the result set");
+					e.printStackTrace();
+				}
+			}catch (SQLException e) {
+				System.err.println("getPersonByExternalId: problem with the prepared statement");
+				e.printStackTrace();
 			}
 				
-		} catch (SQLException e) {
-			System.err.println("problem querying");
+		}catch (SQLException e) {
+			System.err.println("getPersonByExternalId: problem with the connection");
 			e.printStackTrace();
 		}
 		
@@ -123,76 +132,99 @@ public class Person {
 	 */
 	public static Person getAuthenticatedPerson(Integer externalId, String email, String password){
 		
-		Connection connection = DBConnectionFactory.getConnection(); //returns a prepared connection to the DB
+		String queryExternalId = "SELECT * FROM sac_person WHERE `person_external_id` = ?";
+		String queryEmail = "SELECT * FROM sac_person WHERE `person_email` = ?";
+		//Connection, PreparedStatement and Resultset have to be closed when finished being used
+		//Since Java 7, these objects implement autocloseable so if there are given as parameters to a try clause they will be closed at the end
+		//https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html
+		
 		Person personByExternalId;
 		Person personByEmail;
-		try {
-			if(externalId != null){
-				PreparedStatement pStatement1 = (PreparedStatement) connection.prepareStatement("SELECT * FROM sac_person WHERE `person_external_id` = ?");
-				pStatement1.setInt(2, externalId);
-				ResultSet result1 = pStatement1.executeQuery();
-				
-				if(result1.next()){ //check we have at least one result. If any, read data from record
-					personByExternalId = new Person();
-					
-					personByExternalId.setId( result1.getInt(1));
-					personByExternalId.setExternalId(result1.getInt(2));
-					personByExternalId.setFirstname(result1.getString(3));
-					personByExternalId.setLastname(result1.getString(4));
-					personByExternalId.setEmail( result1.getString(5));
-					personByExternalId.setPassword( result1.getString(6));
-					personByExternalId.setDob(result1.getString(7));
-					personByExternalId.setToken(result1.getString(8));
-					personByExternalId.setPhoneNumber(result1.getString(9));
-					personByExternalId.setCreatedAt(result1.getDate(10));
-					personByExternalId.setUpdatedAt(result1.getDate(11));
-					personByExternalId.setAdvisorId(result1.getInt(12));
-					personByExternalId.setAdvisor(result1.getBoolean(13));
-					
-					if(checkPassword(password, personByExternalId.getPassword())){
-                        //before returning the person, update its token
-                        personByExternalId.regenerateToken();
-                        personByExternalId.persist();//save change to the token
-                        return personByExternalId;
-                    }
-				}
-			}
-			
-			if(email != null){
-				PreparedStatement pStatement2 = (PreparedStatement) connection.prepareStatement("SELECT * FROM sac_person WHERE `person_email` = ?");
-				pStatement2.setString(1, email);
-				ResultSet result2 = pStatement2.executeQuery();
 		
-				
-				if(result2.next()){ //check we have at least one result. If any, read data from record
-					personByEmail = new Person();
-									
-					personByEmail.setId( result2.getInt(1));
-					personByEmail.setExternalId(result2.getInt(2));
-					personByEmail.setFirstname(result2.getString(3));
-					personByEmail.setLastname(result2.getString(4));
-					personByEmail.setEmail( result2.getString(5));
-					personByEmail.setPassword( result2.getString(6));
-					personByEmail.setDob(result2.getString(7));
-					personByEmail.setToken(result2.getString(8));
-					personByEmail.setPhoneNumber(result2.getString(9));
-					personByEmail.setCreatedAt(result2.getDate(10));
-					personByEmail.setUpdatedAt(result2.getDate(11));
-					personByEmail.setAdvisorId(result2.getInt(12));
-					personByEmail.setAdvisor(result2.getBoolean(13));
-					
-					if(checkPassword(password, personByEmail.getPassword())){
-						personByEmail.regenerateToken();
-                        personByEmail.persist();//save change to the token
-						return personByEmail;
+		try(Connection connection = DBConnectionFactory.getConnection()){
+
+			if(externalId != null){
+				try(PreparedStatement pStatement1 = (PreparedStatement) connection.prepareStatement(queryExternalId)){
+		
+					pStatement1.setInt(2, externalId);
+					try(ResultSet result1 = pStatement1.executeQuery()){
 						
+						if(result1.next()){ //check we have at least one result. If any, read data from record
+							personByExternalId = new Person();
+							
+							personByExternalId.setId( result1.getInt(1));
+							personByExternalId.setExternalId(result1.getInt(2));
+							personByExternalId.setFirstname(result1.getString(3));
+							personByExternalId.setLastname(result1.getString(4));
+							personByExternalId.setEmail( result1.getString(5));
+							personByExternalId.setPassword( result1.getString(6));
+							personByExternalId.setDob(result1.getString(7));
+							personByExternalId.setToken(result1.getString(8));
+							personByExternalId.setPhoneNumber(result1.getString(9));
+							personByExternalId.setCreatedAt(result1.getDate(10));
+							personByExternalId.setUpdatedAt(result1.getDate(11));
+							personByExternalId.setAdvisorId(result1.getInt(12));
+							personByExternalId.setAdvisor(result1.getBoolean(13));
+							
+							if(checkPassword(password, personByExternalId.getPassword())){
+		                        //before returning the person, update its token
+		                        personByExternalId.regenerateToken();
+		                        personByExternalId.persist();//save change to the token
+		                        return personByExternalId;
+		                    }
+						}
+					}catch (SQLException e) {
+						System.err.println("getAuthenticatedPerson: problem with the result set");
+						e.printStackTrace();
 					}
+				}catch (SQLException e) {
+					System.err.println("getAuthenticatedPerson: problem with the prepared statement");
+					e.printStackTrace();
 				}
 			}
+		
+			if(email != null){
+				try(PreparedStatement pStatement2 = (PreparedStatement) connection.prepareStatement(queryEmail)){
+					pStatement2.setString(1, email);
+					try(ResultSet result2 = pStatement2.executeQuery()){
 			
-				
-		} catch (SQLException e) {
-			System.err.println("problem querying");
+						
+						if(result2.next()){ //check we have at least one result. If any, read data from record
+							personByEmail = new Person();
+											
+							personByEmail.setId( result2.getInt(1));
+							personByEmail.setExternalId(result2.getInt(2));
+							personByEmail.setFirstname(result2.getString(3));
+							personByEmail.setLastname(result2.getString(4));
+							personByEmail.setEmail( result2.getString(5));
+							personByEmail.setPassword( result2.getString(6));
+							personByEmail.setDob(result2.getString(7));
+							personByEmail.setToken(result2.getString(8));
+							personByEmail.setPhoneNumber(result2.getString(9));
+							personByEmail.setCreatedAt(result2.getDate(10));
+							personByEmail.setUpdatedAt(result2.getDate(11));
+							personByEmail.setAdvisorId(result2.getInt(12));
+							personByEmail.setAdvisor(result2.getBoolean(13));
+							
+							if(checkPassword(password, personByEmail.getPassword())){
+								personByEmail.regenerateToken();
+		                        personByEmail.persist();//save change to the token
+								return personByEmail;
+								
+							}
+						}
+					}catch (SQLException e) {
+						System.err.println("getAuthenticatedPerson: problem with the result set");
+						e.printStackTrace();
+					}
+				}catch (SQLException e) {
+					System.err.println("getAuthenticatedPerson: problem with the prepared statement");
+					e.printStackTrace();
+				}
+			}
+		
+		}catch (SQLException e) {
+			System.err.println("getAuthenticatedPerson: problem with the connection");
 			e.printStackTrace();
 		}
 		
@@ -209,42 +241,54 @@ public class Person {
 	 * @return
 	 */
 	public static Person getAuthenticatedPersonByToken(Integer id, String token){
+		String query ="SELECT * FROM sac_person where `person_id` = ? and `person_token` = ?";
 		
-		Connection connection = DBConnectionFactory.getConnection(); // returns a prepared connection to the DB
 		Person person = null;
-		try{
+		
+		//Connection, PreparedStatement and Resultset have to be closed when finished being used
+		// Since Java 7, these objects implement autocloseable so if there are given as parameters to a try clause they will be closed at the end
+		// https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html
+		
+		try(Connection connection = DBConnectionFactory.getConnection()){
 			
 			if(id !=null && token != null){
-				PreparedStatement pStatement = (PreparedStatement) connection.prepareStatement("SELECT * FROM sac_person where `person_id` = ? and `person_token` = ?");
-				pStatement.setInt(1, id);
-				pStatement.setString(2, token);
-				ResultSet result = pStatement.executeQuery();
-				if(result.next()){ // check we have at least one result. If any, read data from record
-					person = new Person();
-                    
-                    person.setId( result.getInt(1));
-					person.setExternalId(result.getInt(2));
-					person.setFirstname(result.getString(3));
-					person.setLastname(result.getString(4));
-					person.setEmail( result.getString(5));
-					person.setPassword( result.getString(6));
-					person.setDob(result.getString(7));
-					person.setToken(result.getString(8));
-					person.setPhoneNumber(result.getString(9));
-					person.setCreatedAt(result.getDate(10));
-					person.setUpdatedAt(result.getDate(11));
-					person.setAdvisorId(result.getInt(12));
-					
-					person.setAdvisor(result.getBoolean(13));
-                }
-            }
-            
-                
-        } catch (SQLException e) {
-            System.err.println("problem querying");
-            e.printStackTrace();
-        }
-        
+				try(PreparedStatement pStatement = (PreparedStatement) connection.prepareStatement(query)){
+					pStatement.setInt(1, id);
+					pStatement.setString(2, token);
+					try(ResultSet result = pStatement.executeQuery()){
+						if(result.next()){ // check we have at least one result. If any, read data from record
+							person = new Person();
+		                    
+		                    person.setId( result.getInt(1));
+							person.setExternalId(result.getInt(2));
+							person.setFirstname(result.getString(3));
+							person.setLastname(result.getString(4));
+							person.setEmail( result.getString(5));
+							person.setPassword( result.getString(6));
+							person.setDob(result.getString(7));
+							person.setToken(result.getString(8));
+							person.setPhoneNumber(result.getString(9));
+							person.setCreatedAt(result.getDate(10));
+							person.setUpdatedAt(result.getDate(11));
+							person.setAdvisorId(result.getInt(12));
+							
+							person.setAdvisor(result.getBoolean(13));
+		                }
+	            
+					}catch (SQLException e) {
+						System.err.println("getAuthenticatedPerson: problem with the result set");
+						e.printStackTrace();
+					}
+				}catch (SQLException e) {
+					System.err.println("getAuthenticatedPerson: problem with the prepared statement");
+					e.printStackTrace();
+				}
+			}
+		}catch (SQLException e) {
+			System.err.println("getAuthenticatedPerson: problem with the connection");
+			e.printStackTrace();
+		}
+	        
         return person;    
     }
 		
@@ -271,82 +315,84 @@ public class Person {
 	 */
 	public void persist(){
         
-        Connection connection = DBConnectionFactory.getConnection(); //returns a prepared connection to the database
-        
-        PreparedStatement pStatement = null;
-        //test if the person already has an id >=0 (id -1 means not yet created in db).
-        //if he does, he already exists in database, so we update it
-        if(this.getId() > 0){
-            //prepare a prepared statement for update
-            System.err.println("trying to update a record !");
-			try {
-				pStatement = (PreparedStatement) connection.prepareStatement("UPDATE sac_person SET person_external_id = ?, person_firstname = ?, person_lastname = ?, person_email = ?, person_password = ?, person_dob = ?, person_token = ?, person_phone_number = ?, person_created_At = ?, person_updated_at = ?, person_advisor_id = ?, person_is_advisor = ? WHERE person_id = ?  ;");
-			
-	            pStatement.setInt(1, this.getExternalId());
-	            pStatement.setString(2, this.getFirstname());
-	            pStatement.setString(3, this.getLastname());
-	            pStatement.setString(4, this.getEmail());
-	            pStatement.setString(5, this.getPassword());
-	            pStatement.setString(6, this.getDob());
-	            pStatement.setString(7, this.getToken());
-	            pStatement.setString(8, this.getPhoneNumber());
-	            pStatement.setTimestamp(9, new java.sql.Timestamp(this.getCreatedAt().getTime()));
-	            pStatement.setTimestamp(10, new java.sql.Timestamp(this.getUpdatedAt().getTime()));
-	            pStatement.setInt(11, this.getAdvisorId());
-	            pStatement.setBoolean(12, this.isAdvisor());
-	            pStatement.setInt(13, this.getId());
-	
-	            // execute update SQL statement
-	            pStatement.executeUpdate();
-			} catch (SQLException e) {
-			
-	            System.err.println("Update of a record failed !");
-				e.printStackTrace();
-			}
+		String queryInsert = "UPDATE sac_person SET person_external_id = ?, person_firstname = ?, person_lastname = ?, person_email = ?, person_password = ?, person_dob = ?, person_token = ?, person_phone_number = ?, person_created_At = ?, person_updated_at = ?, person_advisor_id = ?, person_is_advisor = ? WHERE person_id = ?  ;";
+		String queryUpdate = "INSERT INTO `sac_person` (`person_external_id`, `person_firstname`, `person_lastname`, `person_email`, `person_password`, `person_dob`, `person_token`, `person_phone_number`, `person_created_At`, `person_updated_at`, `person_advisor_id`, `person_is_advisor`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?);";
+		
+		//Connection, PreparedStatement and Resultset have to be closed when finished being used
+		//Since Java 7, these objects implement autocloseable so if there are given as parameters to a try clause they will be closed at the end
+		//https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html
+        try(Connection connection = DBConnectionFactory.getConnection()){
 
-        }else{//if he does not, one must insert it.
-            //prepare a prepared statement for insertion
-        	try {
-	            pStatement = (PreparedStatement) connection.prepareStatement("INSERT INTO `sac_person` (`person_external_id`, `person_firstname`, `person_lastname`, `person_email`, `person_password`, `person_dob`, `person_token`, `person_phone_number`, `person_created_At`, `person_updated_at`, `person_advisor_id`, `person_is_advisor`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?);");
+	        //test if the person already has an id >=0 (id -1 means not yet created in db).
+	        //if he does, he already exists in database, so we update it
+	        if(this.getId() > 0){
+	            //prepare a prepared statement for update
+	            try(PreparedStatement pStatement = (PreparedStatement) connection.prepareStatement(queryInsert)){
+		            pStatement.setInt(1, this.getExternalId());
+		            pStatement.setString(2, this.getFirstname());
+		            pStatement.setString(3, this.getLastname());
+		            pStatement.setString(4, this.getEmail());
+		            pStatement.setString(5, this.getPassword());
+		            pStatement.setString(6, this.getDob());
+		            pStatement.setString(7, this.getToken());
+		            pStatement.setString(8, this.getPhoneNumber());
+		            pStatement.setTimestamp(9, new java.sql.Timestamp(this.getCreatedAt().getTime()));
+		            pStatement.setTimestamp(10, new java.sql.Timestamp(this.getUpdatedAt().getTime()));
+		            pStatement.setInt(11, this.getAdvisorId());
+		            pStatement.setBoolean(12, this.isAdvisor());
+		            pStatement.setInt(13, this.getId());
+		
+		            // execute update SQL statement
+		            pStatement.executeUpdate();
+				}catch (SQLException e) {
+					System.err.println("persist: problem with the prepared statement at insert");
+					e.printStackTrace();
+				}
 
-	            pStatement.setInt(1, this.getExternalId());
-	            pStatement.setString(2, this.getFirstname());
-	            pStatement.setString(3, this.getLastname());
-	            pStatement.setString(4, this.getEmail());
-	            pStatement.setString(5, this.getPassword());
-	            pStatement.setString(6, this.getDob());
-	            pStatement.setString(7, this.getToken());
-	            pStatement.setString(8, this.getPhoneNumber());
-	            pStatement.setTimestamp(9, new Timestamp(this.getCreatedAt().getTime()));
-	            pStatement.setTimestamp(10, new Timestamp(this.getUpdatedAt().getTime()));
-	            pStatement.setInt(11, this.getAdvisorId());
-	            pStatement.setBoolean(12, this.isAdvisor());
+	        }else{//if he does not, one must insert it.
+	            //prepare a prepared statement for insertion
+	        	try(PreparedStatement pStatement = (PreparedStatement) connection.prepareStatement(queryUpdate)){
 	
-	            // execute update SQL statement
-	            pStatement.executeUpdate();
-	
-	            int affectedRows = pStatement.executeUpdate();
-	
-	            if (affectedRows == 0) {
-	                throw new SQLException("Creating user failed, no rows affected.");
-	            }
-	
-	            try (ResultSet generatedKeys = pStatement.getGeneratedKeys()) {
-	                if (generatedKeys.next()) {
-	                    this.setId(generatedKeys.getInt(1));
-	                }
-	                else {
-	                    throw new SQLException("Creating user failed, no ID obtained.");
-	                }
-	            }
+		            pStatement.setInt(1, this.getExternalId());
+		            pStatement.setString(2, this.getFirstname());
+		            pStatement.setString(3, this.getLastname());
+		            pStatement.setString(4, this.getEmail());
+		            pStatement.setString(5, this.getPassword());
+		            pStatement.setString(6, this.getDob());
+		            pStatement.setString(7, this.getToken());
+		            pStatement.setString(8, this.getPhoneNumber());
+		            pStatement.setTimestamp(9, new Timestamp(this.getCreatedAt().getTime()));
+		            pStatement.setTimestamp(10, new Timestamp(this.getUpdatedAt().getTime()));
+		            pStatement.setInt(11, this.getAdvisorId());
+		            pStatement.setBoolean(12, this.isAdvisor());
+		
+		            // execute update SQL statement
+		            pStatement.executeUpdate();
+		
+		            int affectedRows = pStatement.executeUpdate();
+		
+		            if (affectedRows == 0) {
+		                throw new SQLException("Creating person failed, no rows affected.");
+		            }
+		
+		            try (ResultSet generatedKeys = pStatement.getGeneratedKeys()) {
+		                if (generatedKeys.next()) {
+		                    this.setId(generatedKeys.getInt(1));
+		                }
+		                else {
+		                    throw new SQLException("Creating person failed, no ID obtained.");
+		                }
+		            }
 	            
-	        } catch (SQLException e) {
-
-				e.printStackTrace();
+				}catch (SQLException e) {
+					System.err.println("persist: problem with the prepared statement at update");
+					e.printStackTrace();
+				}
 			}
-        }
-
-
+		}catch (SQLException e) {
+			System.err.println("persist: problem with the connection");
+			e.printStackTrace();
+		}
     }
 
 	
