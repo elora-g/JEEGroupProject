@@ -340,7 +340,7 @@ public class Person {
 		            pStatement.setString(7, this.getToken());
 		            pStatement.setString(8, this.getPhoneNumber());
 		            pStatement.setTimestamp(9, new java.sql.Timestamp(this.getCreatedAt().getTime()));
-		            pStatement.setTimestamp(10, new java.sql.Timestamp(this.getUpdatedAt().getTime()));
+		            pStatement.setTimestamp(10, new java.sql.Timestamp(new Date().getTime()));
 		            pStatement.setInt(11, this.getAdvisorId());
 		            pStatement.setBoolean(12, this.getIsAdvisor());
 		            pStatement.setInt(13, this.getId());
@@ -364,8 +364,8 @@ public class Person {
 		            pStatement.setString(6, this.getDob());
 		            pStatement.setString(7, this.getToken());
 		            pStatement.setString(8, this.getPhoneNumber());
-		            pStatement.setTimestamp(9, new Timestamp(this.getCreatedAt().getTime()));
-		            pStatement.setTimestamp(10, new Timestamp(this.getUpdatedAt().getTime()));
+		            pStatement.setTimestamp(9, new Timestamp(new Date().getTime()));
+		            pStatement.setTimestamp(10, new Timestamp(new Date().getTime()));
 		            pStatement.setInt(11, this.getAdvisorId());
 		            pStatement.setBoolean(12, this.getIsAdvisor());
 		

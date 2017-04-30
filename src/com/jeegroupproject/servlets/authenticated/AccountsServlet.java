@@ -7,6 +7,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.jeegroupproject.beans.Operation;
+import com.jeegroupproject.beans.Person;
+
 /**
  * Servlet implementation class accountsServlet
  */
@@ -34,8 +37,15 @@ public class AccountsServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
+	
+		//get request parameters
+		Operation newDisputedOperation = Operation.getOperationById(Integer.parseInt(request.getParameter("operationid")));
+		newDisputedOperation.setDispute(true);
+		newDisputedOperation.persist();
+
+		this.getServletContext().getRequestDispatcher(VIEW).forward(request, response);
+		
+				
 	}
 
 }

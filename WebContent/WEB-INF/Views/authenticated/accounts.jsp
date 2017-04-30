@@ -19,37 +19,39 @@
 			<c:choose>
 				<c:when test="${fn:length(account.operations) > 0}">
 					<h3> Opérations sur le compte</h3>
-					<table>
-						<thead>
-							<tr>
-								<td>Date de l'opération</td>
-								<td>Type d'opération</td>
-								<td>Description</td>
-								<td>Montant</td>
-								<td>Contester l'opération</td>
-							</tr>
-						</thead>
-						<tbody>
-							<c:forEach var="operation" items="${account.operations}">
+					<form method="post">
+						<table>
+							<thead>
 								<tr>
-									<td><c:out value="${operation.createdAt}"></c:out></td>
-									<td><c:out value="${operation.type}"></c:out></td>
-									<td><c:out value="${operation.description}"></c:out></td>
-									<td><c:out value="${operation.amount}"></c:out></td>
-									<td>
-										<%-- <c:choose>
-											<c:when test = opération déjà contestée>
-											Opération déjà contestée
-											</c:when>
-											<c:otherwise>
-												<button name="contest" type="submit" formmethod = "post">Contester cette opération</button>
-											</c:otherwise>
-										</c:choose>--%>
-									</td>
+									<td>Date de l'opération</td>
+									<td>Type d'opération</td>
+									<td>Description</td>
+									<td>Montant</td>
+									<td>Contester l'opération</td>
 								</tr>
-							</c:forEach>
-						</tbody>
-					</table>
+							</thead>
+							<tbody>
+								<c:forEach var="operation" items="${account.operations}">
+									<tr>
+										<td><c:out value="${operation.createdAt}"></c:out></td>
+										<td><c:out value="${operation.type}"></c:out></td>
+										<td><c:out value="${operation.description}"></c:out></td>
+										<td><c:out value="${operation.amount}"></c:out></td>
+										<td>
+											<c:choose>
+												<c:when test = "${operation.dispute == true }">
+												Opération déjà contestée
+												</c:when>
+												<c:otherwise>
+													<button name="operationid" type="submit" value="${operation.id}">Contester cette opération</button>
+												</c:otherwise>
+											</c:choose>
+										</td>
+									</tr>
+								</c:forEach>
+							</tbody>
+						</table>
+					</form>
 				</c:when>
 				<c:otherwise>
 					<h3>Vous n'avez aucune opération pour ce compte</h3>
