@@ -12,10 +12,9 @@
 	<h1>Mes comptes et opérations</h1>
 	
 	<c:import url="/WEB-INF/Views/authenticated/menuauth.jsp" />
-	
-	<%-- <c:forEach compte du client --%>
+		<c:forEach var="account" items="${authenticatedPerson.accounts}">
 		<section class="client_account"> 
-			<h2>Compte n°<%--<c:out id></c:out>--%> - Type : <%--<c:out type></c:out>--%> - Solde : <%--<c:out balance></c:out>--%> </h2>
+			<h2>Compte n°<c:out value="${account.id}"></c:out> - Type : <c:out value="${account.type}"></c:out> - Solde : <c:out value="${account.balance}"></c:out> </h2>
 			<h3> Opérations sur le compte</h3>
 			<table>
 				<thead>
@@ -49,7 +48,7 @@
 				</tbody>
 			</table>
 		</section>
-	<%-- <c:/forEach> --%>
+	</c:forEach>
 	
 	<form method="post">
 		<input type ="hidden" name="operationId"></input>

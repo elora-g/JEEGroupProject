@@ -3,6 +3,7 @@ package com.jeegroupproject.beans;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.List;
 
 import com.jeegroupproject.database.*;
 import java.sql.Connection;
@@ -89,7 +90,7 @@ public class Person {
 		// https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html
 		try(Connection connection = DBConnectionFactory.getConnection()){ //Try with the resource connection 
 			try(PreparedStatement pStatement = (PreparedStatement) connection.prepareStatement(query)){ //try with the preparedStatement
-				pStatement.setInt(2, externalId);
+				pStatement.setInt(1, externalId);
 				try(ResultSet result = pStatement.executeQuery()){ //try with the resultSet
 					if(result.next()){ //check we have at least one result. If any, read data from record
 						person.setId( result.getInt(1));
@@ -398,7 +399,13 @@ public class Person {
 	
 	//TODO public List<Message> getMessages()
 	
-	//TODO public List<Account> getAccounts() 
+	
+	/**
+	 * @return the Account List for this Person
+	 */
+	public List<Account> getAccounts() {
+		return Account.getAccountsByPersonId(this.id);
+	}
 	
 	//TODO public Person getAdvisor()
 	

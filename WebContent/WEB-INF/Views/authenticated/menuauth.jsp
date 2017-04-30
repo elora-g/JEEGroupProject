@@ -5,10 +5,10 @@
 	<nav class="navbar">
 		<div class="container-fluid">
 			<ul class="nav navbar-nav">
-				<li > <a href="#">Accueil</a> </li>
-				<li> <a href="#">Mes Comptes</a> </li>
-				<li> <a href="#">Mes Informations Personnelles</a> </li>
-				<li> <a href="#">Messagerie</a> </li>
+				<li > <a href="/JEEGroupProject/authenticated/main">Accueil</a> </li>
+				<li> <a href="/JEEGroupProject/authenticated/accounts">Mes Comptes</a> </li>
+				<li> <a href="/JEEGroupProject/authenticated/personalinformation">Mes Informations Personnelles</a> </li>
+				<li> <a href="/JEEGroupProject/authenticated/messages">Messagerie</a> </li>
 				<c:if test="${authenticatedPerson.isAdvisor}">
 					<li> <a href="/JEEGroupProject/advisor/main">Je veux voir mon dashboard</a> </li>
 				</c:if>

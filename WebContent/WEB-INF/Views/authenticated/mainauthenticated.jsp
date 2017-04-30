@@ -11,6 +11,8 @@
 	<p>importer la jsp menuauth</p>
 	<p>Bienvenue Client</p>
 	<c:import url="/WEB-INF/Views/authenticated/menuauth.jsp" />
+	
+	<p>Nombre de compte pour cette personne <c:out value="${authenticatedPerson.accounts}"></c:out></p>
 
 	
 	<c:out value="${authenticatedPerson.email}"></c:out>
