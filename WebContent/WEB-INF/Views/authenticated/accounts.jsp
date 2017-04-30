@@ -13,14 +13,8 @@
 	
 	<c:import url="/WEB-INF/Views/authenticated/menuauth.jsp" />
 	
-	<%--
-	<c:forEach var="i" begin="1" end="5">
-   		Item <c:out value="${i}"/><p>
-	</c:forEach> 
-	--%>
-	
-	<section class="client_account"> 
-		<%-- <c:forEach compte du client --%>
+	<%-- <c:forEach compte du client --%>
+		<section class="client_account"> 
 			<h2>Compte n°<%--<c:out id></c:out>--%> - Type : <%--<c:out type></c:out>--%> - Solde : <%--<c:out balance></c:out>--%> </h2>
 			<h3> Opérations sur le compte</h3>
 			<table>
@@ -54,10 +48,12 @@
 					<%--</c:forEach> --%>
 				</tbody>
 			</table>
-		<%-- <c:/forEach> --%>	
-	</section>
-
-	<c:out value="${authenticatedPerson.email}"></c:out>
+		</section>
+	<%-- <c:/forEach> --%>
+	
+	<form method="post">
+		<input type ="hidden" name="operationId"></input>
+	</form>
 	
 </body>
 </html>
