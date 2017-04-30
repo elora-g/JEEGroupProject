@@ -421,6 +421,18 @@ public class Person {
 		
 	}
 	
+	public List<Operation> getDisputedOperationsForClients() throws Exception {
+		List<Operation> disputedOperations = new ArrayList<Operation>();
+		
+		for(Person person : getClients()){
+			disputedOperations.addAll(person.getDisputedOperations());
+		}
+		
+		return disputedOperations;
+		
+		
+	}
+	
 	/**
 	 * 
 	 * @param advisorId

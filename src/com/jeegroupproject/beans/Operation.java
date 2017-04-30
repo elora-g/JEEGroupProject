@@ -241,6 +241,37 @@ public class Operation {
 		return operation;	
 	}
 	
+	public void delete(){
+		String query = "DELETE FROM `sac_operation` WHERE `ope_id` = ?";
+		
+		//Connection, PreparedStatement and Resultset have to be closed when finished being used
+		//Since Java 7, these objects implement autocloseable so if there are given as parameters to a try clause they will be closed at the end
+		//https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html
+        try(Connection connection = DBConnectionFactory.getConnection()){
+        	
+       
+            //prepare a prepared statement for deletion
+        	try(PreparedStatement pStatement = (PreparedStatement) connection.prepareStatement(query)){
+				pStatement.setInt(1, (this.id)); 
+                // execute update SQL statement
+	
+	            int affectedRows = pStatement.executeUpdate();
+	
+	            if (affectedRows == 0) {
+	                throw new SQLException("Deleting failed, no rows affected.");
+	            }
+
+			}catch (SQLException e) {
+				System.err.println("persist: problem with the prepared statement at update");
+				e.printStackTrace();
+			}
+		
+		}catch (SQLException e) {
+			System.err.println("persist: problem with the connection");
+			e.printStackTrace();
+		}
+	}
+	
 	// Getters and Setters
 	
 	public int getId() {

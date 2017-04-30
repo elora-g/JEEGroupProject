@@ -164,6 +164,47 @@ public class Account {
 		return Operation.getDisputedOperationsByAccountId(this.id);
 	}
 	
+	/**
+	 * 
+	 * @param id
+	 * @return an account by its id
+	 */
+	public static Account getAccountById(int id){
+		String query = "SELECT * FROM sac_accounts WHERE `account_id` = ?";
+
+		Account account = null;
+		//Connection, PreparedStatement and Resultset have to be closed when finished being used
+		// Since Java 7, these objects implement autocloseable so if there are given as parameters to a try clause they will be closed at the end
+		// https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html
+		try(Connection connection = DBConnectionFactory.getConnection()){ //Try with the resource connection 
+			try(PreparedStatement pStatement = (PreparedStatement) connection.prepareStatement(query)){ //try with the preparedStatement
+				pStatement.setInt(1, id); // In the accounts table the id of a person is a string but in the person table it's an int so we have to cast. 
+				try(ResultSet result = pStatement.executeQuery()){ //try with the resultSet
+					if(result.next()){ //check we have at least one result. If any, read data from record
+						account = new Account();
+						account.setId( result.getInt(1));
+						account.setCustomerId(result.getString(2));
+						account.setBalance(result.getFloat(3));
+						account.setType(result.getString(4));
+						account.setIsDefault( result.getBoolean(5));
+
+					}
+				}catch (SQLException e) {
+					System.err.println("getAccountsByPersonId: problem with the result set");
+					e.printStackTrace();
+				}
+			}catch (SQLException e) {
+				System.err.println("getAccountsByPersonId: problem with the prepared statement");
+				e.printStackTrace();
+			}
+				
+		}catch (SQLException e) {
+			System.err.println("getAccountsByPersonId: problem with the connection");
+			e.printStackTrace();
+		}
+		
+		return account;	
+	}
 	
 	// Getters and Setters
 	public int getId() {
