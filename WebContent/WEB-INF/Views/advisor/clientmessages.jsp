@@ -9,15 +9,33 @@
 </head>
 <body>
 
-	<p>Echanger avec mon client</p>
+	<h1>Bienvenue sur votre messagerie avec votre client n° <%--<c:out value="${externalId}></c:out> --%></h1>
 	
 	<c:import url="/WEB-INF/Views/advisor/menuadvisor.jsp" />
-
-	<p>Message 1</p>
-	<p>Réponse 1</p>
-	<p>Message 2</p>
-	<p>Réponse 2</p>
-	<p>Espace pour écrire un message au client avec bouton submit</p>
+	<section class="client_message">
+		<h2>Echanges avec mon client n° <%--<c:out value="${externalId}></c:out> --%></h2>
+		<%-- <c:forEach message from et to --%>
+			<article>
+				<h3>De : <c:out value="${from}"></c:out> - <c:out value="${createdAt}"></c:out></h3>
+				<p><c:out value="${content}"></c:out></p>
+			</article>
+		<%-- </c:forEach --%>
+	</section>
+	
+	<section>
+		<h2>Envoyer un message</h2>
+		<p>Attention, votre message ne doit pas dépasser 256 charactères</p>
+		<form method ="post">
+			<fieldset>
+				<%--attention le message doit faire max 256 charactères --%>
+				<label for="messageToAdvisor">Mon Message <span class="required">*</span></label>
+				<input type="text" name="messageToClient"/>
+				<br/>
+				<input type="submit" value="Send" class="noLabel" />
+				<p>${message}</p>
+			</fieldset>
+		</form>
+	</section>
 
 	
 </body>
