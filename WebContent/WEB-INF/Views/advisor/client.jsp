@@ -58,12 +58,11 @@
 				                <input type="text" name="balance" size="20" maxlength="60" />
 				                <br />
 				                
-				                <%-- <c:if test = nombre de comptes >1 > --%>
+				                <c:if test ="${fn:length(currentClient.accounts) >= 1 }">
 				                	<label for="isDefault">Le compte est le compte principal de votre client <span class="required">*</span></label>
 				                	<input type="radio" name="isDefault" value="0">Non<br />
-				                	<input type="radio" name="isDefault" value="1">Oui<br />
-				                	
-								<%-- </c:if> --%>
+				                	<input type="radio" name="isDefault" value="1">Oui<br /> 	
+								</c:if>
 				                <input type="submit" value="créer le compte" class="noLabel" />
 				                <br />
 				                

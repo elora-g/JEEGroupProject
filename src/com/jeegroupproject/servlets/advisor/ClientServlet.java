@@ -49,7 +49,11 @@ public class ClientServlet extends HttpServlet {
 		request.setAttribute(CURRENT_CLIENT_ATTR_NAME, currentClient);
 		String type = request.getParameter("accountType");
 		Float balance = Float.parseFloat(request.getParameter("balance"));
-		boolean isDefault = request.getParameter("isDefault").equals("1") ? true : false;
+		
+		boolean isDefault = true; // if the radio button is not displayed then it's the first account of the client and we set it as its default account
+		if(request.getParameter("isDefault")!=null){ // if the radio button is displayed we get its value
+			isDefault = request.getParameter("isDefault").equals("1") ? true : false;
+		}
 		
 		//instanciate new account
 		Account newAccount = new Account();

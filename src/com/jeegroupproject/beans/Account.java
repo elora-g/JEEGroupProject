@@ -5,7 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,12 +27,24 @@ public class Account {
         
 		String queryInsert = "UPDATE sac_accounts SET account_customer_id = ?, account_balance = ?, account_type = ?, account_is_default = ? WHERE account_id = ?  ;";
 		String queryUpdate = "INSERT INTO sac_accounts (`account_customer_id`, `account_balance`, `account_type`, `account_is_default`) VALUES (?,?,?,?);";
+		String queryRemoveOtherDefault = "UPDATE sac_accounts SET account_is_default = 0 WHERE account_customer_id = ?";
 		
 		//Connection, PreparedStatement and Resultset have to be closed when finished being used
 		//Since Java 7, these objects implement autocloseable so if there are given as parameters to a try clause they will be closed at the end
 		//https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html
         try(Connection connection = DBConnectionFactory.getConnection()){
-
+        	if(this.isDefault){ // to remove the default flag of an account if the advisor sets it to another account while creating it.
+        		
+        		try(PreparedStatement pStatement = (PreparedStatement) connection.prepareStatement(queryRemoveOtherDefault)){
+        			pStatement.setString(1, this.getCustomerId());
+        			// execute update SQL statement
+		            pStatement.executeUpdate();
+		            
+				}catch (SQLException e) {
+					System.err.println("persist: problem with the prepared statement when changing defaults");
+					e.printStackTrace();
+				}
+        	}
 	        //test if the person already has an id >=0 (id -1 means not yet created in db).
 	        //if he does, he already exists in database, so we update it
 	        if(this.getId() > 0){
