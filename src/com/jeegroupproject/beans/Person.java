@@ -5,8 +5,8 @@ import java.sql.SQLException;
 import java.util.Date;
 
 import com.jeegroupproject.database.*;
-import com.mysql.jdbc.Connection;
-import com.mysql.jdbc.PreparedStatement;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import com.jeegroupproject.bcrypt.*;
 import java.sql.Timestamp;
 
