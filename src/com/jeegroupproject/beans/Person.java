@@ -2,6 +2,7 @@ package com.jeegroupproject.beans;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -411,7 +412,70 @@ public class Person {
 	
 	//TODO public List<Operation> getDisputedOperationsOfClients() throw exception if person is not an advisor
 	
-	//TODO public List<Person> getClients() throw exception if person is not an advisor
+	/**
+	 * 
+	 * @param advisorId
+	 * @return List of CLients By Advisor Id
+	 */
+	public static List<Person> getClientsByAdvisorId(int advisorId){
+		String query = "SELECT * FROM sac_person WHERE `person_advisor_id` = ?";
+		List<Person> personListByAdvisorId = new ArrayList<Person>();
+
+		
+		//Connection, PreparedStatement and Resultset have to be closed when finished being used
+		// Since Java 7, these objects implement autocloseable so if there are given as parameters to a try clause they will be closed at the end
+		// https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html
+		try(Connection connection = DBConnectionFactory.getConnection()){ //Try with the resource connection 
+			try(PreparedStatement pStatement = (PreparedStatement) connection.prepareStatement(query)){ //try with the preparedStatement
+				pStatement.setInt(1, advisorId); 
+				try(ResultSet result = pStatement.executeQuery()){ //try with the resultSet
+					while(result.next()){ //check we have at least one result. If any, read data from record
+						Person person = new Person();
+	                    person.setId( result.getInt(1));
+						person.setExternalId(result.getInt(2));
+						person.setFirstname(result.getString(3));
+						person.setLastname(result.getString(4));
+						person.setEmail( result.getString(5));
+						person.setPassword( result.getString(6));
+						person.setDob(result.getString(7));
+						person.setToken(result.getString(8));
+						person.setPhoneNumber(result.getString(9));
+						person.setCreatedAt(result.getDate(10));
+						person.setUpdatedAt(result.getDate(11));
+						person.setAdvisorId(result.getInt(12));
+						
+						personListByAdvisorId.add(person);
+
+					}
+				}catch (SQLException e) {
+					System.err.println("getClientsByAdvisorId: problem with the result set");
+					e.printStackTrace();
+				}
+			}catch (SQLException e) {
+				System.err.println("getClientsByAdvisorId: problem with the prepared statement");
+				e.printStackTrace();
+			}
+				
+		}catch (SQLException e) {
+			System.err.println("getClientsByAdvisorId: problem with the connection");
+			e.printStackTrace();
+		}
+		
+		return personListByAdvisorId;	
+	}
+	
+	/**
+	 * 
+	 * @return List of Clients for an Advisor
+	 * @throws Exception is called for not an advisor
+	 */
+	public List<Person> getClients() throws Exception{
+		if(!this.getIsAdvisor()) {
+			throw new Exception("This user is not an advisor");
+		}else{
+			return getClientsByAdvisorId(this.id);
+		}	
+	}
 	
 
 	

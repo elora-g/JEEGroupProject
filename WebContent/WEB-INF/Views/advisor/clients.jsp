@@ -22,14 +22,15 @@
 				</tr>
 			</thead>
 			<tbody>
-				<%-- <c:forEach client du conseiller --%>
+				<c:forEach var="client" items="${authenticatedPerson.clients}">
+				
 					<tr>
-						<td><%-- <c:out value= ${externalId}/> --%></td>
-						<td><%-- <c:out value= ${Lastname}> --%></td>
-						<td><%-- <c:out value= ${Firstname}/> --%></td>
+						<td><c:out value= "${client.externalId}"/></td>
+						<td><c:out value= "${client.lastname}"/></td>
+						<td><c:out value= "${client.firstname}"/></td>
 						<td><%--<a href="/JEEGroupProject/advisor/client/id">Voir ce client</a> --%> <%--TODO: redirect on the right client page --%></td>
 					</tr>
-				<%--</c:forEach> --%>
+				</c:forEach>
 			</tbody>
 		</table>
 	</section>

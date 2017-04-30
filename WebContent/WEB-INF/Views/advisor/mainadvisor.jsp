@@ -13,6 +13,8 @@
 	<c:out value="${authenticatedPerson.email}"></c:out>
 	<br />
 	
+	<p>Nombre de clients pour cet advisor <c:out value="${authenticatedPerson.clients}"></c:out></p>
+	
 	<c:import url="/WEB-INF/Views/advisor/menuadvisor.jsp" />
 	<br />
 	
