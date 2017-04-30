@@ -12,7 +12,7 @@
 
 	
 
-	<h1>Comptes de mon client n°<%-- <c:out value= ${externalId}/> --%> </h1>
+	<h1>Comptes de mon client n°<c:out value= "${currentClient.externalId}"/></h1>
 	
 		<c:import url="/WEB-INF/Views/advisor/menuadvisor.jsp" />
 		
@@ -29,13 +29,13 @@
 					</tr>
 				</thead>
 				<tbody>
-					<%-- <c:forEach accounts du client --%>
+					<c:forEach var="account" items="${currentClient.accounts}">
 						<tr>
-							<td><%-- <c:out value= ${id}/> --%></td>
-							<td><%-- <c:out value= ${type}> --%></td>
-							<td><%-- <c:out value= ${balance}/> --%></td>
+							<td><c:out value= "${account.id}"/></td>
+							<td><c:out value= "${account.type}"/></td>
+							<td><c:out value= "${account.balance}"/></td>
 						</tr>
-					<%--</c:forEach> --%>
+					</c:forEach>
 				</tbody>
 			</table>
 		</section>
