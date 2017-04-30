@@ -9,8 +9,10 @@
 </head>
 
 <body>
-	<p>importer la jsp menuadvisor</p>
+	<c:import url="/WEB-INF/Views/advisor/menuadvisor.jsp" />
 	<p> liste de toutes les opérations contestées et bouton accepter et bouton refuser (un par ligne)</p>
+	
+	
 
 </body>
 </html>

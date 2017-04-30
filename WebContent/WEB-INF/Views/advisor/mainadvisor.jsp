@@ -13,15 +13,10 @@
 	<c:out value="${authenticatedPerson.email}"></c:out>
 	<br />
 	
-	<p>importer la jsp menuadvisor</p>
+	<c:import url="/WEB-INF/Views/advisor/menuadvisor.jsp" />
 	<br />
 	
-	<form method="post" action="/JEEGroupProject/logout"> <%--TODO : corriger le path --%>
-		<input type="submit" value="Déconnexion" class="noLabel" />
-    	<br />
-	</form>
-	
-	<p><a href="/JEEGroupProject/authenticated/main">Je veux voir mes sous à moi</a></p>
+
 	
 
 </body>

@@ -10,6 +10,7 @@
 <body>
 	<p>importer la jsp menuauth</p>
 	<p>Bienvenue Client Accounts</p>
+	<c:import url="/WEB-INF/Views/authenticated/menuauth.jsp" />
 
 	<p>Mes comptes</p>
 	<p>Mon Compte 1</p>
@@ -18,8 +19,6 @@
 	<p>Opération comptabilisée 1 + bouton contester</p>
 
 	<c:out value="${authenticatedPerson.email}"></c:out>
-	
-
 	
 </body>
 </html>

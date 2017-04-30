@@ -8,8 +8,9 @@
 <title>Bienvenue</title>
 </head>
 <body>
-	<p>importer la jsp menuauth</p>
+
 	<p>Echanger avec mon conseiller</p>
+	<c:import url="/WEB-INF/Views/authenticated/menuauth.jsp" />
 
 	<p>Message 1</p>
 	<p>Réponse 1</p>
@@ -20,7 +21,6 @@
 
 	<c:out value="${authenticatedPerson.email}"></c:out>
 	
-
 	
 </body>
 </html>

@@ -9,14 +9,14 @@
 </head>
 <body>
 
-	<p>importer la jsp menuadvisor</p>
+	
 	<p>Les informations personnelles du client</p>
+	
+	<c:import url="/WEB-INF/Views/advisor/menuadvisor.jsp" />
 	
 	<p>Liste des informations personnelles</p>
 
 	<p>Formulaire pour éditer les informations personnelles</p>
 
-
-	
 </body>
 </html>

@@ -9,7 +9,7 @@
 </head>
 
 <body>
-	<p>importer la jsp menuadvisor</p>
+	<c:import url="/WEB-INF/Views/advisor/menuadvisor.jsp" />
 	<p> liste de tous les clients avec pour chaque client lien vers ses infos </p>
 	<p> formulaire de création d'un client </p>
 

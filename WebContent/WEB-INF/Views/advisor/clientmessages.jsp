@@ -8,16 +8,16 @@
 <title>Mes messages avec mon client</title>
 </head>
 <body>
-	<p>importer la jsp menuadvisor</p>
+
 	<p>Echanger avec mon client</p>
+	
+	<c:import url="/WEB-INF/Views/advisor/menuadvisor.jsp" />
 
 	<p>Message 1</p>
 	<p>Réponse 1</p>
 	<p>Message 2</p>
 	<p>Réponse 2</p>
 	<p>Espace pour écrire un message au client avec bouton submit</p>
-
-
 
 	
 </body>
