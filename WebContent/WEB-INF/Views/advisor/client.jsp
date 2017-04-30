@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -42,8 +43,8 @@
 		
 	
 		<section class="createAccountForm">
-			<%--<c:choose> --%>
-				<%-- <c:when test = nombre de comptes <=4 > --%>
+			<c:choose>
+				<c:when test ="${fn:length(currentClient.accounts) < 5}" > 
 					<h2>Créer un nouveau compte pour ce client</h2>
 				   		<form method="post" action="">
 				            <fieldset>
@@ -70,11 +71,11 @@
 				                
 				            </fieldset>
 				        </form>
-			    <%--</c:when> --%>
-			    <%--<c:otherwise>--%>
+			    </c:when> 
+			    <c:otherwise>
 			    	<p>Vous ne pouvez pas créer de nouveau compte pour ce client, il a déjà 5 comptes différents</p>
-			    <%--</c:otherwise>--%>
-		   	<%--</c:choose> --%>
+			    </c:otherwise>
+		   	</c:choose>
 		</section>
 
 		
