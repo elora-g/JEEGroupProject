@@ -2,6 +2,7 @@ package com.jeegroupproject.beans;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Date;
 
 import com.jeegroupproject.database.*;
@@ -311,94 +312,93 @@ public class Person {
 	
 	
 	/**
-	 * Method to save all person data to DB (already existing ==> update or new person ==> insert in DB)
-	 */
-	public void persist(){
+     * Method to save all person data to DB (already existing ==> update or new person ==> insert in DB)
+     */
+    public void persist(){
         
-		String queryInsert = "UPDATE sac_person SET person_external_id = ?, person_firstname = ?, person_lastname = ?, person_email = ?, person_password = ?, person_dob = ?, person_token = ?, person_phone_number = ?, person_created_At = ?, person_updated_at = ?, person_advisor_id = ?, person_is_advisor = ? WHERE person_id = ?  ;";
-		String queryUpdate = "INSERT INTO `sac_person` (`person_external_id`, `person_firstname`, `person_lastname`, `person_email`, `person_password`, `person_dob`, `person_token`, `person_phone_number`, `person_created_At`, `person_updated_at`, `person_advisor_id`, `person_is_advisor`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?);";
-		
-		//Connection, PreparedStatement and Resultset have to be closed when finished being used
-		//Since Java 7, these objects implement autocloseable so if there are given as parameters to a try clause they will be closed at the end
-		//https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html
+        String queryInsert = "UPDATE sac_person SET person_external_id = ?, person_firstname = ?, person_lastname = ?, person_email = ?, person_password = ?, person_dob = ?, person_token = ?, person_phone_number = ?, person_created_At = ?, person_updated_at = ?, person_advisor_id = ?, person_is_advisor = ? WHERE person_id = ?  ;";
+        String queryUpdate = "INSERT INTO `sac_person` (`person_external_id`, `person_firstname`, `person_lastname`, `person_email`, `person_password`, `person_dob`, `person_token`, `person_phone_number`, `person_created_At`, `person_updated_at`, `person_advisor_id`, `person_is_advisor`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?);";
+        
+        //Connection, PreparedStatement and Resultset have to be closed when finished being used
+        //Since Java 7, these objects implement autocloseable so if there are given as parameters to a try clause they will be closed at the end
+        //https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html
         try(Connection connection = DBConnectionFactory.getConnection()){
-
-	        //test if the person already has an id >=0 (id -1 means not yet created in db).
-	        //if he does, he already exists in database, so we update it
-	        if(this.getId() > 0){
-	            //prepare a prepared statement for update
-	            try(PreparedStatement pStatement = (PreparedStatement) connection.prepareStatement(queryInsert)){
-		            pStatement.setInt(1, this.getExternalId());
-		            pStatement.setString(2, this.getFirstname());
-		            pStatement.setString(3, this.getLastname());
-		            pStatement.setString(4, this.getEmail());
-		            pStatement.setString(5, this.getPassword());
-		            pStatement.setString(6, this.getDob());
-		            pStatement.setString(7, this.getToken());
-		            pStatement.setString(8, this.getPhoneNumber());
-		            pStatement.setTimestamp(9, new java.sql.Timestamp(this.getCreatedAt().getTime()));
-		            pStatement.setTimestamp(10, new java.sql.Timestamp(this.getUpdatedAt().getTime()));
-		            pStatement.setInt(11, this.getAdvisorId());
-		            pStatement.setBoolean(12, this.getIsAdvisor());
-		            pStatement.setInt(13, this.getId());
-		
-		            // execute update SQL statement
-		            pStatement.executeUpdate();
-				}catch (SQLException e) {
-					System.err.println("persist: problem with the prepared statement at insert");
-					e.printStackTrace();
-				}
-
-	        }else{//if he does not, one must insert it.
-	            //prepare a prepared statement for insertion
-	        	try(PreparedStatement pStatement = (PreparedStatement) connection.prepareStatement(queryUpdate)){
-	
-		            pStatement.setInt(1, this.getExternalId());
-		            pStatement.setString(2, this.getFirstname());
-		            pStatement.setString(3, this.getLastname());
-		            pStatement.setString(4, this.getEmail());
-		            pStatement.setString(5, this.getPassword());
-		            pStatement.setString(6, this.getDob());
-		            pStatement.setString(7, this.getToken());
-		            pStatement.setString(8, this.getPhoneNumber());
-		            pStatement.setTimestamp(9, new Timestamp(this.getCreatedAt().getTime()));
-		            pStatement.setTimestamp(10, new Timestamp(this.getUpdatedAt().getTime()));
-		            pStatement.setInt(11, this.getAdvisorId());
-		            pStatement.setBoolean(12, this.getIsAdvisor());
-		
-		            // execute update SQL statement
-		            pStatement.executeUpdate();
-		
-		            int affectedRows = pStatement.executeUpdate();
-		
-		            if (affectedRows == 0) {
-		                throw new SQLException("Creating person failed, no rows affected.");
-		            }
-		
-		            try (ResultSet generatedKeys = pStatement.getGeneratedKeys()) {
-		                if (generatedKeys.next()) {
-		                    this.setId(generatedKeys.getInt(1));
-		                }
-		                else {
-		                    throw new SQLException("Creating person failed, no ID obtained.");
-		                }
-		            }
-	            
-				}catch (SQLException e) {
-					System.err.println("persist: problem with the prepared statement at update");
-					e.printStackTrace();
-				}
-			}
-		}catch (SQLException e) {
-			System.err.println("persist: problem with the connection");
-			e.printStackTrace();
-		}
+            //test if the person already has an id >=0 (id -1 means not yet created in db).
+            //if he does, he already exists in database, so we update it
+            if(this.getId() > 0){
+                //prepare a prepared statement for update
+                try(PreparedStatement pStatement = (PreparedStatement) connection.prepareStatement(queryInsert)){
+                    pStatement.setInt(1, this.getExternalId());
+                    pStatement.setString(2, this.getFirstname());
+                    pStatement.setString(3, this.getLastname());
+                    pStatement.setString(4, this.getEmail());
+                    pStatement.setString(5, this.getPassword());
+                    pStatement.setString(6, this.getDob());
+                    pStatement.setString(7, this.getToken());
+                    pStatement.setString(8, this.getPhoneNumber());
+                    pStatement.setTimestamp(9, new java.sql.Timestamp(this.getCreatedAt().getTime()));
+                    pStatement.setTimestamp(10, new java.sql.Timestamp(this.getUpdatedAt().getTime()));
+                    pStatement.setInt(11, this.getAdvisorId());
+                    pStatement.setBoolean(12, this.getIsAdvisor());
+                    pStatement.setInt(13, this.getId());
+        
+                    // execute update SQL statement
+                    pStatement.executeUpdate();
+                }catch (SQLException e) {
+                    System.err.println("persist: problem with the prepared statement at insert");
+                    e.printStackTrace();
+                }
+            }else{//if he does not, one must insert it.
+                //prepare a prepared statement for insertion
+                try(PreparedStatement pStatement = (PreparedStatement) connection.prepareStatement(queryUpdate, Statement.RETURN_GENERATED_KEYS)){
+    
+                    pStatement.setInt(1, this.getExternalId());
+                    pStatement.setString(2, this.getFirstname());
+                    pStatement.setString(3, this.getLastname());
+                    pStatement.setString(4, this.getEmail());
+                    pStatement.setString(5, this.getPassword());
+                    pStatement.setString(6, this.getDob());
+                    pStatement.setString(7, this.getToken());
+                    pStatement.setString(8, this.getPhoneNumber());
+                    pStatement.setTimestamp(9, new Timestamp(this.getCreatedAt().getTime()));
+                    pStatement.setTimestamp(10, new Timestamp(this.getUpdatedAt().getTime()));
+                    pStatement.setInt(11, this.getAdvisorId());
+                    pStatement.setBoolean(12, this.getIsAdvisor());
+        
+                    // execute update SQL statement
+                    
+                    int affectedRows = pStatement.executeUpdate();
+        
+                    if (affectedRows == 0) {
+                        throw new SQLException("Creating person failed, no rows affected.");
+                    }
+        
+                    try (ResultSet generatedKeys = pStatement.getGeneratedKeys()) {
+                        if (generatedKeys.next()) {
+                            this.setId(generatedKeys.getInt(1));
+                        }
+                        else {
+                            throw new SQLException("Creating person failed, no ID obtained.");
+                        }
+                    }
+                
+                }catch (SQLException e) {
+                    System.err.println("persist: problem with the prepared statement at update");
+                    e.printStackTrace();
+                }
+            }
+        }catch (SQLException e) {
+            System.err.println("persist: problem with the connection");
+            e.printStackTrace();
+        }
     }
 	
 	
 	//TODO public List<Message> getMessages()
 	
 	//TODO public List<Account> getAccounts() 
+    
+    //TODO public static List<Account> getClientsByAdvisorId(int advisor id)
 	
 	//TODO public Person getAdvisor()
 	
