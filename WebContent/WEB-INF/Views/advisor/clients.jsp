@@ -18,6 +18,7 @@
 					<td>Identifiant</td>
 					<td>Nom</td>
 					<td>Prénom</td>
+					<td>Voir ce client</td>
 				</tr>
 			</thead>
 			<tbody>
@@ -26,6 +27,7 @@
 						<td><%-- <c:out value= ${externalId}/> --%></td>
 						<td><%-- <c:out value= ${Lastname}> --%></td>
 						<td><%-- <c:out value= ${Firstname}/> --%></td>
+						<td><%--<a href="/JEEGroupProject/advisor/client/id">Voir ce client</a> --%> <%--TODO: redirect on the right client page --%></td>
 					</tr>
 				<%--</c:forEach> --%>
 			</tbody>
@@ -62,7 +64,7 @@
                 <input type="submit" value="createClient" class="noLabel" />
                 <br />
                 
-                 <p>${message}</p>
+                <p>${message}</p>
                 
             </fieldset>
         </form>
