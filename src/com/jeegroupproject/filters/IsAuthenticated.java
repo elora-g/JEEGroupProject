@@ -97,6 +97,7 @@ public class IsAuthenticated implements Filter {
 		}else{
 			
 			response.sendRedirect(request.getContextPath() + DO_LOG_IN); // redirects to login page
+			return;
 			
 		}
 		

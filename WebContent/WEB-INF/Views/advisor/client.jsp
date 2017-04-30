@@ -49,18 +49,21 @@
 				            <fieldset>
 				                            
 				                <label for="accountType">Type de compte <span class="required">*</span></label>
-				                <input type="radio" name="accountType" value="Checking">Chèque<br />
-	  							<input type="radio" name="accountType" value="Savings">Epargne<br />
-	 							<input type="radio" name="accountType" value="LifeInsurance">Assurance Vie<br />
+				                <input type="radio" name="accountType" value="CHECKING">Chèque<br />
+	  							<input type="radio" name="accountType" value="SAVINGS">Epargne<br />
+	 							<input type="radio" name="accountType" value="LIFE_INSURRANCE">Assurance Vie<br />
 				                
 				                <label for="balance">Solde de départ</label>
 				                <input type="text" name="balance" size="20" maxlength="60" />
 				                <br />
 				                
 				                <%-- <c:if test = nombre de comptes >1 > --%>
-				                	<input type="checkbox" id="cbox2" name="isDefaultCbox" value="isDefault"><label for="isDefaultCbox">Cochez cette case si ce compte est le compte principal du client</label>
+				                	<label for="isDefault">Le compte est le compte principal de votre client <span class="required">*</span></label>
+				                	<input type="radio" name="isDefault" value="0">Non<br />
+				                	<input type="radio" name="isDefault" value="1">Oui<br />
+				                	
 								<%-- </c:if> --%>
-				                <input type="submit" value="createClient" class="noLabel" />
+				                <input type="submit" value="créer le compte" class="noLabel" />
 				                <br />
 				                
 				                <p>${message}</p>

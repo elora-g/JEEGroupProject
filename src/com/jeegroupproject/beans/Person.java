@@ -2,6 +2,7 @@ package com.jeegroupproject.beans;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -353,7 +354,7 @@ public class Person {
 
 	        }else{//if he does not, one must insert it.
 	            //prepare a prepared statement for insertion
-	        	try(PreparedStatement pStatement = (PreparedStatement) connection.prepareStatement(queryUpdate)){
+	        	try(PreparedStatement pStatement = (PreparedStatement) connection.prepareStatement(queryUpdate, Statement.RETURN_GENERATED_KEYS)){
 	
 		            pStatement.setInt(1, this.getExternalId());
 		            pStatement.setString(2, this.getFirstname());
@@ -369,8 +370,7 @@ public class Person {
 		            pStatement.setBoolean(12, this.getIsAdvisor());
 		
 		            // execute update SQL statement
-		            pStatement.executeUpdate();
-		
+		            
 		            int affectedRows = pStatement.executeUpdate();
 		
 		            if (affectedRows == 0) {

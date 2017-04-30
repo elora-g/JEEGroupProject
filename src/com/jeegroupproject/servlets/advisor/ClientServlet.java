@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.jeegroupproject.beans.Account;
 import com.jeegroupproject.beans.Person;
 
 /**
@@ -42,8 +43,26 @@ public class ClientServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
+		
+		//get request parameters
+		Person currentClient = Person.getPersonByExternalId(Integer.parseInt(request.getParameter("id")));
+		request.setAttribute(CURRENT_CLIENT_ATTR_NAME, currentClient);
+		String type = request.getParameter("accountType");
+		Float balance = Float.parseFloat(request.getParameter("balance"));
+		boolean isDefault = request.getParameter("isDefault").equals("1") ? true : false;
+		
+		//instanciate new account
+		Account newAccount = new Account();
+		newAccount.setId(-1);
+		newAccount.setType(type);
+		newAccount.setBalance(balance);
+		newAccount.setIsDefault(isDefault);
+		newAccount.setCustomerId(((Integer)currentClient.getId()).toString());
+		
+		// apply persist
+		newAccount.persist();
+		
+		this.getServletContext().getRequestDispatcher(VIEW).forward(request, response);//refresh
 	}
 
 }

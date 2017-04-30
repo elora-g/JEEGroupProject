@@ -41,8 +41,10 @@ public class LoginPageServlet extends HttpServlet {
 		if(authenticatedPerson != null){ // if user is already authenticated, no need to show login page
 			if(authenticatedPerson.getIsAdvisor()){
 				response.sendRedirect(request.getContextPath() + MAIN_ADVISOR_PAGE); 
+				return;
 			}else{
 				response.sendRedirect(request.getContextPath() + MAIN_AUTH_PAGE);
+				return;
 			}
 		}else{
 			this.getServletContext().getRequestDispatcher(VIEW).forward(request, response);
@@ -65,8 +67,10 @@ public class LoginPageServlet extends HttpServlet {
 		if(authenticatedPerson != null){
 			if(authenticatedPerson.getIsAdvisor()){
 				response.sendRedirect(request.getContextPath() + MAIN_ADVISOR_PAGE);
+				return;
 			}else{
 				response.sendRedirect(request.getContextPath() + MAIN_AUTH_PAGE);
+				return;
 			}
 		}
 		
@@ -102,8 +106,10 @@ public class LoginPageServlet extends HttpServlet {
 				response.addCookie(new Cookie(IsAuthenticated.PERSONID_COOKIE_NAME, ((Integer)connectedPerson.getId()).toString())); //set cookie
 				if(connectedPerson.getIsAdvisor()){
 					response.sendRedirect(request.getContextPath() + MAIN_ADVISOR_PAGE);
+					return;
 				}else{
 					response.sendRedirect(request.getContextPath() + MAIN_AUTH_PAGE);
+					return;
 				}
 			}else{
 				
