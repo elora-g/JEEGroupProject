@@ -153,8 +153,15 @@ public class Account {
 	 * @return a List of all Operations for this account
 	 */
 	public List<Operation> getOperations() {
-		System.out.println("nb of operations for acount n° "+ getId() + " " + Operation.getOperationsByAccountId(this.id));
 		return Operation.getOperationsByAccountId(this.id);
+	}
+	
+	/**
+	 * 
+	 * @return a List of all Disputed Operations for this account
+	 */
+	public List<Operation> getDisputedOperations() {
+		return Operation.getDisputedOperationsByAccountId(this.id);
 	}
 	
 	

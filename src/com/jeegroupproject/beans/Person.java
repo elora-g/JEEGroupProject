@@ -408,9 +408,18 @@ public class Person {
 		return Account.getAccountsByPersonId(this.id);
 	}
 	
-	//TODO public Person getAdvisor()
-	
-	//TODO public List<Operation> getDisputedOperationsOfClients() throw exception if person is not an advisor
+
+	public List<Operation> getDisputedOperations() {
+		List<Operation> disputedOperations = new ArrayList<Operation>();
+		
+		for(Account account : getAccounts()){
+			disputedOperations.addAll(account.getDisputedOperations());
+		}
+		
+		return disputedOperations;
+		
+		
+	}
 	
 	/**
 	 * 
