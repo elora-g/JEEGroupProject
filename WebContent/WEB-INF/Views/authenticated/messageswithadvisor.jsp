@@ -26,11 +26,14 @@
 	<h2>Envoyer un message</h2>
 	<p>Attention, votre message ne doit pas dépasser 256 charactères</p>
 		<form method ="post">
-			<%--attention le message doit faire max 256 charactères --%>
-			<label for="messageToAdvisor">Mon Message</label>
-			<input type="text" name="messageToAdvisor"/>
-			<br/>
-			<input type="submit" value="Send" class="noLabel" />
+			<fieldset>
+				<%--attention le message doit faire max 256 charactères --%>
+				<label for="messageToAdvisor">Mon Message <span class="required">*</span></label>
+				<input type="text" name="messageToAdvisor"/>
+				<br/>
+				<input type="submit" value="Send" class="noLabel" />
+				<p>${message}</p>
+			</fieldset>
 		</form>
 	</section>
 		

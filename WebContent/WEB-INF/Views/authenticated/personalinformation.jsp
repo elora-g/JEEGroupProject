@@ -30,29 +30,34 @@
 		<p>Remplissez le ou les champs que vous souhaitez modifier.</p>
 		<p>Pour changer votre mot de passe, il est nécessaire de remplir les trois champs</p>
 		<form>
-			<label for="email">Adresse email</label>
-            <input type="email" name="email" size="20" maxlength="60" />
-            <br />
-            
-            <label for="phoneNumber">Numéro de Téléphone</label>
-            <input type="text" name="phoneNumber" size="20" maxlength="60" />
-            <br />
-			
-			<%--TODO: logique pour vérifier que l'ancien password correspond, puis que newPassword et checkNewPassword correspondent --%>
-            <label for="oldPassword">Entrez votre ancien mot de passe <span class="required">*</span></label>
-            <input type="password" name="oldPassword" size="20" maxlength="20" />
-            <br />
-            
-           	<label for="newPassword">Entrez votre nouveau mot de passe<span class="required">*</span></label>
-            <input type="password" name="newPassword" size="20" maxlength="20" />
-            <br />
-            
-            <label for="checkNewPassword">Confirmez votre nouveau mot de passe<span class="required">*</span></label>
-            <input type="password" name="checkNewPassword" size="20" maxlength="20" />
-            <br />
-
-            <input type="submit" value="changeInfo" class="noLabel" />
-            <br />
+			<fieldset>
+				<label for="email">Adresse email</label>
+	            <input type="email" name="email" size="20" maxlength="60" />
+	            <br />
+	            
+	            <label for="phoneNumber">Numéro de Téléphone</label>
+	            <input type="text" name="phoneNumber" size="20" maxlength="60" />
+	            <br />
+				
+				<%--TODO: logique pour vérifier que l'ancien password correspond, puis que newPassword et checkNewPassword correspondent --%>
+	            <label for="oldPassword">Entrez votre ancien mot de passe <span class="required">*</span></label>
+	            <input type="password" name="oldPassword" size="20" maxlength="20" />
+	            <br />
+	            
+	           	<label for="newPassword">Entrez votre nouveau mot de passe <span class="required">*</span></label>
+	            <input type="password" name="newPassword" size="20" maxlength="20" />
+	            <br />
+	            
+	            <label for="checkNewPassword">Confirmez votre nouveau mot de passe <span class="required">*</span></label>
+	            <input type="password" name="checkNewPassword" size="20" maxlength="20" />
+	            <br />
+	
+	            <input type="submit" value="changeInfo" class="noLabel" />
+	            <br />
+	            
+                <p>${message}</p>
+                
+            </fieldset>
 		</form>
 	</section>
 	
