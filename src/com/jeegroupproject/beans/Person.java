@@ -87,7 +87,7 @@ public class Person {
 		//Connection, PreparedStatement and Resultset have to be closed when finished being used
 		// Since Java 7, these objects implement autocloseable so if there are given as parameters to a try clause they will be closed at the end
 		// https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html
-		try(Connection connection = DBConnectionFactory.getConnection()){ //Try with the resource connection 
+		try(Connection connection = DBServiceSingleton.getInstance().getConnection()){ //Try with the resource connection 
 			try(PreparedStatement pStatement = (PreparedStatement) connection.prepareStatement(query)){ //try with the preparedStatement
 				pStatement.setInt(2, externalId);
 				try(ResultSet result = pStatement.executeQuery()){ //try with the resultSet
@@ -141,7 +141,7 @@ public class Person {
 		Person personByExternalId;
 		Person personByEmail;
 		
-		try(Connection connection = DBConnectionFactory.getConnection()){
+		try(Connection connection = DBServiceSingleton.getInstance().getConnection()){
 
 			if(externalId != null){
 				try(PreparedStatement pStatement1 = (PreparedStatement) connection.prepareStatement(queryExternalId)){
@@ -249,7 +249,7 @@ public class Person {
 		// Since Java 7, these objects implement autocloseable so if there are given as parameters to a try clause they will be closed at the end
 		// https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html
 		
-		try(Connection connection = DBConnectionFactory.getConnection()){
+		try(Connection connection = DBServiceSingleton.getInstance().getConnection()){
 			
 			if(id !=null && token != null){
 				try(PreparedStatement pStatement = (PreparedStatement) connection.prepareStatement(query)){
@@ -321,7 +321,7 @@ public class Person {
 		//Connection, PreparedStatement and Resultset have to be closed when finished being used
 		//Since Java 7, these objects implement autocloseable so if there are given as parameters to a try clause they will be closed at the end
 		//https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html
-        try(Connection connection = DBConnectionFactory.getConnection()){
+        try(Connection connection = DBServiceSingleton.getInstance().getConnection()){
 
 	        //test if the person already has an id >=0 (id -1 means not yet created in db).
 	        //if he does, he already exists in database, so we update it
