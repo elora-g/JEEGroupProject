@@ -41,6 +41,8 @@
 				
 	            <input type="submit" value="changeInfo" class="noLabel" />
 	            <br />
+	            
+	            <p>${message}</p>
                 
             </fieldset>
 		</form>

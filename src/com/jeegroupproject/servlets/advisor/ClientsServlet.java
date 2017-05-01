@@ -53,7 +53,6 @@ public class ClientsServlet extends HttpServlet {
 		//As the authenticated user is the advisor, we will pass its id as the setAdvisorId for the new client
 		int advisorId = ((Person)request.getAttribute(IsAuthenticated.AUTH_PERSON_ATTR_NAME)).getId();
 		int externalId = Person.getUniqueExternalId();
-		System.err.println(firstName);
 		
 		//instanciate new person
 		Person newPerson = new Person();
