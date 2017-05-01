@@ -5,17 +5,23 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Détail de mon client</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="description" content="Connexion Page">
+	<meta name="author" content="Elora Guyader">
+
+	<link href="/JEEGroupProject/assets/css/bootstrap.min.css" rel="stylesheet">
+	<link href="/JEEGroupProject/assets/css/generalstyle.css" rel="stylesheet" type="text/css">
+	<title>Détail de mon client</title>
 </head>
 
 <body>
 
+	<c:import url="/WEB-INF/Views/advisor/menuadvisor.jsp" />
 	
-
-	<h1>Comptes de mon client n°<c:out value= "${currentClient.externalId}"/></h1>
+	<div class="container2">
 	
-		<c:import url="/WEB-INF/Views/advisor/menuadvisor.jsp" />
+		<h1>Comptes de mon client n°<c:out value= "${currentClient.externalId}"/></h1>	
 		
 		<p><a href="/JEEGroupProject/advisor/clientinformation?id=<c:out value="${currentClient.externalId}"/>">Voir les informations personnelles du client</a></p>
 		<p><a href="/JEEGroupProject/advisor/clientmessages?id=<c:out value="${currentClient.externalId}"/>">Messagerie avec le client</a></p>
@@ -76,8 +82,10 @@
 			    </c:otherwise>
 		   	</c:choose>
 		</section>
-
-		
+	</div>
+	<script src="/JEEGroupProject/assets/jquery/jquery.min.js"></script>
+    <script src="/JEEGroupProject/assets/tether/tether.min.js"></script>
+    <script src="/JEEGroupProject/assets/js/bootstrap.min.js"></script>
 	
 		
 </body>

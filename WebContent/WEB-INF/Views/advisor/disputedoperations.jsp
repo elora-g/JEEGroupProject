@@ -5,8 +5,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Liste de toutes les opérations contestées</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="description" content="Connexion Page">
+	<meta name="author" content="Elora Guyader">
+
+	<link href="/JEEGroupProject/assets/css/bootstrap.min.css" rel="stylesheet">
+	<link href="/JEEGroupProject/assets/css/generalstyle.css" rel="stylesheet" type="text/css">
+	<title>Liste de toutes les opérations contestées</title>
 </head>
 
 <body>
@@ -61,9 +67,10 @@
 			<h3>Vos clients n'ont pas contesté d'opérations.</h3>
 		</c:otherwise>
 	</c:choose>
-			
+	
+	<script src="/JEEGroupProject/assets/jquery/jquery.min.js"></script>
+    <script src="/JEEGroupProject/assets/tether/tether.min.js"></script>
+    <script src="/JEEGroupProject/assets/js/bootstrap.min.js"></script>		
 		
-
-
 </body>
 </html>
