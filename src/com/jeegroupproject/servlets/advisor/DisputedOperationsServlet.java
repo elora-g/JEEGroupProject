@@ -40,19 +40,32 @@ public class DisputedOperationsServlet extends HttpServlet {
 		
 		//get request parameters
 		Operation disputedOperation = Operation.getOperationById(Integer.parseInt(request.getParameter("operationid")));
-		boolean cancelOperation = request.getParameter("disputeDecision").equals("1") ? true : false;
-		if(cancelOperation){
+		String cancelOperation = request.getParameter("disputeDecision");
+				
+		boolean canContinue = true;
+
+		if(cancelOperation == null){
+			canContinue = false;
+			String message = "Vous n'avez pas coché de bouton";
+			request.setAttribute("message", message);
+		} 
+		if(canContinue){
+			
+			boolean iscancelOperation = cancelOperation.equals("1") ? true : false;
+			
+			if (iscancelOperation){
+		
 			// delete the operation and give money back
 			Account account = Account.getAccountById(disputedOperation.getAccountId());
 			account.setBalance(account.getBalance() + disputedOperation.getAmount());
 			account.persist();
 			disputedOperation.delete();
-		}else{
+			}else{
 			disputedOperation.setDispute(false);
 			disputedOperation.persist();
-		}
+			}
 		
-
+		}
 		
 		this.getServletContext().getRequestDispatcher(VIEW).forward(request, response);//refresh
 	}

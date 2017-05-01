@@ -69,6 +69,7 @@
 						</section>
 					</c:if>
 				</c:forEach>
+				<p class="error"><c:out value="${message}"></c:out>
 			</c:when>
 			<c:otherwise>
 				<h3>Vos clients n'ont pas contesté d'opérations.</h3>
