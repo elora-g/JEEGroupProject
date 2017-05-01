@@ -19,19 +19,20 @@
 	
 	<div class="container2">
 	
-	<h1>Bienvenue sur votre messagerie avec votre client n° <c:out value="${currentClient.externalId}"/> : <c:out value="${currentClient.firstname}"/> <c:out value="${currentClient.lastname}"/></h1>
+		<h1>Bienvenue sur votre messagerie avec votre client n° <c:out value="${currentClient.externalId}"/> : <c:out value="${currentClient.firstname}"/> <c:out value="${currentClient.lastname}"/></h1>
+		
+		<p><a href="/advisor/clientinformation?id=<c:out value="${currentClient.externalId}"/>">Voir les informations personnelles du client</a></p>
 	
 		<section>
 			<h2>Envoyer un message</h2>
-			<p>Attention, votre message ne doit pas dépasser 128 charactères</p>
 			<form method ="post">
 				<fieldset>
 					<%--attention le message doit faire max 128 charactères --%>
 					<label for="messageToClient">Mon Message <span class="required">*</span></label>
-					<textarea name="messageToClient"></textarea>
-					<br/>
-					<input type="submit" value="Send" class="noLabel" />
-					<p>${message}</p>
+					<textarea name="messageToClient" class="form-control"></textarea>
+					<p class="form-text text-muted" >Attention, votre message ne doit pas dépasser 128 charactères</p>
+					<input type="submit" value="Envoyer" class="btn btn-primary">
+					<p class="error">${message}</p>
 				</fieldset>
 			</form>
 		</section>

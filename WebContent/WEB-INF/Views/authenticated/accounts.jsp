@@ -31,14 +31,14 @@
 					<c:when test="${fn:length(account.operations) > 0}">
 						<h3> Opérations sur le compte</h3>
 						<form method="post">
-							<table>
+							<table class="table table-stripped">
 								<thead>
 									<tr>
-										<td>Date de l'opération</td>
-										<td>Type d'opération</td>
-										<td>Description</td>
-										<td>Montant</td>
-										<td>Contester l'opération</td>
+										<th>Date de l'opération</th>
+										<th>Type d'opération</th>
+										<th>Description</th>
+										<th>Montant</th>
+										<th>Contester l'opération</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -54,7 +54,7 @@
 													Opération déjà contestée
 													</c:when>
 													<c:otherwise>
-														<button name="operationid" type="submit" value="${operation.id}">Contester cette opération</button>
+														<button name="operationid" type="submit" value="${operation.id}" class="btn btn-primary">Contester cette opération</button>
 													</c:otherwise>
 												</c:choose>
 											</td>
@@ -71,9 +71,6 @@
 			</section>
 		</c:forEach>
 		
-		<form method="post">
-			<input type ="hidden" name="operationId"></input>
-		</form>
 	 </div>
 	<script src="/assets/jquery/jquery.min.js"></script>
     <script src="/assets/tether/tether.min.js"></script>

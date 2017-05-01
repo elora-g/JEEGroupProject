@@ -21,9 +21,11 @@
 	
 		<h1>Les informations personnelles du client n°<c:out value= "${currentClient.externalId}"/></h1>
 		
+		<p><a href="/advisor/clientmessages?id=<c:out value="${currentClient.externalId}"/>">Messagerie avec le client</a></p>
+		
 		<section id = "personal_info_by_advisor">
 			<h2>Détail des informations personnelles</h2>
-			<ul>
+			<ul class="nodeco">
 				<li>Nom : <c:out value= "${currentClient.lastname}"/></li>
 				<li>Prénom : <c:out value= "${currentClient.firstname}"/></li>
 				<li>Identifiant : <c:out value= "${currentClient.externalId}"/></li>
@@ -38,18 +40,19 @@
 			<p>Vous ne pouvez pas modifier l'état civil (nom, prénom et date de naissance) du client sans pièce justificative et autorisation du responsable d'agence.</p>
 			<form method="post">
 				<fieldset>
-					<label for="email">Adresse email</label>
-		            <input type="email" name="email" size="20" maxlength="60" />
-		            <br />
+					<div class="form-group row">      
+						<label for="email" class="col-2">Adresse email</label>
+		            	<input type="email" name="email" maxlength="60" class="form-control col-2">
+		            </div>
 		            
-		            <label for="phoneNumber">Numéro de Téléphone</label>
-		            <input type="text" name="phoneNumber" size="20" maxlength="60" />
-		            <br />
+		            <div class="form-group row">      
+		           		<label for="phoneNumber" class="col-2">Numéro de Téléphone</label>
+		            	<input type="text" name="phoneNumber" maxlength="60" class="form-control col-2">
+		            </div>   
 					
-		            <input type="submit" value="changeInfo" class="noLabel" />
-		            <br />
+		            <input type="submit" value="valider la modification" class="btn btn-primary">
 		            
-		            <p>${message}</p>
+		            <p class="error">${message}</p>
 	                
 	            </fieldset>
 			</form>

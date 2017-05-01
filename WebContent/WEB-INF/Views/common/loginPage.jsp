@@ -22,20 +22,20 @@
 	                
 	                <div class="form-group">
 	              	  <label for="email">Adresse email</label>
-	               	  <input type="email" class="form-control" id="email" name="email" size="20" maxlength="60" />
+	               	  <input type="email" class="form-control" id="email" name="email" maxlength="60">
 	                </div>
 	                
 	                <div class="form-group">
 	                <label for="externalId">Client Id</label>
-	                <input type="text" class="form-control" id="externalId" name="externalId" size="20" maxlength="60" />
+	                <input type="text" class="form-control" id="externalId" name="externalId" maxlength="60">
 	                </div>
 					
 					<div class="form-group">
 	                <label for="password">Mot de passe <span class="required">*</span></label>
-	                <input type="password" class="form-control" id="password" name="password" size="20" maxlength="20" />
+	                <input type="password" class="form-control" id="password" name="password" maxlength="20">
 	                </div>
 	
-	                <input type="submit" class="btn btn-primary" value="Connexion" class="noLabel" />
+	                <input type="submit" class="btn btn-primary" value="Connexion">
 	                
 	                 <p class="error">${message}</p>
 	                

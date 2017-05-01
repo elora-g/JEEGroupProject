@@ -28,7 +28,7 @@
 		
 		<article class ="row">
 			<div class="col-lg-12">
-				<h3><a href="/advisor/disputedoperations">Opérations contestées</a></h3>
+				<h3><a href="/advisor/disputedoperations">Opérations contestées <span class="notif">(<c:out value="${fn:length(authenticatedPerson.disputedOperationsForClients)}"/>)</span></a></h3>
 				<p>
 					Dans cette page vous pourrez voir la liste de toutes les opérations contestées par vos clients en attente d'action de votre part.
 					Vous pourrez choisir, pour chaque opération, de rembourser votre client ou de valider l'opération en question.
