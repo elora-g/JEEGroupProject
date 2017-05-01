@@ -65,8 +65,8 @@
                 <br />
                 
                 <label for="clientType">Le client est employé de la banque<span class="required">*</span></label>
-                <input type="radio" name="clientType" value="1">Oui<br />
-				<input type="radio" name="clientType" value="0">Non<br />
+                <input type="radio" name="clientType" value="0">Non<br />
+				<input type="radio" name="clientType" value="1">Oui<br />
 
 
                 <input type="submit" value="createClient" class="noLabel" />

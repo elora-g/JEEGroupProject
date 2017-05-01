@@ -54,7 +54,7 @@
 	  							<input type="radio" name="accountType" value="SAVINGS">Epargne<br />
 	 							<input type="radio" name="accountType" value="LIFE_INSURRANCE">Assurance Vie<br />
 				                
-				                <label for="balance">Solde de départ</label>
+				                <label for="balance">Solde de départ <span class="required">*</span></label>
 				                <input type="text" name="balance" size="20" maxlength="60" />
 				                <br />
 				                

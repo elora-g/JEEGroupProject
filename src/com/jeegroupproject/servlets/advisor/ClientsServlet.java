@@ -48,12 +48,18 @@ public class ClientsServlet extends HttpServlet {
 		String email = request.getParameter("email");
 		String password = request.getParameter("password");
 		String phoneNumber = request.getParameter("phoneNumber");
-		Boolean clientType = request.getParameter("clientType").equals("1") ? true : false;
+		String clientType = request.getParameter("clientType");
 		// getAttribute returns an object, we have to cast it to Person to get its id. 
 		//As the authenticated user is the advisor, we will pass its id as the setAdvisorId for the new client
 		int advisorId = ((Person)request.getAttribute(IsAuthenticated.AUTH_PERSON_ATTR_NAME)).getId();
 		int externalId = Person.getUniqueExternalId();
 		
+		
+		if(lastName.trim().isEmpty() || firstName.trim().isEmpty() || dob.trim().isEmpty() || email.trim().isEmpty() || password.trim().isEmpty() || phoneNumber.trim().isEmpty() || clientType == null){
+			String message = "Vous n'avez pas rempli tous les champs";
+			request.setAttribute("message", message);
+		}else{
+			
 		//instanciate new person
 		Person newPerson = new Person();
 		newPerson.setId(-1); // show to persist that's it is a new person
@@ -63,12 +69,14 @@ public class ClientsServlet extends HttpServlet {
 		newPerson.setEmail(email);
 		newPerson.setPassword(password);
 		newPerson.setPhoneNumber(phoneNumber);
-		newPerson.setIsAdvisor(clientType);
+		newPerson.setIsAdvisor(clientType.equals("1") ? true : false);
 		newPerson.setAdvisorId(advisorId);
 		newPerson.setExternalId(externalId);
 		
 		// apply persist
 		newPerson.persist();
+		
+		}
 		
 		this.getServletContext().getRequestDispatcher(VIEW).forward(request, response);//refresh
 		
