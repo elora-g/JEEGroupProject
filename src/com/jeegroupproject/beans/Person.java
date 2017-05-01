@@ -410,7 +410,13 @@ public class Person {
     }
 	
 	
-	//TODO public List<Message> getMessages()
+	/**
+	 * 
+	 * @return the list of exchanged message with the person's advisor
+	 */
+	public List<Message> getMessagesWithAdvisor(){
+		return Message.getMessagesforClientAndAdvisor(this.id, this.advisorId);	
+	}
 	
 	
 	/**
