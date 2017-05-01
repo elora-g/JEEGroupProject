@@ -18,51 +18,51 @@ import com.jeegroupproject.beans.Person;
  */
 @WebFilter("/IsAdvisor")
 public class IsAdvisor implements Filter {
-	public static final String GO_MAIN_AUTH = "/authenticated/main";
+    public static final String GO_MAIN_AUTH = "/authenticated/main";
 
-    /**
-     * Default constructor. 
+   /**
+     * Default constructor.
      */
     public IsAdvisor() {
         // TODO Auto-generated constructor stub
     }
 
-	/**
-	 * @see Filter#destroy()
-	 */
-	public void destroy() {
-		// TODO Auto-generated method stub
-	}
+    /**
+     * @see Filter#destroy()
+     */
+    public void destroy() {
+        // TODO Auto-generated method stub
+    }
 
-	/**
-	 * @see Filter#doFilter(ServletRequest, ServletResponse, FilterChain)
-	 */
-	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
-		
-		HttpServletRequest request = (HttpServletRequest) req; // Cast to obtain HttpServletRequest specific methods required to get context path
-		HttpServletResponse response = (HttpServletResponse) res; // Cast to obtain HttpServletResponse specific methods required to get context path
-		
-		Person authenticatedPerson = (Person) request.getAttribute(IsAuthenticated.AUTH_PERSON_ATTR_NAME); // returns the authenticated person set by the filter
-		
-		if(authenticatedPerson.getIsAdvisor()){
-			
-            chain.doFilter(request, response); //let the person go to the restricted main advisor page
+    /**
+     * @see Filter#doFilter(ServletRequest, ServletResponse, FilterChain)
+     */
+    public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
+        
+        HttpServletRequest request = (HttpServletRequest) req; // Cast to obtain HttpServletRequest specific methods required to get context path
+        HttpServletResponse response = (HttpServletResponse) res; // Cast to obtain HttpServletResponse specific methods required to get context path
+        
+        Person authenticatedPerson = (Person) request.getAttribute(IsAuthenticated.AUTH_PERSON_ATTR_NAME); // returns the authenticated person set by the filter
+        
+        if(authenticatedPerson.getIsAdvisor()){
             
-		}else{
-			
-			response.sendRedirect(request.getContextPath() + GO_MAIN_AUTH); // redirects to main authenticated page
-			return;
-			
-		}
-		
-		//chain.doFilter(request, response);
-	}
+           chain.doFilter(request, response); //let the person go to the restricted main advisor page
+            
+        }else{
+            
+            response.sendRedirect(request.getContextPath() + GO_MAIN_AUTH); // redirects to main authenticated page
+            return;
+            
+        }
+        
+    }
 
-	/**
-	 * @see Filter#init(FilterConfig)
-	 */
-	public void init(FilterConfig fConfig) throws ServletException {
-		// TODO Auto-generated method stub
-	}
+
+    /**
+     * @see Filter#init(FilterConfig)
+     */
+    public void init(FilterConfig fConfig) throws ServletException {
+        // TODO Auto-generated method stub
+    }
 
 }
