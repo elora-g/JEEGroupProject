@@ -4,52 +4,63 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Mes messages avec mon client</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="description" content="Connexion Page">
+	<meta name="author" content="Elora Guyader">
+
+	<link href="/assets/css/bootstrap.min.css" rel="stylesheet">
+	<link href="/assets/css/generalstyle.css" rel="stylesheet" type="text/css">
+	<title>Mes messages avec mon client</title>
 </head>
 <body>
 
-	<h1>Bienvenue sur votre messagerie avec votre client n° <c:out value="${currentClient.externalId}"/> : <c:out value="${currentClient.firstname}"/> <c:out value="${currentClient.lastname}"/></h1>
-	
 	<c:import url="/WEB-INF/Views/advisor/menuadvisor.jsp" />
-
-
-	<section>
-		<h2>Envoyer un message</h2>
-		<p>Attention, votre message ne doit pas dépasser 128 charactères</p>
-		<form method ="post">
-			<fieldset>
-				<%--attention le message doit faire max 128 charactères --%>
-				<label for="messageToClient">Mon Message <span class="required">*</span></label>
-				<textarea name="messageToClient"></textarea>
-				<br/>
-				<input type="submit" value="Send" class="noLabel" />
-				<p>${message}</p>
-			</fieldset>
-		</form>
-	</section>
 	
+	<div class="container2">
 	
-	<section class="client_message">
-		<h2>Echanges avec mon client n°<c:out value="${currentClient.externalId}"/></h2>
-		<c:forEach var="message" items="${currentClient.messagesWithAdvisor}" >
-			<article>
-				<h3>De 
-					<c:choose>
-						<c:when test="${message.from == authenticatedPerson.id}">
-							vous :
-						</c:when>
-						<c:otherwise>
-							votre Client :
-						</c:otherwise>
-					</c:choose>
-					<c:out value="${message.createdAt}"></c:out>
-				</h3>
-				<p><c:out value="${message.content}"></c:out></p>
-			</article>
-		</c:forEach>
-	</section>
-
+		<h1>Bienvenue sur votre messagerie avec votre client n° <c:out value="${currentClient.externalId}"/> : <c:out value="${currentClient.firstname}"/> <c:out value="${currentClient.lastname}"/></h1>
+		
+		<p><a href="/advisor/clientinformation?id=<c:out value="${currentClient.externalId}"/>">Voir les informations personnelles du client</a></p>
+	
+		<section>
+			<h2>Envoyer un message</h2>
+			<form method ="post">
+				<fieldset>
+					<%--attention le message doit faire max 128 charactères --%>
+					<label for="messageToClient">Mon Message <span class="required">*</span></label>
+					<textarea name="messageToClient" class="form-control"></textarea>
+					<p class="form-text text-muted" >Attention, votre message ne doit pas dépasser 128 charactères</p>
+					<input type="submit" value="Envoyer" class="btn btn-primary">
+					<p class="error">${message}</p>
+				</fieldset>
+			</form>
+		</section>
+		
+		
+		<section class="client_message">
+			<h2>Echanges avec mon client n°<c:out value="${currentClient.externalId}"/></h2>
+			<c:forEach var="message" items="${currentClient.messagesWithAdvisor}" >
+				<article>
+					<h3>De 
+						<c:choose>
+							<c:when test="${message.from == authenticatedPerson.id}">
+								vous :
+							</c:when>
+							<c:otherwise>
+								votre Client :
+							</c:otherwise>
+						</c:choose>
+						<c:out value="${message.createdAt}"></c:out>
+					</h3>
+					<p><c:out value="${message.content}"></c:out></p>
+				</article>
+			</c:forEach>
+		</section>
+	</div>
+	<script src="/assets/jquery/jquery.min.js"></script>
+    <script src="/assets/tether/tether.min.js"></script>
+    <script src="/assets/js/bootstrap.min.js"></script>
 	
 </body>
 </html>
