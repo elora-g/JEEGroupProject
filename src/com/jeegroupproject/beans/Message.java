@@ -52,7 +52,7 @@ public class Message {
 						message.setContent(result.getString(2));
 						message.setFrom(result.getInt(3));
 						message.setTo(result.getInt(4));
-						message.setCreatedAt(result.getDate(5));
+						message.setCreatedAt(result.getTimestamp(5));
 						
 						messageList.add(message);
 

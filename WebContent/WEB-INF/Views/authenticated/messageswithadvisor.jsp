@@ -33,7 +33,17 @@
 		<h2>Echanges avec mon Conseiller</h2>
 		<c:forEach var="message" items="${authenticatedPerson.messagesWithAdvisor}" >
 			<article>
-				<h3>De : <c:out value="${message.from}"></c:out> - <c:out value="${message.createdAt}"></c:out></h3>
+				<h3>De 
+					<c:choose>
+						<c:when test="${message.from == authenticatedPerson.id}">
+							vous :
+						</c:when>
+						<c:otherwise>
+							votre Conseiller :
+						</c:otherwise>
+					</c:choose>
+					<c:out value="${message.createdAt}"></c:out>
+				</h3>
 				<p><c:out value="${message.content}"></c:out></p>
 			</article>
 		</c:forEach>
