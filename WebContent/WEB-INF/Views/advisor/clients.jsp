@@ -48,11 +48,15 @@
                 <input type="text" name="firstName" size="20" maxlength="60" />
                 <br />
                 
+                <label for="dob">Date de naissance <span class="required">*</span></label>
+                <input type="text" name="dob" size="20" maxlength="60" />
+                <br />
+                
                 <label for="email">Email <span class="required">*</span></label>
                 <input type="email" name="email" size="20" maxlength="60" />
                 <br />
 
-                <label for="password">Entrez un mot de passe pour votre client <span class="required">*</span></label> <%--TODO générer le mot de passe automatiquement --%>
+                <label for="password">Entrez un mot de passe pour votre client <span class="required">*</span></label> <%--Not a good practice but doing differently is out of the scope of the project --%>
                 <input type="password" name="password" size="20" maxlength="20" />
                 <br />
                 
@@ -60,7 +64,10 @@
                 <input type="text" name="phoneNumber" size="20" maxlength="60" />
                 <br />
                 
-                <input type="checkbox" id="cbox" name="isAdvisorCbox" value="isAdvisor"><label for="isAdvisorCbox">Cochez cette case si le client est un employé de la banque</label>
+                <label for="clientType">Le client est employé de la banque<span class="required">*</span></label>
+                <input type="radio" name="clientType" value="1">Oui<br />
+				<input type="radio" name="clientType" value="0">Non<br />
+
 
                 <input type="submit" value="createClient" class="noLabel" />
                 <br />

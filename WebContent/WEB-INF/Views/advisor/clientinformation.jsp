@@ -29,7 +29,7 @@
 	<section id = "personal_info_modify_form_by_advisor">
 		<h2>Formulaire pour éditer les informations personnelles du client</h2>
 		<p>Vous ne pouvez pas modifier l'état civil (nom, prénom et date de naissance) du client sans pièce justificative et autorisation du responsable d'agence.</p>
-		<form>
+		<form method="post">
 			<fieldset>
 				<label for="email">Adresse email</label>
 	            <input type="email" name="email" size="20" maxlength="60" />

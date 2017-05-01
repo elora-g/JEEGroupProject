@@ -6,6 +6,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 import com.jeegroupproject.database.*;
 import java.sql.Connection;
@@ -135,7 +136,7 @@ public class Person {
 	 * @return
 	 */
 	public static Person getAuthenticatedPerson(Integer externalId, String email, String password){
-		return getAuthenticatedPerson(externalId, email, password, false);
+		return getAuthenticatedPerson(externalId, email, password, true);
 	}
 	/**
 	 * Helper method to get a person based on its credentials
@@ -507,6 +508,48 @@ public class Person {
 		}else{
 			return getClientsByAdvisorId(this.id);
 		}	
+	}
+	
+	
+	/**
+	 * 
+	 * @return a new unique externalId randomly
+	 */
+	public static int getUniqueExternalId(){
+	
+		// int(11) from database for id doesn't fit in int primitive type. 
+        //Should refactor to long to potentially get all numbers possible for an externalId ==> out of scope
+		Random r = new Random();
+        int newExternalId = r.nextInt(999999998)+1; 
+        
+        String query = "SELECT * FROM sac_person WHERE `person_external_id` = ?";
+		
+		//Connection, PreparedStatement and Resultset have to be closed when finished being used
+		// Since Java 7, these objects implement autocloseable so if there are given as parameters to a try clause they will be closed at the end
+		// https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html
+		try(Connection connection = DBConnectionFactory.getConnection()){ //Try with the resource connection 
+			try(PreparedStatement pStatement = (PreparedStatement) connection.prepareStatement(query)){ //try with the preparedStatement
+				pStatement.setInt(1, newExternalId); 
+				try(ResultSet result = pStatement.executeQuery()){ //try with the resultSet
+					if(result.next()){ //check we have at least one result. If any, read data from record
+						return getUniqueExternalId();
+					}
+				}catch (SQLException e) {
+					System.err.println("getUniqueExternalId: problem with the result set");
+					e.printStackTrace();
+				}
+			}catch (SQLException e) {
+				System.err.println("getUniqueExternalId: problem with the prepared statement");
+				e.printStackTrace();
+			}
+				
+		}catch (SQLException e) {
+			System.err.println("getUniqueExternalId: problem with the connection");
+			e.printStackTrace();
+		}
+		
+		return newExternalId;	
+         
 	}
 	
 

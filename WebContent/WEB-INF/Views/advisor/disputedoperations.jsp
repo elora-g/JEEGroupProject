@@ -42,8 +42,8 @@
 												<td><c:out value="${operation.amount}"/> </td>
 												<td>
 													<form method="post">
-									                	<input type="radio" name="disputeDecision" value="0">Refuser<br />
-									                	<input type="radio" name="disputeDecision" value="1">Approuver<br /> 	
+									                	<input type="radio" name="disputeDecision" value="0">#NonJeRendsPas<br />
+									                	<input type="radio" name="disputeDecision" value="1">#Rendsl'argent<br /> 	
 														<button name="operationid" type="submit" value="${operation.id}">Enregistrer</button>
 													</form>
 												</td>
