@@ -223,7 +223,9 @@ public class Person {
 							
 							if(checkPassword(password, personByEmail.getPassword())){
 								personByEmail.regenerateToken();
-		                        personByEmail.persist();//save change to the token
+								if(saveToken){
+									personByEmail.persist();//save change to the token
+								}
 								return personByEmail;
 								
 							}
