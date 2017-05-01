@@ -29,7 +29,7 @@
 	</section>
 	
 	
-	<section class="client_message">
+	<section class="advisor_message">
 		<h2>Echanges avec mon Conseiller</h2>
 		<c:forEach var="message" items="${authenticatedPerson.messagesWithAdvisor}" >
 			<article>

@@ -9,32 +9,45 @@
 </head>
 <body>
 
-	<h1>Bienvenue sur votre messagerie avec votre client n° <%--<c:out value="${externalId}></c:out> --%></h1>
+	<h1>Bienvenue sur votre messagerie avec votre client n° <c:out value="${currentClient.externalId}"/> : <c:out value="${currentClient.firstname}"/> <c:out value="${currentClient.lastname}"/></h1>
 	
 	<c:import url="/WEB-INF/Views/advisor/menuadvisor.jsp" />
-	<section class="client_message">
-		<h2>Echanges avec mon client n° <%--<c:out value="${externalId}></c:out> --%></h2>
-		<%-- <c:forEach message from et to --%>
-			<article>
-				<h3>De : <c:out value="${from}"></c:out> - <c:out value="${createdAt}"></c:out></h3>
-				<p><c:out value="${content}"></c:out></p>
-			</article>
-		<%-- </c:forEach --%>
-	</section>
-	
+
+
 	<section>
 		<h2>Envoyer un message</h2>
 		<p>Attention, votre message ne doit pas dépasser 256 charactères</p>
 		<form method ="post">
 			<fieldset>
 				<%--attention le message doit faire max 256 charactères --%>
-				<label for="messageToAdvisor">Mon Message <span class="required">*</span></label>
+				<label for="messageToClient">Mon Message <span class="required">*</span></label>
 				<input type="text" name="messageToClient"/>
 				<br/>
 				<input type="submit" value="Send" class="noLabel" />
 				<p>${message}</p>
 			</fieldset>
 		</form>
+	</section>
+	
+	
+	<section class="client_message">
+		<h2>Echanges avec mon client n°<c:out value="${currentClient.externalId}"/></h2>
+		<c:forEach var="message" items="${currentClient.messagesWithAdvisor}" >
+			<article>
+				<h3>De 
+					<c:choose>
+						<c:when test="${message.from == authenticatedPerson.id}">
+							vous :
+						</c:when>
+						<c:otherwise>
+							votre Client :
+						</c:otherwise>
+					</c:choose>
+					<c:out value="${message.createdAt}"></c:out>
+				</h3>
+				<p><c:out value="${message.content}"></c:out></p>
+			</article>
+		</c:forEach>
 	</section>
 
 	
