@@ -7,6 +7,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.jeegroupproject.beans.Message;
+import com.jeegroupproject.beans.Person;
+import com.jeegroupproject.filters.IsAuthenticated;
+
 /**
  * Servlet implementation class MessagesWithAdvisorServlet
  */
@@ -28,7 +32,7 @@ public class MessagesWithAdvisorServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		
 		this.getServletContext().getRequestDispatcher(VIEW).forward(request, response);
 	}
 
@@ -36,8 +40,26 @@ public class MessagesWithAdvisorServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
+
+		String messageToAdvisor = request.getParameter("messageToAdvisor");
+		
+		Person authenticatedPerson = (Person) request.getAttribute(IsAuthenticated.AUTH_PERSON_ATTR_NAME);//cast because getAttribute only retuns objects
+		
+		if(messageToAdvisor.trim().isEmpty() ){
+			String message = "Vous n'avez rien indiqué";
+			request.setAttribute("message", message);
+		}else if(messageToAdvisor.length() > 128){ //this field in database is of type varchar 128
+			String message = "Votre message est trop long (max 128 caractères)";
+			request.setAttribute("message", message);
+		}else{
+			Message newMessage = new Message();
+			newMessage.setContent(messageToAdvisor);
+			newMessage.setFrom(authenticatedPerson.getId());
+			newMessage.setTo(authenticatedPerson.getAdvisorId());
+			newMessage.persist();
+		}
+		
+		this.getServletContext().getRequestDispatcher(VIEW).forward(request, response);
 	}
 
 }

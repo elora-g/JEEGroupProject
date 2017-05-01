@@ -15,12 +15,13 @@
 		
 	<section>
 		<h2>Envoyer un message</h2>
-		<p>Attention, votre message ne doit pas dépasser 256 charactères</p>
+		<p>Attention, votre message ne doit pas dépasser 128 charactères</p>
 		<form method ="post">
 			<fieldset>
-				<%--attention le message doit faire max 256 charactères --%>
+				<%--attention le message doit faire max 128 charactères --%>
 				<label for="messageToAdvisor">Mon Message <span class="required">*</span></label>
-				<input type="text" name="messageToAdvisor"/>
+				<textarea name="messageToAdvisor">
+				</textarea>
 				<br/>
 				<input type="submit" value="Send" class="noLabel" />
 				<p>${message}</p>

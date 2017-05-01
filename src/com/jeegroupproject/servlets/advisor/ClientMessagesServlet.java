@@ -7,7 +7,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.jeegroupproject.beans.Message;
 import com.jeegroupproject.beans.Person;
+import com.jeegroupproject.filters.IsAuthenticated;
 
 /**
  * Servlet implementation class ClientMessagesServlet
@@ -39,8 +41,28 @@ public class ClientMessagesServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
+		String messageToAdvisor = request.getParameter("messageToClient");
+		
+		Person currentClient = Person.getPersonByExternalId(Integer.parseInt(request.getParameter("id")));
+		request.setAttribute(ClientServlet.CURRENT_CLIENT_ATTR_NAME, currentClient);
+		
+		if(messageToAdvisor.trim().isEmpty() ){
+			String message = "Vous n'avez rien indiqué";
+			request.setAttribute("message", message);
+		}else if(messageToAdvisor.length() > 128){ //this field in database is of type varchar 128
+			String message = "Votre message est trop long (max 128 caractères)";
+			request.setAttribute("message", message);
+		}else{
+			Message newMessage = new Message();
+			newMessage.setContent(messageToAdvisor);
+			newMessage.setTo(currentClient.getId());
+			newMessage.setFrom(currentClient.getAdvisorId());
+			newMessage.persist();
+		}
+		
+
+		this.getServletContext().getRequestDispatcher(VIEW).forward(request, response);
+		
 	}
 
 }
