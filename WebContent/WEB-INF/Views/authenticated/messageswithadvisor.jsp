@@ -12,19 +12,10 @@
 	<h1>Bienvenue sur votre messagerie</h1>
 	
 	<c:import url="/WEB-INF/Views/authenticated/menuauth.jsp" />
-	<section class="client_message">
-		<h2>Echanges avec mon Conseiller</h2>
-		<%-- <c:forEach message from et to --%>
-			<article>
-				<h3>De : <c:out value="${from}"></c:out> - <c:out value="${createdAt}"></c:out></h3>
-				<p><c:out value="${content}"></c:out></p>
-			</article>
-		<%-- </c:forEach --%>
-	</section>
-	
+		
 	<section>
-	<h2>Envoyer un message</h2>
-	<p>Attention, votre message ne doit pas dépasser 256 charactères</p>
+		<h2>Envoyer un message</h2>
+		<p>Attention, votre message ne doit pas dépasser 256 charactères</p>
 		<form method ="post">
 			<fieldset>
 				<%--attention le message doit faire max 256 charactères --%>
@@ -36,6 +27,19 @@
 			</fieldset>
 		</form>
 	</section>
+	
+	
+	<section class="client_message">
+		<h2>Echanges avec mon Conseiller</h2>
+		<c:forEach var="message" items="${authenticatedPerson.messagesWithAdvisor}" >
+			<article>
+				<h3>De : <c:out value="${message.from}"></c:out> - <c:out value="${message.createdAt}"></c:out></h3>
+				<p><c:out value="${message.content}"></c:out></p>
+			</article>
+		</c:forEach>
+	</section>
+
+	
 		
 </body>
 </html>

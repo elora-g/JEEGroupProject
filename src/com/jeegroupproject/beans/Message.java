@@ -32,7 +32,7 @@ public class Message {
 	 * @return list of messages
 	 */
 	public static List<Message> getMessagesforClientAndAdvisor(int clientid, int advisorid) {
-		String query = "SELECT * FROM  `sac_messages` WHERE (`msg_from`= ? OR  `msg_from` = ?) AND (`msg_to` = ? OR `msg_to` = ?) ORDER BY `msg_created_at` DESC;"; //get messages where both the client and the advisor appear in any of from and to
+		String query = "SELECT * FROM  `sac_messages` WHERE (`msg_from`= ? OR  `msg_from` = ?) AND (`msg_to` = ? OR `msg_to` = ?) ORDER BY `msg_id` DESC;"; //get messages where both the client and the advisor appear in any of from and to
 		
 		List<Message> messageList = new ArrayList<Message>();
 		
