@@ -9,7 +9,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.jeegroupproject.database.DBConnectionFactory;
+
+import com.jeegroupproject.database.DBServiceSingleton;
 
 public class Operation {
 	
@@ -28,13 +29,13 @@ public class Operation {
 	 */
 	public void persist() {
         
-		String queryUpdate = "UPDATE `sac_operation` SET `ope_type`=?,`ope_amount`=?,`ope_description`=?,`ope_account_id`=?,`ope_created_at`=?,`ope_updated_at`=?,`ope_dispute`=? WHERE `ope_id` = ?";
-		String queryInsert = "INSERT INTO `sac_operation`( `ope_type`, `ope_amount`, `ope_description`, `ope_account_id`, `ope_created_at`, `ope_updated_at`, `ope_dispute`) VALUES (?,?,?,?,?,?,?)";
+		String queryUpdate = "UPDATE sac_operation SET ope_type=?,ope_amount=?,ope_description=?,ope_account_id=?,ope_created_at=?,ope_updated_at=?,ope_dispute=? WHERE ope_id = ?";
+		String queryInsert = "INSERT INTO sac_operation( ope_type, ope_amount, ope_description, ope_account_id, ope_created_at, ope_updated_at, ope_dispute) VALUES (?,?,?,?,?,?,?)";
 
 		//Connection, PreparedStatement and Resultset have to be closed when finished being used
 		//Since Java 7, these objects implement autocloseable so if there are given as parameters to a try clause they will be closed at the end
 		//https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html
-        try(Connection connection = DBConnectionFactory.getConnection()){
+        try(Connection connection = DBServiceSingleton.getInstance().getConnection()){
         	
 	        //test if the person already has an id >=0 (id -1 means not yet created in db).
 	        //if he does, he already exists in database, so we update it
@@ -104,14 +105,14 @@ public class Operation {
 	 * @return a List of Operations for a given accountid
 	 */
 	public static List<Operation> getOperationsByAccountId(int accountid){
-		String query = "SELECT * FROM sac_operation WHERE `ope_account_id` = ?";
+		String query = "SELECT * FROM sac_operation WHERE ope_account_id = ?";
 		List<Operation> operationListByAccountId = new ArrayList<Operation>();
 
 		
 		//Connection, PreparedStatement and Resultset have to be closed when finished being used
 		// Since Java 7, these objects implement autocloseable so if there are given as parameters to a try clause they will be closed at the end
 		// https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html
-		try(Connection connection = DBConnectionFactory.getConnection()){ //Try with the resource connection 
+		try(Connection connection = DBServiceSingleton.getInstance().getConnection()){ //Try with the resource connection 
 			try(PreparedStatement pStatement = (PreparedStatement) connection.prepareStatement(query)){ //try with the preparedStatement
 				pStatement.setInt(1, (accountid)); 
 				try(ResultSet result = pStatement.executeQuery()){ //try with the resultSet
@@ -151,14 +152,14 @@ public class Operation {
 	 * @return a List of Operations for a given accountid
 	 */
 	public static List<Operation> getDisputedOperationsByAccountId(int accountid){
-		String query = "SELECT * FROM sac_operation WHERE `ope_account_id` = ? AND `ope_dispute` = 1";
+		String query = "SELECT * FROM sac_operation WHERE ope_account_id = ? AND ope_dispute = 1";
 		List<Operation> operationListByAccountId = new ArrayList<Operation>();
 
 		
 		//Connection, PreparedStatement and Resultset have to be closed when finished being used
 		// Since Java 7, these objects implement autocloseable so if there are given as parameters to a try clause they will be closed at the end
 		// https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html
-		try(Connection connection = DBConnectionFactory.getConnection()){ //Try with the resource connection 
+		try(Connection connection = DBServiceSingleton.getInstance().getConnection()){ //Try with the resource connection 
 			try(PreparedStatement pStatement = (PreparedStatement) connection.prepareStatement(query)){ //try with the preparedStatement
 				pStatement.setInt(1, (accountid)); 
 				try(ResultSet result = pStatement.executeQuery()){ //try with the resultSet
@@ -201,14 +202,14 @@ public class Operation {
 	 */
 	public static Operation getOperationById(int operationId) {
 		
-		String query = "SELECT * FROM sac_operation WHERE `ope_id` = ?";
+		String query = "SELECT * FROM sac_operation WHERE ope_id = ?";
 		Operation operation = new Operation();
 
 		
 		//Connection, PreparedStatement and Resultset have to be closed when finished being used
 		// Since Java 7, these objects implement autocloseable so if there are given as parameters to a try clause they will be closed at the end
 		// https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html
-		try(Connection connection = DBConnectionFactory.getConnection()){ //Try with the resource connection 
+		try(Connection connection = DBServiceSingleton.getInstance().getConnection()){ //Try with the resource connection 
 			try(PreparedStatement pStatement = (PreparedStatement) connection.prepareStatement(query)){ //try with the preparedStatement
 				pStatement.setInt(1, (operationId)); 
 				try(ResultSet result = pStatement.executeQuery()){ //try with the resultSet
@@ -242,12 +243,12 @@ public class Operation {
 	}
 	
 	public void delete(){
-		String query = "DELETE FROM `sac_operation` WHERE `ope_id` = ?";
+		String query = "DELETE FROM sac_operation WHERE ope_id = ?";
 		
 		//Connection, PreparedStatement and Resultset have to be closed when finished being used
 		//Since Java 7, these objects implement autocloseable so if there are given as parameters to a try clause they will be closed at the end
 		//https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html
-        try(Connection connection = DBConnectionFactory.getConnection()){
+        try(Connection connection = DBServiceSingleton.getInstance().getConnection()){
         	
        
             //prepare a prepared statement for deletion

@@ -9,7 +9,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.jeegroupproject.database.DBConnectionFactory;
+
+import com.jeegroupproject.database.DBServiceSingleton;
 
 public class Message {
 
@@ -25,13 +26,13 @@ public class Message {
 	 */
 public void persist() {
         
-		String queryUpdate = "UPDATE `sac_messages` SET `msg_content`=?,`msg_from`=?,`msg_to`=?,`msg_created_at`=? WHERE `msg_id` = ?";
-		String queryInsert = "INSERT INTO `sac_messages`( `msg_content`, `msg_from`, `msg_to`, `msg_created_at`) VALUES (?,?,?,?)";
+		String queryUpdate = "UPDATE sac_messages SET msg_content=?,msg_from=?,msg_to=?,msg_created_at=? WHERE msg_id = ?";
+		String queryInsert = "INSERT INTO sac_messages( msg_content, msg_from, msg_to, msg_created_at) VALUES (?,?,?,?)";
 
 		//Connection, PreparedStatement and Resultset have to be closed when finished being used
 		//Since Java 7, these objects implement autocloseable so if there are given as parameters to a try clause they will be closed at the end
 		//https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html
-        try(Connection connection = DBConnectionFactory.getConnection()){
+        try(Connection connection = DBServiceSingleton.getInstance().getConnection()){
         	
 	        //test if the person already has an id >=0 (id -1 means not yet created in db).
 	        //if he does, he already exists in database, so we update it
@@ -95,14 +96,14 @@ public void persist() {
 	 * @return list of messages
 	 */
 	public static List<Message> getMessagesforClientAndAdvisor(int clientid, int advisorid) {
-		String query = "SELECT * FROM  `sac_messages` WHERE (`msg_from`= ? OR  `msg_from` = ?) AND (`msg_to` = ? OR `msg_to` = ?) ORDER BY `msg_id` DESC;"; //get messages where both the client and the advisor appear in any of from and to
+		String query = "SELECT * FROM  sac_messages WHERE (msg_from= ? OR  msg_from = ?) AND (msg_to = ? OR msg_to = ?) ORDER BY msg_id DESC;"; //get messages where both the client and the advisor appear in any of from and to
 		
 		List<Message> messageList = new ArrayList<Message>();
 		
 		//Connection, PreparedStatement and Resultset have to be closed when finished being used
 		// Since Java 7, these objects implement autocloseable so if there are given as parameters to a try clause they will be closed at the end
 		// https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html
-		try(Connection connection = DBConnectionFactory.getConnection()){ //Try with the resource connection 
+		try(Connection connection = DBServiceSingleton.getInstance().getConnection()){ //Try with the resource connection 
 			try(PreparedStatement pStatement = (PreparedStatement) connection.prepareStatement(query)){ //try with the preparedStatement
 				pStatement.setInt(1, (clientid)); 
 				pStatement.setInt(2, (advisorid)); 

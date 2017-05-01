@@ -8,7 +8,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.jeegroupproject.database.DBConnectionFactory;
+
+import com.jeegroupproject.database.DBServiceSingleton;
 
 public class Account {
 	
@@ -26,13 +27,13 @@ public class Account {
 	public void persist(){
         
 		String queryInsert = "UPDATE sac_accounts SET account_customer_id = ?, account_balance = ?, account_type = ?, account_is_default = ? WHERE account_id = ?  ;";
-		String queryUpdate = "INSERT INTO sac_accounts (`account_customer_id`, `account_balance`, `account_type`, `account_is_default`) VALUES (?,?,?,?);";
+		String queryUpdate = "INSERT INTO sac_accounts (account_customer_id, account_balance, account_type, account_is_default) VALUES (?,?,?,?);";
 		String queryRemoveOtherDefault = "UPDATE sac_accounts SET account_is_default = 0 WHERE account_customer_id = ?";
 		
 		//Connection, PreparedStatement and Resultset have to be closed when finished being used
 		//Since Java 7, these objects implement autocloseable so if there are given as parameters to a try clause they will be closed at the end
 		//https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html
-        try(Connection connection = DBConnectionFactory.getConnection()){
+        try(Connection connection = DBServiceSingleton.getInstance().getConnection()){
         	if(this.isDefault){ // to remove the default flag of an account if the advisor sets it to another account while creating it.
         		
         		try(PreparedStatement pStatement = (PreparedStatement) connection.prepareStatement(queryRemoveOtherDefault)){
@@ -109,14 +110,14 @@ public class Account {
 	 */
 	
 	public static List<Account> getAccountsByPersonId(int personId){
-		String query = "SELECT * FROM sac_accounts WHERE `account_customer_id` = ?";
+		String query = "SELECT * FROM sac_accounts WHERE account_customer_id = ?";
 		List<Account> accountListByPersonId = new ArrayList<Account>();
 
 		
 		//Connection, PreparedStatement and Resultset have to be closed when finished being used
 		// Since Java 7, these objects implement autocloseable so if there are given as parameters to a try clause they will be closed at the end
 		// https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html
-		try(Connection connection = DBConnectionFactory.getConnection()){ //Try with the resource connection 
+		try(Connection connection = DBServiceSingleton.getInstance().getConnection()){ //Try with the resource connection 
 			try(PreparedStatement pStatement = (PreparedStatement) connection.prepareStatement(query)){ //try with the preparedStatement
 				pStatement.setString(1, ((Integer)personId).toString()); // In the accounts table the id of a person is a string but in the person table it's an int so we have to cast. 
 				try(ResultSet result = pStatement.executeQuery()){ //try with the resultSet
@@ -170,13 +171,13 @@ public class Account {
 	 * @return an account by its id
 	 */
 	public static Account getAccountById(int id){
-		String query = "SELECT * FROM sac_accounts WHERE `account_id` = ?";
+		String query = "SELECT * FROM sac_accounts WHERE account_id = ?";
 
 		Account account = null;
 		//Connection, PreparedStatement and Resultset have to be closed when finished being used
 		// Since Java 7, these objects implement autocloseable so if there are given as parameters to a try clause they will be closed at the end
 		// https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html
-		try(Connection connection = DBConnectionFactory.getConnection()){ //Try with the resource connection 
+		try(Connection connection = DBServiceSingleton.getInstance().getConnection()){ //Try with the resource connection 
 			try(PreparedStatement pStatement = (PreparedStatement) connection.prepareStatement(query)){ //try with the preparedStatement
 				pStatement.setInt(1, id); // In the accounts table the id of a person is a string but in the person table it's an int so we have to cast. 
 				try(ResultSet result = pStatement.executeQuery()){ //try with the resultSet

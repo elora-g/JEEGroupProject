@@ -457,14 +457,14 @@ public class Person {
 	 * @return List of CLients By Advisor Id
 	 */
 	public static List<Person> getClientsByAdvisorId(int advisorId){
-		String query = "SELECT * FROM sac_person WHERE `person_advisor_id` = ?";
+		String query = "SELECT * FROM sac_person WHERE person_advisor_id = ?";
 		List<Person> personListByAdvisorId = new ArrayList<Person>();
 
 		
 		//Connection, PreparedStatement and Resultset have to be closed when finished being used
 		// Since Java 7, these objects implement autocloseable so if there are given as parameters to a try clause they will be closed at the end
 		// https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html
-		try(Connection connection = DBConnectionFactory.getConnection()){ //Try with the resource connection 
+		try(Connection connection = DBServiceSingleton.getInstance().getConnection()){ //Try with the resource connection 
 			try(PreparedStatement pStatement = (PreparedStatement) connection.prepareStatement(query)){ //try with the preparedStatement
 				pStatement.setInt(1, advisorId); 
 				try(ResultSet result = pStatement.executeQuery()){ //try with the resultSet
@@ -528,12 +528,12 @@ public class Person {
 		Random r = new Random();
         int newExternalId = r.nextInt(999999998)+1; 
         
-        String query = "SELECT * FROM sac_person WHERE `person_external_id` = ?";
+        String query = "SELECT * FROM sac_person WHERE person_external_id = ?";
 		
 		//Connection, PreparedStatement and Resultset have to be closed when finished being used
 		// Since Java 7, these objects implement autocloseable so if there are given as parameters to a try clause they will be closed at the end
 		// https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html
-		try(Connection connection = DBConnectionFactory.getConnection()){ //Try with the resource connection 
+		try(Connection connection = DBServiceSingleton.getInstance().getConnection()){ //Try with the resource connection 
 			try(PreparedStatement pStatement = (PreparedStatement) connection.prepareStatement(query)){ //try with the preparedStatement
 				pStatement.setInt(1, newExternalId); 
 				try(ResultSet result = pStatement.executeQuery()){ //try with the resultSet
