@@ -2,7 +2,13 @@
 
 Projet de création d'une plateforme de gestion clients et interface clients pour une banque
 
-Attention, pour tester l'implémentation de Bcrypt pour les passwords, ils ont été updatés dans la database fournie
+ATTENTION : IL Y A UNE LEGERE MODIFICATION DU SERVER TOMCAT8.5 A EFFECTUER
+1. Double cliquer sur l'icône du serveur dans l'onglet serveur (eclipse)
+2. Onglet "Modules" du document ouvert
+3. Sélectionner la ligne correspondant au projet
+4. Cliquer sur Edit et retirer la valeur de path de la fenêtre
+
+ATTENTION, pour tester l'implémentation de Bcrypt pour les passwords, ils ont été updatés dans la database fournie
 Merci donc d'utiliser le fichier de requête sql fourni à la racine (et pas celui envoyé initialement par Clément)
 
 Pour mémoire et test rapide du projet voici les tuples email - external_id - password - hashed password BCrypt12 :
