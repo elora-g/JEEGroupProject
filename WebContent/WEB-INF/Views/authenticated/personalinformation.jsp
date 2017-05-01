@@ -16,12 +16,12 @@
 	<section id = "personal_info">
 		<h2>Détail de mes informations personnelles</h2>
 		<ul>
-			<li>Nom : <%-- <c:out value= ${personLastName}/> --%></li>
-			<li>Prénom : <%-- <c:out value= ${personFirstName}/> --%></li>
-			<li>Identifiant :<%-- <c:out value= ${personExternalId}/> --%> </li>
-			<li>Date de naissance : <%-- <c:out value= ${personDob}/> --%></li>
-			<li>Email : <%-- <c:out value= ${personEmail}/> --%> </li>
-			<li>Téléphone : <%-- <c:out value= ${personPhoneNumber}/> --%> </li>
+			<li>Nom : <c:out value="${authenticatedPerson.lastname}"/>  </li>
+			<li>Prénom :   <c:out value="${authenticatedPerson.firstname}"/>  </li>
+			<li>Identifiant : <c:out value="${authenticatedPerson.externalId}"/>   </li>
+			<li>Date de naissance :   <c:out value= "${authenticatedPerson.dob}"/> </li>
+			<li>Email :   <c:out value="${authenticatedPerson.email}"/>  </li>
+			<li>Téléphone :  <c:out value="${authenticatedPerson.phoneNumber}"/>  </li>
 		</ul>
 	</section>
 	
@@ -29,7 +29,7 @@
 		<h2>Formulaire pour éditer mes informations personnelles</h2>
 		<p>Remplissez le ou les champs que vous souhaitez modifier.</p>
 		<p>Pour changer votre mot de passe, il est nécessaire de remplir les trois champs</p>
-		<form>
+		<form method="post">
 			<fieldset>
 				<label for="email">Adresse email</label>
 	            <input type="email" name="email" size="20" maxlength="60" />
@@ -38,7 +38,14 @@
 	            <label for="phoneNumber">Numéro de Téléphone</label>
 	            <input type="text" name="phoneNumber" size="20" maxlength="60" />
 	            <br />
-				
+	            
+	            <button name="changeType" type="submit" value="personalInfo">Enregistrer</button>
+	            
+	            <p>${messagePersonalInfo}</p>
+			</fieldset>
+		</form>
+		<form method="post">
+			<fieldset>
 				<%--TODO: logique pour vérifier que l'ancien password correspond, puis que newPassword et checkNewPassword correspondent --%>
 	            <label for="oldPassword">Entrez votre ancien mot de passe <span class="required">*</span></label>
 	            <input type="password" name="oldPassword" size="20" maxlength="20" />
@@ -49,13 +56,13 @@
 	            <br />
 	            
 	            <label for="checkNewPassword">Confirmez votre nouveau mot de passe <span class="required">*</span></label>
-	            <input type="password" name="checkNewPassword" size="20" maxlength="20" />
+	            <input type="password" name="newPasswordConfirm" size="20" maxlength="20" />
 	            <br />
 	
-	            <input type="submit" value="changeInfo" class="noLabel" />
+	            <button name="changeType" type="submit" value="Password">Enregistrer</button>
 	            <br />
 	            
-                <p>${message}</p>
+                <p>${messagePassword}</p>
                 
             </fieldset>
 		</form>

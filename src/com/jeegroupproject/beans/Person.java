@@ -127,13 +127,22 @@ public class Person {
 	}
 	
 	
-	
+	/**
+	 * 
+	 * @param externalId
+	 * @param email
+	 * @param password
+	 * @return
+	 */
+	public static Person getAuthenticatedPerson(Integer externalId, String email, String password){
+		return getAuthenticatedPerson(externalId, email, password, false);
+	}
 	/**
 	 * Helper method to get a person based on its credentials
 	 * @param externalId
 	 * @return the found person, If not found, returns null
 	 */
-	public static Person getAuthenticatedPerson(Integer externalId, String email, String password){
+	public static Person getAuthenticatedPerson(Integer externalId, String email, String password, boolean saveToken){
 		
 		String queryExternalId = "SELECT * FROM sac_person WHERE `person_external_id` = ?";
 		String queryEmail = "SELECT * FROM sac_person WHERE `person_email` = ?";
@@ -172,7 +181,9 @@ public class Person {
 							if(checkPassword(password, personByExternalId.getPassword())){
 		                        //before returning the person, update its token
 		                        personByExternalId.regenerateToken();
-		                        personByExternalId.persist();//save change to the token
+		                        if(saveToken){
+		                        		personByExternalId.persist();//save change to the token
+		                        }
 		                        return personByExternalId;
 		                    }
 						}
