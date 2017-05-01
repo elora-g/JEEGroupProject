@@ -51,10 +51,11 @@ public class IsAdvisor implements Filter {
 		}else{
 			
 			response.sendRedirect(request.getContextPath() + GO_MAIN_AUTH); // redirects to main authenticated page
+			return;
 			
 		}
 		
-		chain.doFilter(request, response);
+		//chain.doFilter(request, response);
 	}
 
 	/**

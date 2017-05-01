@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -9,9 +9,73 @@
 </head>
 
 <body>
-	<p>importer la jsp menuadvisor</p>
-	<p> liste de tous les clients avec pour chaque client lien vers ses infos </p>
-	<p> formulaire de création d'un client </p>
+	<h1>Liste de mes clients</h1>
+	<c:import url="/WEB-INF/Views/advisor/menuadvisor.jsp" />
+	<section class="clientList"> 
+		<table>
+			<thead>
+				<tr>
+					<td>Identifiant</td>
+					<td>Nom</td>
+					<td>Prénom</td>
+					<td>Voir ce client</td>
+				</tr>
+			</thead>
+			<tbody>
+				<c:forEach var="client" items="${authenticatedPerson.clients}">
+				
+					<tr>
+						<td><c:out value= "${client.externalId}"/></td>
+						<td><c:out value= "${client.lastname}"/></td>
+						<td><c:out value= "${client.firstname}"/></td>
+						<td><a href="/JEEGroupProject/advisor/client?id=<c:out value="${client.externalId}"/>">Voir ce client</a> <%--TODO: redirect on the right client page --%></td>
+					</tr>
+				</c:forEach>
+			</tbody>
+		</table>
+	</section>
+		
+	<section class="createClientForm">
+	<h2>Créer un nouveau client</h2>
+   		<form method="post" action="">
+            <fieldset>
+                            
+                <label for="lastName">Nom <span class="required">*</span></label>
+                <input type="text" name="lastName" size="20" maxlength="60" />
+                <br />
+                
+                <label for="firstName">Prénom <span class="required">*</span></label>
+                <input type="text" name="firstName" size="20" maxlength="60" />
+                <br />
+                
+                <label for="dob">Date de naissance <span class="required">*</span></label>
+                <input type="text" name="dob" size="20" maxlength="60" />
+                <br />
+                
+                <label for="email">Email <span class="required">*</span></label>
+                <input type="email" name="email" size="20" maxlength="60" />
+                <br />
 
+                <label for="password">Entrez un mot de passe pour votre client <span class="required">*</span></label> <%--Not a good practice but doing differently is out of the scope of the project --%>
+                <input type="password" name="password" size="20" maxlength="20" />
+                <br />
+                
+                <label for="phoneNumber">Téléphone <span class="required">*</span></label>
+                <input type="text" name="phoneNumber" size="20" maxlength="60" />
+                <br />
+                
+                <label for="clientType">Le client est employé de la banque<span class="required">*</span></label>
+                <input type="radio" name="clientType" value="0">Non<br />
+				<input type="radio" name="clientType" value="1">Oui<br />
+
+
+                <input type="submit" value="createClient" class="noLabel" />
+                <br />
+                
+                <p>${message}</p>
+                
+            </fieldset>
+        </form>
+	</section>
 </body>
 </html>

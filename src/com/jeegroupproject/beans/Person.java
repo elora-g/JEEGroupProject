@@ -2,7 +2,11 @@ package com.jeegroupproject.beans;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Random;
 
 import com.jeegroupproject.database.*;
 import java.sql.Connection;
@@ -89,7 +93,7 @@ public class Person {
 		// https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html
 		try(Connection connection = DBServiceSingleton.getInstance().getConnection()){ //Try with the resource connection 
 			try(PreparedStatement pStatement = (PreparedStatement) connection.prepareStatement(query)){ //try with the preparedStatement
-				pStatement.setInt(2, externalId);
+				pStatement.setInt(1, externalId);
 				try(ResultSet result = pStatement.executeQuery()){ //try with the resultSet
 					if(result.next()){ //check we have at least one result. If any, read data from record
 						person.setId( result.getInt(1));
@@ -124,13 +128,22 @@ public class Person {
 	}
 	
 	
-	
+	/**
+	 * 
+	 * @param externalId
+	 * @param email
+	 * @param password
+	 * @return
+	 */
+	public static Person getAuthenticatedPerson(Integer externalId, String email, String password){
+		return getAuthenticatedPerson(externalId, email, password, true);
+	}
 	/**
 	 * Helper method to get a person based on its credentials
 	 * @param externalId
 	 * @return the found person, If not found, returns null
 	 */
-	public static Person getAuthenticatedPerson(Integer externalId, String email, String password){
+	public static Person getAuthenticatedPerson(Integer externalId, String email, String password, boolean saveToken){
 		
 		String queryExternalId = "SELECT * FROM sac_person WHERE person_external_id = ?";
 		String queryEmail = "SELECT * FROM sac_person WHERE person_email = ?";
@@ -169,7 +182,9 @@ public class Person {
 							if(checkPassword(password, personByExternalId.getPassword())){
 		                        //before returning the person, update its token
 		                        personByExternalId.regenerateToken();
-		                        personByExternalId.persist();//save change to the token
+		                        if(saveToken){
+		                        		personByExternalId.persist();//save change to the token
+		                        }
 		                        return personByExternalId;
 		                    }
 						}
@@ -337,7 +352,7 @@ public class Person {
 		            pStatement.setString(7, this.getToken());
 		            pStatement.setString(8, this.getPhoneNumber());
 		            pStatement.setTimestamp(9, new java.sql.Timestamp(this.getCreatedAt().getTime()));
-		            pStatement.setTimestamp(10, new java.sql.Timestamp(this.getUpdatedAt().getTime()));
+		            pStatement.setTimestamp(10, new java.sql.Timestamp(new Date().getTime()));
 		            pStatement.setInt(11, this.getAdvisorId());
 		            pStatement.setBoolean(12, this.getIsAdvisor());
 		            pStatement.setInt(13, this.getId());
@@ -351,7 +366,7 @@ public class Person {
 
 	        }else{//if he does not, one must insert it.
 	            //prepare a prepared statement for insertion
-	        	try(PreparedStatement pStatement = (PreparedStatement) connection.prepareStatement(queryUpdate)){
+	        	try(PreparedStatement pStatement = (PreparedStatement) connection.prepareStatement(queryUpdate, Statement.RETURN_GENERATED_KEYS)){
 	
 		            pStatement.setInt(1, this.getExternalId());
 		            pStatement.setString(2, this.getFirstname());
@@ -361,14 +376,13 @@ public class Person {
 		            pStatement.setString(6, this.getDob());
 		            pStatement.setString(7, this.getToken());
 		            pStatement.setString(8, this.getPhoneNumber());
-		            pStatement.setTimestamp(9, new Timestamp(this.getCreatedAt().getTime()));
-		            pStatement.setTimestamp(10, new Timestamp(this.getUpdatedAt().getTime()));
+		            pStatement.setTimestamp(9, new Timestamp(new Date().getTime()));
+		            pStatement.setTimestamp(10, new Timestamp(new Date().getTime()));
 		            pStatement.setInt(11, this.getAdvisorId());
 		            pStatement.setBoolean(12, this.getIsAdvisor());
 		
 		            // execute update SQL statement
-		            pStatement.executeUpdate();
-		
+		            
 		            int affectedRows = pStatement.executeUpdate();
 		
 		            if (affectedRows == 0) {
@@ -396,15 +410,153 @@ public class Person {
     }
 	
 	
-	//TODO public List<Message> getMessages()
+	/**
+	 * 
+	 * @return the list of exchanged message with the person's advisor
+	 */
+	public List<Message> getMessagesWithAdvisor(){
+		return Message.getMessagesforClientAndAdvisor(this.id, this.advisorId);	
+	}
 	
-	//TODO public List<Account> getAccounts() 
 	
-	//TODO public Person getAdvisor()
+	/**
+	 * @return the Account List for this Person
+	 */
+	public List<Account> getAccounts() {
+		return Account.getAccountsByPersonId(this.id);
+	}
 	
-	//TODO public List<Operation> getDisputedOperationsOfClients() throw exception if person is not an advisor
+
+	public List<Operation> getDisputedOperations() {
+		List<Operation> disputedOperations = new ArrayList<Operation>();
+		
+		for(Account account : getAccounts()){
+			disputedOperations.addAll(account.getDisputedOperations());
+		}
+		
+		return disputedOperations;
+		
+		
+	}
 	
-	//TODO public List<Person> getClients() throw exception if person is not an advisor
+	public List<Operation> getDisputedOperationsForClients() throws Exception {
+		List<Operation> disputedOperations = new ArrayList<Operation>();
+		
+		for(Person person : getClients()){
+			disputedOperations.addAll(person.getDisputedOperations());
+		}
+		
+		return disputedOperations;
+		
+		
+	}
+	
+	/**
+	 * 
+	 * @param advisorId
+	 * @return List of CLients By Advisor Id
+	 */
+	public static List<Person> getClientsByAdvisorId(int advisorId){
+		String query = "SELECT * FROM sac_person WHERE `person_advisor_id` = ?";
+		List<Person> personListByAdvisorId = new ArrayList<Person>();
+
+		
+		//Connection, PreparedStatement and Resultset have to be closed when finished being used
+		// Since Java 7, these objects implement autocloseable so if there are given as parameters to a try clause they will be closed at the end
+		// https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html
+		try(Connection connection = DBConnectionFactory.getConnection()){ //Try with the resource connection 
+			try(PreparedStatement pStatement = (PreparedStatement) connection.prepareStatement(query)){ //try with the preparedStatement
+				pStatement.setInt(1, advisorId); 
+				try(ResultSet result = pStatement.executeQuery()){ //try with the resultSet
+					while(result.next()){ //check we have at least one result. If any, read data from record
+						Person person = new Person();
+	                    person.setId( result.getInt(1));
+						person.setExternalId(result.getInt(2));
+						person.setFirstname(result.getString(3));
+						person.setLastname(result.getString(4));
+						person.setEmail( result.getString(5));
+						person.setPassword( result.getString(6));
+						person.setDob(result.getString(7));
+						person.setToken(result.getString(8));
+						person.setPhoneNumber(result.getString(9));
+						person.setCreatedAt(result.getDate(10));
+						person.setUpdatedAt(result.getDate(11));
+						person.setAdvisorId(result.getInt(12));
+						
+						personListByAdvisorId.add(person);
+
+					}
+				}catch (SQLException e) {
+					System.err.println("getClientsByAdvisorId: problem with the result set");
+					e.printStackTrace();
+				}
+			}catch (SQLException e) {
+				System.err.println("getClientsByAdvisorId: problem with the prepared statement");
+				e.printStackTrace();
+			}
+				
+		}catch (SQLException e) {
+			System.err.println("getClientsByAdvisorId: problem with the connection");
+			e.printStackTrace();
+		}
+		
+		return personListByAdvisorId;	
+	}
+	
+	/**
+	 * 
+	 * @return List of Clients for an Advisor
+	 * @throws Exception is called for not an advisor
+	 */
+	public List<Person> getClients() throws Exception{
+		if(!this.getIsAdvisor()) {
+			throw new Exception("This user is not an advisor");
+		}else{
+			return getClientsByAdvisorId(this.id);
+		}	
+	}
+	
+	
+	/**
+	 * 
+	 * @return a new unique externalId randomly
+	 */
+	public static int getUniqueExternalId(){
+	
+		// int(11) from database for id doesn't fit in int primitive type. 
+        //Should refactor to long to potentially get all numbers possible for an externalId ==> out of scope
+		Random r = new Random();
+        int newExternalId = r.nextInt(999999998)+1; 
+        
+        String query = "SELECT * FROM sac_person WHERE `person_external_id` = ?";
+		
+		//Connection, PreparedStatement and Resultset have to be closed when finished being used
+		// Since Java 7, these objects implement autocloseable so if there are given as parameters to a try clause they will be closed at the end
+		// https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html
+		try(Connection connection = DBConnectionFactory.getConnection()){ //Try with the resource connection 
+			try(PreparedStatement pStatement = (PreparedStatement) connection.prepareStatement(query)){ //try with the preparedStatement
+				pStatement.setInt(1, newExternalId); 
+				try(ResultSet result = pStatement.executeQuery()){ //try with the resultSet
+					if(result.next()){ //check we have at least one result. If any, read data from record
+						return getUniqueExternalId();
+					}
+				}catch (SQLException e) {
+					System.err.println("getUniqueExternalId: problem with the result set");
+					e.printStackTrace();
+				}
+			}catch (SQLException e) {
+				System.err.println("getUniqueExternalId: problem with the prepared statement");
+				e.printStackTrace();
+			}
+				
+		}catch (SQLException e) {
+			System.err.println("getUniqueExternalId: problem with the connection");
+			e.printStackTrace();
+		}
+		
+		return newExternalId;	
+         
+	}
 	
 
 	

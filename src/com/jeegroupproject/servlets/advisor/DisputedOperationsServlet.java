@@ -7,6 +7,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.jeegroupproject.beans.Account;
+import com.jeegroupproject.beans.Operation;
+
 /**
  * Servlet implementation class DisputedOperationsServlet
  */
@@ -34,8 +37,24 @@ public class DisputedOperationsServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
+		
+		//get request parameters
+		Operation disputedOperation = Operation.getOperationById(Integer.parseInt(request.getParameter("operationid")));
+		boolean cancelOperation = request.getParameter("disputeDecision").equals("1") ? true : false;
+		if(cancelOperation){
+			// delete the operation and give money back
+			Account account = Account.getAccountById(disputedOperation.getAccountId());
+			account.setBalance(account.getBalance() + disputedOperation.getAmount());
+			account.persist();
+			disputedOperation.delete();
+		}else{
+			disputedOperation.setDispute(false);
+			disputedOperation.persist();
+		}
+		
+
+		
+		this.getServletContext().getRequestDispatcher(VIEW).forward(request, response);//refresh
 	}
 
 }

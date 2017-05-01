@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.jeegroupproject.beans.Person;
+
 /**
  * Servlet implementation class ClientInformationServlet
  */
@@ -27,6 +29,9 @@ public class ClientInformationServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	
+		Person currentClient = Person.getPersonByExternalId(Integer.parseInt(request.getParameter("id")));
+		request.setAttribute(ClientServlet.CURRENT_CLIENT_ATTR_NAME, currentClient);
 		this.getServletContext().getRequestDispatcher(VIEW).forward(request, response);
 	}
 
@@ -34,8 +39,29 @@ public class ClientInformationServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
+		String email = request.getParameter("email");
+		String phoneNumber = request.getParameter("phoneNumber");
+
+		
+		//get the currentClient
+		Person currentClient = Person.getPersonByExternalId(Integer.parseInt(request.getParameter("id")));
+		request.setAttribute(ClientServlet.CURRENT_CLIENT_ATTR_NAME, currentClient);
+		
+		if(!email.trim().isEmpty()){
+			currentClient.setEmail(email.trim());
+		}
+		if(!phoneNumber.trim().isEmpty()){
+			currentClient.setPhoneNumber(phoneNumber.trim());
+		}
+		if(email.trim().isEmpty() && phoneNumber.trim().isEmpty()){
+			String message = "Vous n'avez rien indiqué";
+			request.setAttribute("message", message);
+		}
+		
+		// apply persist
+		currentClient.persist();
+		
+		this.getServletContext().getRequestDispatcher(VIEW).forward(request, response);//refresh
 	}
 
 }
