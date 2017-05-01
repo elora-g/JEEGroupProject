@@ -14,6 +14,11 @@
         <title>Se connecter</title>
    	</head>
    	<body>
+   		<nav class="navbar fixed-top navbar-toggleable-md navbar-inverse bg-inverse">
+			<div class="container">
+				<a class="navbar-brand" href="/login">Société Agricole - Bienvenue sur la page de connexion</a>
+			</div>
+		</nav>
    		<div class ="container3">
 	   		 <form method="post" action="">
 	            <fieldset>
