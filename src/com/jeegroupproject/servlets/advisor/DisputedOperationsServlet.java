@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.jeegroupproject.beans.Account;
 import com.jeegroupproject.beans.Operation;
-import com.jeegroupproject.beans.Person;
 
 /**
  * Servlet implementation class DisputedOperationsServlet

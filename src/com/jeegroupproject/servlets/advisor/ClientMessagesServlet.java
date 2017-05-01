@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.jeegroupproject.beans.Message;
 import com.jeegroupproject.beans.Person;
-import com.jeegroupproject.filters.IsAuthenticated;
+
 
 /**
  * Servlet implementation class ClientMessagesServlet
