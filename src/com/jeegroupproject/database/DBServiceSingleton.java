@@ -1,15 +1,25 @@
 package com.jeegroupproject.database;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Scanner;
 
-import com.mysql.jdbc.Connection;
+import java.sql.Connection;
 
 public class DBServiceSingleton {
 	
 	protected static DBServiceSingleton instance = null;
 	//TODO, read these from config
-	protected static DBConnectorDescriptor[] DBConnectorDescriptors = { new DBConnectorDescriptor("jdbc:mysql://localhost:3306/societe_agricole_test", "root", "rootroot", "com.mysql.jdbc.Driver", null)};
+	protected static DBConnectorDescriptor[] DBConnectorDescriptors = { new DBConnectorDescriptor("jdbc:mysql://localhost:3306/societe_agricole_test", "root", "rootroot", "com.mysql.jdbc.Driver", null),
+			 															new DBConnectorDescriptor("jdbc:hsqldb:mem:societe_agricole_test","SA","", "org.hsqldb.jdbc.JDBCDriver", new String[] {"initDb.sql", "populateDb.sql"})};
 	protected static int selectedDBConnetor;
 	
 	
@@ -24,10 +34,46 @@ public class DBServiceSingleton {
 		while( (connection = getConnectionFromDescriptor(DBConnectorDescriptors[i])) == null ){
 			i++;
 		}
-		selectedDBConnetor = i;
-		String initFile = null;
-		if(connection != null && (initFile = DBConnectorDescriptors[i].getInitFile()) != null){
+		
+		String[] initFile = null;
+		if(connection != null){
+			selectedDBConnetor = i;
+			initFile = DBConnectorDescriptors[i].getInitFile();
 			//TODO : load init file and play statement on that connection 
+			 System.err.println("found valid connection at index" + selectedDBConnetor);
+			 if(initFile != null){
+
+				 for(String file : initFile){
+				 
+					 InputStream stream = Thread.currentThread().getContextClassLoader().getResourceAsStream("scripts/"+file.toString());
+					 if (stream == null) {
+						 System.err.println("File not found "+file.toString());
+				    } else {
+				   
+						Scanner scanner = new Scanner(stream);    
+					    String s;
+						while( scanner.hasNext()){
+							s = scanner.nextLine();
+							if(!s.trim().isEmpty()){
+							    Statement statement;
+								try {
+									statement = connection.createStatement();
+									statement.executeQuery(s);
+								} catch (SQLException e) {
+									// TODO Auto-generated catch block
+									System.err.println("Error when executing statement : "+s);
+									e.printStackTrace();
+								}
+								
+							}
+					    }
+						    
+				    }
+			
+			    }	
+				 
+			 }
+			 
 		}
 		
 	}
@@ -48,12 +94,12 @@ public class DBServiceSingleton {
 				connection = (Connection) DriverManager.getConnection(descriptor.url, descriptor.usernameDB, descriptor.passwordDB);
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				//e.printStackTrace();
 				System.err.println("couldn't establish link to DB");
 			}
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
 			System.err.println("couldn't find JDBC driver");
 		}
 		
@@ -76,13 +122,13 @@ class DBConnectorDescriptor{
 	protected String usernameDB;
 	protected String passwordDB;
 	protected String driverClassName;
-	protected String initFile;
+	protected String[] initFile;
 	
 	
 	
 
 	public DBConnectorDescriptor(String url, String usernameDB, String passwordDB, String driverClassName,
-			String initFile) {
+			String[] initFile) {
 		super();
 		this.url = url;
 		this.usernameDB = usernameDB;
@@ -90,10 +136,10 @@ class DBConnectorDescriptor{
 		this.driverClassName = driverClassName;
 		this.initFile = initFile;
 	}
-	public String getInitFile() {
+	public String[] getInitFile() {
 		return initFile;
 	}
-	public void setInitFile(String initFile) {
+	public void setInitFile(String[] initFile) {
 		this.initFile = initFile;
 	}
 	public String getUrl() {

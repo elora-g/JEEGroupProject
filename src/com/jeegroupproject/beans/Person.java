@@ -81,7 +81,7 @@ public class Person {
 	 * @return the found user, If not found, all members of the user are empty
 	 */
 	public static Person getPersonByExternalId(int externalId){
-		String query = "SELECT * FROM sac_person WHERE `person_external_id` = ?";
+		String query = "SELECT * FROM sac_person WHERE person_external_id = ?";
 		Person person = new Person();
 		
 		//Connection, PreparedStatement and Resultset have to be closed when finished being used
@@ -132,8 +132,8 @@ public class Person {
 	 */
 	public static Person getAuthenticatedPerson(Integer externalId, String email, String password){
 		
-		String queryExternalId = "SELECT * FROM sac_person WHERE `person_external_id` = ?";
-		String queryEmail = "SELECT * FROM sac_person WHERE `person_email` = ?";
+		String queryExternalId = "SELECT * FROM sac_person WHERE person_external_id = ?";
+		String queryEmail = "SELECT * FROM sac_person WHERE person_email = ?";
 		//Connection, PreparedStatement and Resultset have to be closed when finished being used
 		//Since Java 7, these objects implement autocloseable so if there are given as parameters to a try clause they will be closed at the end
 		//https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html
@@ -241,7 +241,7 @@ public class Person {
 	 * @return
 	 */
 	public static Person getAuthenticatedPersonByToken(Integer id, String token){
-		String query ="SELECT * FROM sac_person where `person_id` = ? and `person_token` = ?";
+		String query ="SELECT * FROM sac_person where person_id = ? and person_token = ?";
 		
 		Person person = null;
 		
@@ -316,7 +316,7 @@ public class Person {
 	public void persist(){
         
 		String queryInsert = "UPDATE sac_person SET person_external_id = ?, person_firstname = ?, person_lastname = ?, person_email = ?, person_password = ?, person_dob = ?, person_token = ?, person_phone_number = ?, person_created_At = ?, person_updated_at = ?, person_advisor_id = ?, person_is_advisor = ? WHERE person_id = ?  ;";
-		String queryUpdate = "INSERT INTO `sac_person` (`person_external_id`, `person_firstname`, `person_lastname`, `person_email`, `person_password`, `person_dob`, `person_token`, `person_phone_number`, `person_created_At`, `person_updated_at`, `person_advisor_id`, `person_is_advisor`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?);";
+		String queryUpdate = "INSERT INTO sac_person (person_external_id, person_firstname, person_lastname, person_email, person_password, person_dob, person_token, person_phone_number, person_created_At, person_updated_at, person_advisor_id, person_is_advisor) VALUES (?,?,?,?,?,?,?,?,?,?,?,?);";
 		
 		//Connection, PreparedStatement and Resultset have to be closed when finished being used
 		//Since Java 7, these objects implement autocloseable so if there are given as parameters to a try clause they will be closed at the end
