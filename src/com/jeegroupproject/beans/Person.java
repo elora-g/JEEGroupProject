@@ -3,7 +3,9 @@ package com.jeegroupproject.beans;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+
 import java.util.ArrayList;
+
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
@@ -326,17 +328,18 @@ public class Person {
 	
 	
 	/**
-	 * Method to save all person data to DB (already existing ==> update or new person ==> insert in DB)
-	 */
-	public void persist(){
+     * Method to save all person data to DB (already existing ==> update or new person ==> insert in DB)
+     */
+    public void persist(){
         
-		String queryInsert = "UPDATE sac_person SET person_external_id = ?, person_firstname = ?, person_lastname = ?, person_email = ?, person_password = ?, person_dob = ?, person_token = ?, person_phone_number = ?, person_created_At = ?, person_updated_at = ?, person_advisor_id = ?, person_is_advisor = ? WHERE person_id = ?  ;";
-		String queryUpdate = "INSERT INTO `sac_person` (`person_external_id`, `person_firstname`, `person_lastname`, `person_email`, `person_password`, `person_dob`, `person_token`, `person_phone_number`, `person_created_At`, `person_updated_at`, `person_advisor_id`, `person_is_advisor`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?);";
-		
-		//Connection, PreparedStatement and Resultset have to be closed when finished being used
-		//Since Java 7, these objects implement autocloseable so if there are given as parameters to a try clause they will be closed at the end
-		//https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html
+        String queryInsert = "UPDATE sac_person SET person_external_id = ?, person_firstname = ?, person_lastname = ?, person_email = ?, person_password = ?, person_dob = ?, person_token = ?, person_phone_number = ?, person_created_At = ?, person_updated_at = ?, person_advisor_id = ?, person_is_advisor = ? WHERE person_id = ?  ;";
+        String queryUpdate = "INSERT INTO `sac_person` (`person_external_id`, `person_firstname`, `person_lastname`, `person_email`, `person_password`, `person_dob`, `person_token`, `person_phone_number`, `person_created_At`, `person_updated_at`, `person_advisor_id`, `person_is_advisor`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?);";
+        
+        //Connection, PreparedStatement and Resultset have to be closed when finished being used
+        //Since Java 7, these objects implement autocloseable so if there are given as parameters to a try clause they will be closed at the end
+        //https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html
         try(Connection connection = DBConnectionFactory.getConnection()){
+
 
 	        //test if the person already has an id >=0 (id -1 means not yet created in db).
 	        //if he does, he already exists in database, so we update it
@@ -407,6 +410,7 @@ public class Person {
 			System.err.println("persist: problem with the connection");
 			e.printStackTrace();
 		}
+
     }
 	
 	
@@ -418,6 +422,7 @@ public class Person {
 		return Message.getMessagesforClientAndAdvisor(this.id, this.advisorId);	
 	}
 	
+
 	
 	/**
 	 * @return the Account List for this Person
