@@ -10,19 +10,19 @@
 <body>
 
 	
-	<h1>Les informations personnelles du client n° <%--<c:out value=${externalId}></c:out> --%></h1>
+	<h1>Les informations personnelles du client n°<c:out value= "${currentClient.externalId}"/></h1>
 	
 	<c:import url="/WEB-INF/Views/advisor/menuadvisor.jsp" />
 	
 	<section id = "personal_info_by_advisor">
 		<h2>Détail des informations personnelles</h2>
 		<ul>
-			<li>Nom : <%-- <c:out value= ${personLastName}/> --%></li>
-			<li>Prénom : <%-- <c:out value= ${personFirstName}/> --%></li>
-			<li>Identifiant :<%-- <c:out value= ${personExternalId}/> --%> </li>
-			<li>Date de naissance : <%-- <c:out value= ${personDob}/> --%></li>
-			<li>Email : <%-- <c:out value= ${personEmail}/> --%> </li>
-			<li>Téléphone : <%-- <c:out value= ${personPhoneNumber}/> --%> </li>
+			<li>Nom : <c:out value= "${currentClient.lastname}"/></li>
+			<li>Prénom : <c:out value= "${currentClient.firstname}"/></li>
+			<li>Identifiant : <c:out value= "${currentClient.externalId}"/></li>
+			<li>Date de naissance : <c:out value= "${currentClient.dob}"/></li>
+			<li>Email : <c:out value= "${currentClient.email}"/></li>
+			<li>Téléphone : <c:out value= "${currentClient.phoneNumber}"/></li>
 		</ul>
 	</section>
 	

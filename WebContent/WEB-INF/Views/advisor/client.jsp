@@ -17,8 +17,8 @@
 	
 		<c:import url="/WEB-INF/Views/advisor/menuadvisor.jsp" />
 		
-		<p><%--<a href="/JEEGroupProject/advisor/clientinformation/id">Voir les informations personnelles du client</a> --%> <%--TODO: redirect on the right client page --%></p>
-		<p><%--<a href="/JEEGroupProject/advisor/clientmessages/id">Messagerie avec le client</a> --%> <%--TODO: redirect on the right client page --%></p>
+		<p><a href="/JEEGroupProject/advisor/clientinformation?id=<c:out value="${currentClient.externalId}"/>">Voir les informations personnelles du client</a></p>
+		<p><a href="/JEEGroupProject/advisor/clientmessages?id=<c:out value="${currentClient.externalId}"/>">Messagerie avec le client</a></p>
 		
 		<section class="clientAccounts"> 
 			<table>
