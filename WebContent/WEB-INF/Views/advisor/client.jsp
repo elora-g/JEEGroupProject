@@ -10,8 +10,8 @@
 	<meta name="description" content="Connexion Page">
 	<meta name="author" content="Elora Guyader">
 
-	<link href="/JEEGroupProject/assets/css/bootstrap.min.css" rel="stylesheet">
-	<link href="/JEEGroupProject/assets/css/generalstyle.css" rel="stylesheet" type="text/css">
+	<link href="/assets/css/bootstrap.min.css" rel="stylesheet">
+	<link href="/assets/css/generalstyle.css" rel="stylesheet" type="text/css">
 	<title>Détail de mon client</title>
 </head>
 
@@ -23,8 +23,8 @@
 	
 		<h1>Comptes de mon client n°<c:out value= "${currentClient.externalId}"/></h1>	
 		
-		<p><a href="/JEEGroupProject/advisor/clientinformation?id=<c:out value="${currentClient.externalId}"/>">Voir les informations personnelles du client</a></p>
-		<p><a href="/JEEGroupProject/advisor/clientmessages?id=<c:out value="${currentClient.externalId}"/>">Messagerie avec le client</a></p>
+		<p><a href="/advisor/clientinformation?id=<c:out value="${currentClient.externalId}"/>">Voir les informations personnelles du client</a></p>
+		<p><a href="/advisor/clientmessages?id=<c:out value="${currentClient.externalId}"/>">Messagerie avec le client</a></p>
 		
 		<section class="clientAccounts"> 
 			<table>
@@ -83,9 +83,9 @@
 		   	</c:choose>
 		</section>
 	</div>
-	<script src="/JEEGroupProject/assets/jquery/jquery.min.js"></script>
-    <script src="/JEEGroupProject/assets/tether/tether.min.js"></script>
-    <script src="/JEEGroupProject/assets/js/bootstrap.min.js"></script>
+	<script src="/assets/jquery/jquery.min.js"></script>
+    <script src="/assets/tether/tether.min.js"></script>
+    <script src="/assets/js/bootstrap.min.js"></script>
 	
 		
 </body>

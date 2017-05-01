@@ -9,8 +9,8 @@
 	<meta name="description" content="Connexion Page">
 	<meta name="author" content="Elora Guyader">
 
-	<link href="/JEEGroupProject/assets/css/bootstrap.min.css" rel="stylesheet">
-	<link href="/JEEGroupProject/assets/css/generalstyle.css" rel="stylesheet" type="text/css">
+	<link href="/assets/css/bootstrap.min.css" rel="stylesheet">
+	<link href="/assets/css/generalstyle.css" rel="stylesheet" type="text/css">
 	
 	<title>Bienvenue</title>
 </head>
@@ -26,7 +26,7 @@
 		
 		<article class ="row">
 			<div class="col-lg-12">
-				<h3><a href="/JEEGroupProject/authenticated/accounts">Mes comptes</a></h3>
+				<h3><a href="/authenticated/accounts">Mes comptes</a></h3>
 				<p>
 					Dans cette page vous pourrez voir la liste de vos comptes et toutes les opérations associées.
 				</p>
@@ -38,7 +38,7 @@
 		
 		<article class ="row">
 			<div class="col-lg-12">
-				<h3><a href="/JEEGroupProject/authenticated/personalinformation">Mes informations personnelles</a></h3>
+				<h3><a href="/authenticated/personalinformation">Mes informations personnelles</a></h3>
 				<p>
 					Dans cette page vous pourrez accéder à vos informations personnelles et les modifier.
 				</p>
@@ -47,7 +47,7 @@
 		
 		<article class ="row">
 			<div class="col-lg-12">
-				<h3><a href="/JEEGroupProject/authenticated/messages">Messagerie</a></h3>
+				<h3><a href="/authenticated/messages">Messagerie</a></h3>
 				<p>
 					Une question, une information à partager? Vous pourrez échanger avec votre conseiller sur cette page.
 				</p>
@@ -56,9 +56,9 @@
 	
 	</section>
 
-	<script src="/JEEGroupProject/assets/jquery/jquery.min.js"></script>
-    <script src="/JEEGroupProject/assets/tether/tether.min.js"></script>
-    <script src="/JEEGroupProject/assets/js/bootstrap.min.js"></script>
+	<script src="/assets/jquery/jquery.min.js"></script>
+    <script src="/assets/tether/tether.min.js"></script>
+    <script src="/assets/js/bootstrap.min.js"></script>
     
 </body>
 </html>
