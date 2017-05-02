@@ -21,6 +21,8 @@ public class DBServiceSingleton {
 	protected static DBConnectorDescriptor[] DBConnectorDescriptors = { new DBConnectorDescriptor("jdbc:mysql://localhost:3306/societe_agricole_test", "root", "rootroot", "com.mysql.jdbc.Driver", null),
 			 															new DBConnectorDescriptor("jdbc:hsqldb:mem:societe_agricole_test","SA","", "org.hsqldb.jdbc.JDBCDriver", new String[] {"initDb.sql", "populateDb.sql"})};
 	protected static int selectedDBConnetor;
+
+	private static Object mutex= new Object();
 	
 	
 	protected DBServiceSingleton() {
@@ -80,7 +82,9 @@ public class DBServiceSingleton {
 	
 	public static DBServiceSingleton getInstance(){
 		if(instance == null){
-			instance = new DBServiceSingleton();
+			synchronized (mutex){
+				instance = new DBServiceSingleton();
+			}
 		}
 		return instance;
 	}
