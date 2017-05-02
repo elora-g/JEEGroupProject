@@ -84,6 +84,7 @@ public class IsAuthenticated implements Filter {
 	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
 		
 		req.setCharacterEncoding("UTF-8"); // set encoding of the request through all application. has to be the first thing we do on request // Fixes pb of encoding in forms post
+		res.setCharacterEncoding("UTF-8");
 		HttpServletRequest request = (HttpServletRequest) req; // Cast to obtain HttpServletRequest specific methods required to get cookies and context path
 		HttpServletResponse response = (HttpServletResponse) res; // Cast to obtain HttpServletResponse specific methods required to get cookies 
 		Cookie[] cookies = request.getCookies(); // get all cookies for the current domain (IE, those that are sent by client)
