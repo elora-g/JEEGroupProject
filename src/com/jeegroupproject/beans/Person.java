@@ -85,13 +85,13 @@ public class Person {
 	 * @return the found user, If not found, all members of the user are empty
 	 */
 	public static Person getPersonByExternalId(int externalId){
-		String query = "SELECT * FROM sac_person WHERE `person_external_id` = ?";
+		String query = "SELECT * FROM sac_person WHERE person_external_id = ?";
 		Person person = new Person();
 		
 		//Connection, PreparedStatement and Resultset have to be closed when finished being used
 		// Since Java 7, these objects implement autocloseable so if there are given as parameters to a try clause they will be closed at the end
 		// https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html
-		try(Connection connection = DBConnectionFactory.getConnection()){ //Try with the resource connection 
+		try(Connection connection = DBServiceSingleton.getInstance().getConnection()){ //Try with the resource connection 
 			try(PreparedStatement pStatement = (PreparedStatement) connection.prepareStatement(query)){ //try with the preparedStatement
 				pStatement.setInt(1, externalId);
 				try(ResultSet result = pStatement.executeQuery()){ //try with the resultSet
@@ -145,8 +145,8 @@ public class Person {
 	 */
 	public static Person getAuthenticatedPerson(Integer externalId, String email, String password, boolean saveToken){
 		
-		String queryExternalId = "SELECT * FROM sac_person WHERE `person_external_id` = ?";
-		String queryEmail = "SELECT * FROM sac_person WHERE `person_email` = ?";
+		String queryExternalId = "SELECT * FROM sac_person WHERE person_external_id = ?";
+		String queryEmail = "SELECT * FROM sac_person WHERE person_email = ?";
 		//Connection, PreparedStatement and Resultset have to be closed when finished being used
 		//Since Java 7, these objects implement autocloseable so if there are given as parameters to a try clause they will be closed at the end
 		//https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html
@@ -154,7 +154,7 @@ public class Person {
 		Person personByExternalId;
 		Person personByEmail;
 		
-		try(Connection connection = DBConnectionFactory.getConnection()){
+		try(Connection connection = DBServiceSingleton.getInstance().getConnection()){
 
 			if(externalId != null){
 				try(PreparedStatement pStatement1 = (PreparedStatement) connection.prepareStatement(queryExternalId)){
@@ -223,7 +223,9 @@ public class Person {
 							
 							if(checkPassword(password, personByEmail.getPassword())){
 								personByEmail.regenerateToken();
-		                        personByEmail.persist();//save change to the token
+								if(saveToken){
+									personByEmail.persist();//save change to the token
+								}
 								return personByEmail;
 								
 							}
@@ -256,7 +258,7 @@ public class Person {
 	 * @return
 	 */
 	public static Person getAuthenticatedPersonByToken(Integer id, String token){
-		String query ="SELECT * FROM sac_person where `person_id` = ? and `person_token` = ?";
+		String query ="SELECT * FROM sac_person where person_id = ? and person_token = ?";
 		
 		Person person = null;
 		
@@ -264,7 +266,7 @@ public class Person {
 		// Since Java 7, these objects implement autocloseable so if there are given as parameters to a try clause they will be closed at the end
 		// https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html
 		
-		try(Connection connection = DBConnectionFactory.getConnection()){
+		try(Connection connection = DBServiceSingleton.getInstance().getConnection()){
 			
 			if(id !=null && token != null){
 				try(PreparedStatement pStatement = (PreparedStatement) connection.prepareStatement(query)){
@@ -331,12 +333,12 @@ public class Person {
 	public void persist(){
         
 		String queryInsert = "UPDATE sac_person SET person_external_id = ?, person_firstname = ?, person_lastname = ?, person_email = ?, person_password = ?, person_dob = ?, person_token = ?, person_phone_number = ?, person_created_At = ?, person_updated_at = ?, person_advisor_id = ?, person_is_advisor = ? WHERE person_id = ?  ;";
-		String queryUpdate = "INSERT INTO `sac_person` (`person_external_id`, `person_firstname`, `person_lastname`, `person_email`, `person_password`, `person_dob`, `person_token`, `person_phone_number`, `person_created_At`, `person_updated_at`, `person_advisor_id`, `person_is_advisor`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?);";
+		String queryUpdate = "INSERT INTO sac_person (person_external_id, person_firstname, person_lastname, person_email, person_password, person_dob, person_token, person_phone_number, person_created_At, person_updated_at, person_advisor_id, person_is_advisor) VALUES (?,?,?,?,?,?,?,?,?,?,?,?);";
 		
 		//Connection, PreparedStatement and Resultset have to be closed when finished being used
 		//Since Java 7, these objects implement autocloseable so if there are given as parameters to a try clause they will be closed at the end
 		//https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html
-        try(Connection connection = DBConnectionFactory.getConnection()){
+        try(Connection connection = DBServiceSingleton.getInstance().getConnection()){
 
 	        //test if the person already has an id >=0 (id -1 means not yet created in db).
 	        //if he does, he already exists in database, so we update it
@@ -457,14 +459,14 @@ public class Person {
 	 * @return List of CLients By Advisor Id
 	 */
 	public static List<Person> getClientsByAdvisorId(int advisorId){
-		String query = "SELECT * FROM sac_person WHERE `person_advisor_id` = ?";
+		String query = "SELECT * FROM sac_person WHERE person_advisor_id = ?";
 		List<Person> personListByAdvisorId = new ArrayList<Person>();
 
 		
 		//Connection, PreparedStatement and Resultset have to be closed when finished being used
 		// Since Java 7, these objects implement autocloseable so if there are given as parameters to a try clause they will be closed at the end
 		// https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html
-		try(Connection connection = DBConnectionFactory.getConnection()){ //Try with the resource connection 
+		try(Connection connection = DBServiceSingleton.getInstance().getConnection()){ //Try with the resource connection 
 			try(PreparedStatement pStatement = (PreparedStatement) connection.prepareStatement(query)){ //try with the preparedStatement
 				pStatement.setInt(1, advisorId); 
 				try(ResultSet result = pStatement.executeQuery()){ //try with the resultSet
@@ -528,12 +530,12 @@ public class Person {
 		Random r = new Random();
         int newExternalId = r.nextInt(999999998)+1; 
         
-        String query = "SELECT * FROM sac_person WHERE `person_external_id` = ?";
+        String query = "SELECT * FROM sac_person WHERE person_external_id = ?";
 		
 		//Connection, PreparedStatement and Resultset have to be closed when finished being used
 		// Since Java 7, these objects implement autocloseable so if there are given as parameters to a try clause they will be closed at the end
 		// https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html
-		try(Connection connection = DBConnectionFactory.getConnection()){ //Try with the resource connection 
+		try(Connection connection = DBServiceSingleton.getInstance().getConnection()){ //Try with the resource connection 
 			try(PreparedStatement pStatement = (PreparedStatement) connection.prepareStatement(query)){ //try with the preparedStatement
 				pStatement.setInt(1, newExternalId); 
 				try(ResultSet result = pStatement.executeQuery()){ //try with the resultSet
