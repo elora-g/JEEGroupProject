@@ -2,6 +2,8 @@
 
 Projet de création d'une plateforme de gestion clients et interface clients pour une banque
 
+Projet héberger par Heroku [Home Page](https://societeagricoleproject.herokuapp.com) merci @Gruck pour l'aide au déploiement! 
+
 ATTENTION : IL Y A UNE LEGERE MODIFICATION DU SERVER TOMCAT8.5 A EFFECTUER
 1. Double cliquer sur l'icône du serveur dans l'onglet serveur (eclipse)
 2. Onglet "Modules" du document ouvert
