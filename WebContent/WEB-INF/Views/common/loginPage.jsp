@@ -46,6 +46,63 @@
 	                
 	            </fieldset>
 	        </form>
+	      </div>
+	      <div class="container4">
+	        <h2>Données de test fournies pour l'exercice</h2>
+	        <table class="table table-stripped">
+				<thead>
+					<tr>
+						<th>E-mail</th>
+						<th>Id</th>
+						<th>Mot de passe</th>
+						<th>Conseiller?</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>lskai@lskai.sw</td>
+						<td>63758986</td>
+						<td>JeSuisMonPere</td>
+						<td>non</td>
+					</tr>
+					<tr>
+						<td>logono@deathstar.com</td>
+						<td>45975853</td>
+						<td>LORGONO</td>
+						<td>non</td>
+					</tr>
+					<tr>
+						<td>daenerys@dothraki.got</td>
+						<td>90765765</td>
+						<td>MamanDragon</td>
+						<td>non</td>
+					</tr>
+					<tr>
+						<td>estark@7royaumes.co</td>
+						<td>23645766</td>
+						<td>TeteTranchee</td>
+						<td>non</td>
+					</tr>
+					<tr>
+						<td>jsnow@gardedenuit.info</td>
+						<td>53469557</td>
+						<td>WinterIsComming</td>
+						<td>non</td>
+					</tr>
+					<tr>
+						<td>bankable@picsou.acme</td>
+						<td>05677764</td>
+						<td>arrrrrrrrgent</td>
+						<td>oui</td>
+					</tr>
+					<tr>
+						<td>jordan@evilbank.biz</td>
+						<td>84628456</td>
+						<td>MoneyLovr</td>
+						<td>oui</td>
+					</tr>
+				</tbody>
+			</table>
         </div>
         <script src="/assets/jquery/jquery.min.js"></script>
    		<script src="/assets/tether/tether.min.js"></script>
